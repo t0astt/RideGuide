@@ -121,7 +121,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
     }
 
     public void selectPosition(int position) {
-        int pos = position+1;
+        int pos = position;
         notifyItemChanged(mSelectedPosition); // unset the old one
         mSelectedPosition = pos;
         notifyItemChanged(pos); //and set the new one

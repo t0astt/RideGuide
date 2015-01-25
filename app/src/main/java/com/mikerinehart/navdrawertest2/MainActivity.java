@@ -43,7 +43,7 @@ public class MainActivity extends ActionBarActivity implements
     private Toolbar toolbar;
 
     RecyclerView mRecyclerView;
-    RecyclerView.Adapter mAdapter;
+    MyAdapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
     DrawerLayout Drawer;
     ActionBarDrawerToggle mDrawerToggle;
@@ -104,6 +104,7 @@ public class MainActivity extends ActionBarActivity implements
                     android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
 
                     int itemClicked = recyclerView.getChildPosition(child);
+                    mAdapter.selectPosition(itemClicked);
 
                     if (itemClicked == 1) {
                         fm.beginTransaction().replace(R.id.container, HomeFragment.newInstance("Test", "HomeFragment")).commit();
