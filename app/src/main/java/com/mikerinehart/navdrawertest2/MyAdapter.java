@@ -26,9 +26,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
     private String mNavTitles[];
     private int mIcons[];
 
+    private int mSelectedPosition;
+
     private String name;
     private String profile;
     private String email;
+
+
 
     Context context;
 
@@ -43,8 +47,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         TextView email;
         ImageView pic;
 
+        View v;
+
         public ViewHolder(View itemView, int viewType) {
             super(itemView);
+            v = itemView;
 
             if (viewType == TYPE_ITEM) {
                 textView = (TextView)itemView.findViewById(R.id.rowText);
@@ -54,7 +61,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                 name = (TextView)itemView.findViewById(R.id.name);
                 email = (TextView)itemView.findViewById(R.id.email);
                 pic = (ImageView)itemView.findViewById(R.id.imageView);
-                profile = (ImageView)itemView.findViewById(R.id.fb_profile_img);
 
                 holderId = 0;
             }
@@ -76,6 +82,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row, parent, false);
             ViewHolder vhItem = new ViewHolder(v,viewType);
 
+
             return vhItem;
         } else if (viewType == TYPE_HEADER) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header, parent, false);
@@ -91,13 +98,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
             holder.textView.setText(mNavTitles[position - 1]);
             holder.imageView.setImageResource(mIcons[position - 1]);
         } else {
-            //holder.profile.setImageResource();
-
-            //Picasso.with(context).load("http://graph.facebook.com/67563683055/picture?type=square").transform(new RoundedTransformation(5, 10)).into(holder.pic);
-            //Picasso.with(context).load("http://graph.facebook.com/67563683055/picture?type=square").into(holder.profile);
+            Picasso.with(context).load("https://graph.facebook.com/10205393671587549/picture?type=large").transform(new RoundedTransformation(100, 5)).into(holder.pic);
             holder.name.setText((name));
             holder.email.setText(email);
         }
+        holder.v.setSelected(mSelectedPosition == position);
     }
 
     @Override
@@ -113,6 +118,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
     private boolean isPositionHeader(int position) {
         return position == 0;
+    }
+
+    public void selectPosition(int position) {
+        int pos = position+1;
+        notifyItemChanged(mSelectedPosition); // unset the old one
+        mSelectedPosition = pos;
+        notifyItemChanged(pos); //and set the new one
     }
 
 }

@@ -21,7 +21,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.facebook.model.GraphObject;
@@ -94,7 +96,8 @@ public class MainActivity extends ActionBarActivity implements
         mRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-                View child = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+                //View child = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+                ViewGroup child = (ViewGroup)recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
 
                 if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
                     Drawer.closeDrawers();
@@ -102,7 +105,9 @@ public class MainActivity extends ActionBarActivity implements
 
                     int itemClicked = recyclerView.getChildPosition(child);
 
-                    if (itemClicked == 1) fm.beginTransaction().replace(R.id.container, HomeFragment.newInstance("Test", "HomeFragment")).commit();
+                    if (itemClicked == 1) {
+                        fm.beginTransaction().replace(R.id.container, HomeFragment.newInstance("Test", "HomeFragment")).commit();
+                    }
                     else if (itemClicked == 2) fm.beginTransaction().replace(R.id.container, ProfileFragment.newInstance("Test", "ProfileFragment")).commit();
                     else if (itemClicked == 3) fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance("Test", "RidesFragment")).commit();
                     else if (itemClicked == 4) fm.beginTransaction().replace(R.id.container, SettingsFragment.newInstance("Test", "SettingsFragment")).commit();
@@ -125,7 +130,7 @@ public class MainActivity extends ActionBarActivity implements
             }
             @Override
             public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-
+                Log.i(TAG, "TouchEvent");
             }
         });
 
