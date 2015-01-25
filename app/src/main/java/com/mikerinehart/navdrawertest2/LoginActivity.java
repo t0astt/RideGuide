@@ -42,6 +42,8 @@ public class LoginActivity extends ActionBarActivity {
     public final static String USER = "com.mikerinehart.navdrawertest2.USER";
 
     private String fbUid;
+    private String fName;
+    private String lName;
     private boolean confCheckActive;
 
     @Override
@@ -73,24 +75,23 @@ public class LoginActivity extends ActionBarActivity {
                 public void onCompleted(final GraphUser user, Response response) {
                     if (user != null) {
                         fbUid = user.getId();
+                        fName = user.getFirstName();
+                        lName = user.getLastName();
 
-                        RequestParams params = new RequestParams("fb_uid", user.getId());
-                        RestClient.post("users", params, new JsonHttpResponseHandler() {
+                        // Check if user is confirmed
+                        RequestParams params = new RequestParams("fb_uid", fbUid);
+                        RestClient.post("users/checkConfirmation", params, new JsonHttpResponseHandler() {
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                 try {
-                                    int confirmedStatus = response.getInt("confirmed");
-                                    if (confirmedStatus == 1) {
+                                    String confirmedStatus = response.getString("confirmed");
+                                    if (confirmedStatus.equals("true")) {
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-
-                                        JSONObject obj = user.getInnerJSONObject();
-                                        String jsonUserString = obj.toString();
-
-                                        intent.putExtra(USER, jsonUserString);
+                                        intent.putExtra(USER, user.getId());
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                         startActivity(intent);
                                         finish();
-                                    } else if (confirmedStatus == 0) {
+                                    } else if (confirmedStatus.equals("false")) {
                                         fbContainer = (FrameLayout)findViewById(R.id.fb_container);
                                         emailContainer = (RelativeLayout)findViewById(R.id.email_container);
                                         fbContainer.setVisibility(FrameLayout.GONE);
@@ -122,8 +123,12 @@ public class LoginActivity extends ActionBarActivity {
         {
             Snackbar.with(getApplicationContext()).text("Sending email...").show(LoginActivity.this);
             RequestParams params = new RequestParams();
+            Log.i(TAG, "Email: " + email + "| fb_uid: " + fbUid + "| first_name: " + fName + "| last_name: " + lName);
             params.put("email", email);
             params.put("fb_uid", fbUid);
+            params.put("first_name", fName);
+            params.put("last_name", lName);
+
             RestClient.post("registration/sendValidationEmail", params, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {

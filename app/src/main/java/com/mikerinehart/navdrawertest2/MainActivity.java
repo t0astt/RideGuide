@@ -1,12 +1,8 @@
 package com.mikerinehart.navdrawertest2;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.net.Uri;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -22,13 +18,13 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.facebook.model.GraphObject;
 import com.facebook.model.GraphUser;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,8 +46,11 @@ public class MainActivity extends ActionBarActivity implements
 
     String[] TITLES;
     int ICONS[] = {R.drawable.ic_home, R.drawable.ic_profile, R.drawable.ic_rides, R.drawable.ic_settings, R.drawable.ic_about, R.drawable.ic_logout};
-    String EMAIL = "mrrineh@ilstu.edu";
-    int PROFILE = R.drawable.ic_launcher;
+
+    private String myFbUid;
+    String myFName;
+    private String myLName;
+    private String myEmail;
 
     String TAG = "MainActivity";
 
@@ -61,19 +60,43 @@ public class MainActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Intent intent = getIntent();
-        String fbUser = intent.getStringExtra("com.mikerinehart.navdrawertest2.USER");
-
-        try {
-            JSONObject obj = new JSONObject(fbUser);
-            user = GraphObject.Factory.create(obj, GraphUser.class);
-        } catch (JSONException e) {
-            Log.i(TAG, "JSON Exception :(");
-        }
-
         TITLES = getResources().getStringArray(R.array.nav_drawer_items);
 
+        Intent intent = getIntent();
+        myFbUid = intent.getStringExtra("com.mikerinehart.navdrawertest2.USER");
+
+        RequestParams params = new RequestParams();
+        params.put("fb_uid", myFbUid);
+        RestClient.get("users/show/", params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    myFName = response.getString("first_name");
+                    myLName = response.getString("last_name");
+                    myEmail = response.getString("email");
+
+                    mAdapter = new MyAdapter(TITLES, ICONS, myFName + " " + myLName, myEmail, myFbUid, getBaseContext());
+                    mRecyclerView.setAdapter(mAdapter);
+                } catch (JSONException e) {
+                    Log.i(TAG, e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Error")
+                        .setMessage("RideGuide requires an active data connection. Please enable data before continuing.")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                                System.exit(0);
+                            }
+                        }).show();
+            }
+        });
+        Log.i(TAG, "3. Out of http call");
         toolbar = (Toolbar)findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
@@ -82,9 +105,6 @@ public class MainActivity extends ActionBarActivity implements
 
         mRecyclerView = (RecyclerView)findViewById(R.id.RecyclerView);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new MyAdapter(TITLES, ICONS, user.getName(), EMAIL, user.getId(), getBaseContext());
-        mRecyclerView.setAdapter(mAdapter);
-
 
         final GestureDetector mGestureDetector = new GestureDetector(MainActivity.this, new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -92,11 +112,9 @@ public class MainActivity extends ActionBarActivity implements
                 return true;
             }
         });
-
         mRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-                //View child = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
                 ViewGroup child = (ViewGroup)recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
 
                 if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
@@ -134,11 +152,8 @@ public class MainActivity extends ActionBarActivity implements
                 Log.i(TAG, "TouchEvent");
             }
         });
-
-
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
         Drawer = (DrawerLayout)findViewById(R.id.DrawerLayout);
         mDrawerToggle = new ActionBarDrawerToggle(this, Drawer, toolbar, R.string.openDrawer, R.string.closeDrawer) {
             @Override
@@ -181,5 +196,10 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    private String getMyFName()
+    {
+        return this.myFName;
     }
 }

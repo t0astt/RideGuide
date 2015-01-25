@@ -28,11 +28,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
     private int mSelectedPosition;
 
-    private String name;
-    private String profile;
-    private String email;
-
-
+    private String myName;
+    private String myEmail;
+    private String myFbUid;
 
     Context context;
 
@@ -42,7 +40,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
         TextView textView;
         ImageView imageView;
-        ImageView profile;
         TextView name;
         TextView email;
         ImageView pic;
@@ -67,12 +64,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         }
     }
 
-    MyAdapter(String Titles[], int Icons[], String Name, String Email, String Profile, Context c) {
+    MyAdapter(String Titles[], int Icons[], String Name, String Email, String fbUid, Context c) {
         mNavTitles = Titles;
         mIcons = Icons;
-        name = Name;
-        email = Email;
-        profile = Profile;
+        myName = Name;
+        myEmail = Email;
+        myFbUid = fbUid;
         context = c;
     }
 
@@ -98,9 +95,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
             holder.textView.setText(mNavTitles[position - 1]);
             holder.imageView.setImageResource(mIcons[position - 1]);
         } else {
-            Picasso.with(context).load("https://graph.facebook.com/10205393671587549/picture?type=large").transform(new RoundedTransformation(100, 5)).into(holder.pic);
-            holder.name.setText((name));
-            holder.email.setText(email);
+            Picasso.with(context).load("https://graph.facebook.com/"+ myFbUid +"/picture?type=large").transform(new RoundedTransformation(100, 5)).into(holder.pic);
+            holder.name.setText((myName));
+            holder.email.setText(myEmail);
         }
         holder.v.setSelected(mSelectedPosition == position);
     }

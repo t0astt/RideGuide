@@ -1,6 +1,11 @@
 package com.mikerinehart.navdrawertest2;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,43 +17,55 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
 
-import org.json.JSONObject;
-
 
 public class DecisionActivity extends ActionBarActivity {
 
     private static String TAG = "DecisionActivity";
     public final static String USER = "com.mikerinehart.navdrawertest2.USER";
 
+    ConnectivityManager cm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_decision);
+        cm = (ConnectivityManager)getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
+            Session session = Session.getActiveSession();
 
-        Session session = Session.getActiveSession();
+            if (session != null && session.isOpened()) {
+                Log.i(TAG, "Session active");
 
-        if (session != null && session.isOpened()) {
-            Log.i(TAG, "Session active");
+                Request.newMeRequest(session, new Request.GraphUserCallback() {
+                    // callback after Graph API response with user object
+                    @Override
+                    public void onCompleted(final GraphUser user, Response response) {
+                        Intent intent = new Intent(DecisionActivity.this, MainActivity.class);
 
-            Request.newMeRequest(session, new Request.GraphUserCallback() {
-                // callback after Graph API response with user object
-                @Override
-                public void onCompleted(final GraphUser user, Response response) {
-                    Intent intent = new Intent(DecisionActivity.this, MainActivity.class);
-
-                    JSONObject obj = user.getInnerJSONObject();
-                    String jsonUserString = obj.toString();
-
-                    intent.putExtra(USER, jsonUserString);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    startActivity(intent);
-                    finish();
-                }
-            }).executeAsync();
+                        intent.putExtra(USER, user.getId());
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        startActivity(intent);
+                        finish();
+                    }
+                }).executeAsync();
+            } else {
+                Log.i(TAG, "No session active");
+                Intent intent = new Intent(DecisionActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
         } else {
-            Log.i(TAG, "No session active");
-            Intent intent = new Intent(DecisionActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
+            new AlertDialog.Builder(DecisionActivity.this)
+                    .setTitle("Error")
+                    .setMessage("RideGuide requires an active data connection. Please enable data before continuing.")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                            System.exit(0);
+                        }
+                    }).show();
         }
     }
 
