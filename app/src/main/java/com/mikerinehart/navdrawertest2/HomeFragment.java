@@ -1,13 +1,36 @@
 package com.mikerinehart.navdrawertest2;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 
 /**
@@ -18,7 +41,7 @@ import android.view.ViewGroup;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends ListFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -59,6 +82,49 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        String[] values = new String[] { "Ride1", "Ride2", "Ride3", "Ride4", "Ride5"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, values);
+        setListAdapter(adapter);
+
+
+        RequestParams params = new RequestParams();
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+           Log.i("HomeFrag", currentDate);
+
+        params.put("current_date", currentDate);
+        RestClient.post("shifts/shiftsThisHour", params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    TextView numRides = (TextView)getActivity().findViewById(R.id.num_rides);
+                    //numRides.setText(response.getString("shift"));
+                    //Log.i("HomeFragment", response.getString("shift"));
+                    JSONObject jsonObj = response.getJSONObject("shift");
+                    ArrayList<String> list = new ArrayList<String>();
+
+                    for (int i = 0; i < jsonObj.length(); i++)
+                    {
+                        list.add(jsonObj.get(i).toString());
+                    }
+
+
+
+                } catch (JSONException e) {
+                    Log.i("HomeFragment", e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+
+            }
+        });
+    }
+
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        String item = (String) getListAdapter().getItem(position);
+        Toast.makeText(getActivity().getApplicationContext(), item + " selected", Toast.LENGTH_LONG).show();
     }
 
     @Override

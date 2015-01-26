@@ -1,11 +1,36 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.mikerinehart.navdrawertest2.HomeFragment"
     android:background="#303030">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="Home Fragment" />
 
-</FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Rides This Hour: "
+        android:id="@+id/rides_this_hour"
+        android:textColor="#FFFFFF"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="num"
+        android:id="@+id/num_rides"
+        android:textColor="@color/ColorAccent"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/rides_this_hour"
+        android:layout_toEndOf="@+id/rides_this_hour" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@id/android:list"
+        android:layout_below="@+id/rides_this_hour" />
+
+</RelativeLayout>

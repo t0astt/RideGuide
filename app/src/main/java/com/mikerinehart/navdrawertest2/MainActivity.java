@@ -96,7 +96,6 @@ public class MainActivity extends ActionBarActivity implements
                         }).show();
             }
         });
-        Log.i(TAG, "3. Out of http call");
         toolbar = (Toolbar)findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
