@@ -1,24 +1,19 @@
 package com.mikerinehart.navdrawertest2;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Downloader;
 import com.squareup.picasso.Picasso;
-
-import java.lang.annotation.Target;
 
 /**
  * Created by Mike on 1/19/2015.
  */
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
+public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder>{
 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
@@ -64,7 +59,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         }
     }
 
-    MyAdapter(String Titles[], int Icons[], String Name, String Email, String fbUid, Context c) {
+    DrawerAdapter(String Titles[], int Icons[], String Name, String Email, String fbUid, Context c) {
         mNavTitles = Titles;
         mIcons = Icons;
         myName = Name;
@@ -73,7 +68,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         context = c;
     }
 
-    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DrawerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (viewType == TYPE_ITEM) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row, parent, false);
@@ -90,7 +85,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         return null;
     }
 
-    public void onBindViewHolder(MyAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(DrawerAdapter.ViewHolder holder, int position) {
         if (holder.holderId == 1) {
             holder.textView.setText(mNavTitles[position - 1]);
             holder.imageView.setImageResource(mIcons[position - 1]);

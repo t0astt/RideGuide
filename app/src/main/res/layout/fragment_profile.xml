@@ -4,7 +4,7 @@
     tools:context="com.mikerinehart.navdrawertest2.ProfileFragment"
     android:background="#FFFFFF">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- TODO: Update blank fragment ride_info_list_item -->
 
     <ImageView
         android:layout_width="202dp"

@@ -39,7 +39,7 @@ public class MainActivity extends ActionBarActivity implements
     private Toolbar toolbar;
 
     RecyclerView mRecyclerView;
-    MyAdapter mAdapter;
+    DrawerAdapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
     DrawerLayout Drawer;
     ActionBarDrawerToggle mDrawerToggle;
@@ -75,7 +75,7 @@ public class MainActivity extends ActionBarActivity implements
                     myLName = response.getString("last_name");
                     myEmail = response.getString("email");
 
-                    mAdapter = new MyAdapter(TITLES, ICONS, myFName + " " + myLName, myEmail, myFbUid, getBaseContext());
+                    mAdapter = new DrawerAdapter(TITLES, ICONS, myFName + " " + myLName, myEmail, myFbUid, getBaseContext());
                     mRecyclerView.setAdapter(mAdapter);
                 } catch (JSONException e) {
                     Log.i(TAG, e.getMessage());
