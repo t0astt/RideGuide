@@ -83,7 +83,9 @@ public class HomeFragment extends Fragment {
         rideList.setLayoutManager(llm);
 
         RideInfoAdapter ra = new RideInfoAdapter(createList(30));
+        rideList.addItemDecoration(new SimpleDividerItemDecoration(rideList.getContext()));
         rideList.setAdapter(ra);
+
 
         return v;
     }

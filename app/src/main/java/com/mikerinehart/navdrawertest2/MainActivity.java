@@ -98,6 +98,8 @@ public class MainActivity extends ActionBarActivity implements
         });
         toolbar = (Toolbar)findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle("Rides Available Now");
+
 
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.container, HomeFragment.newInstance("Test", "HomeFragment")).commit();
@@ -124,12 +126,25 @@ public class MainActivity extends ActionBarActivity implements
                     mAdapter.selectPosition(itemClicked);
 
                     if (itemClicked == 1) {
+                        toolbar.setTitle("Rides Available Now");
                         fm.beginTransaction().replace(R.id.container, HomeFragment.newInstance("Test", "HomeFragment")).commit();
                     }
-                    else if (itemClicked == 2) fm.beginTransaction().replace(R.id.container, ProfileFragment.newInstance("Test", "ProfileFragment")).commit();
-                    else if (itemClicked == 3) fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance("Test", "RidesFragment")).commit();
-                    else if (itemClicked == 4) fm.beginTransaction().replace(R.id.container, SettingsFragment.newInstance("Test", "SettingsFragment")).commit();
-                    else if (itemClicked == 5) fm.beginTransaction().replace(R.id.container, AboutFragment.newInstance("Test", "AboutFragment")).commit();
+                    else if (itemClicked == 2) {
+                        toolbar.setTitle("My Profile");
+                        fm.beginTransaction().replace(R.id.container, ProfileFragment.newInstance("Test", "ProfileFragment")).commit();
+                    }
+                    else if (itemClicked == 3) {
+                        toolbar.setTitle("Search Rides");
+                        fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance("Test", "RidesFragment")).commit();
+                    }
+                    else if (itemClicked == 4) {
+                        toolbar.setTitle("Settings");
+                        fm.beginTransaction().replace(R.id.container, SettingsFragment.newInstance("Test", "SettingsFragment")).commit();
+                    }
+                    else if (itemClicked == 5) {
+                        toolbar.setTitle("About");
+                        fm.beginTransaction().replace(R.id.container, AboutFragment.newInstance("Test", "AboutFragment")).commit();
+                    }
                     else if (itemClicked == 6) {
                         new AlertDialog.Builder(MainActivity.this)
                         .setTitle("Confirm Logout")
