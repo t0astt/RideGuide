@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Mike on 2/3/2015.
  */
-public class RideInfoAdapter extends RecyclerView.Adapter<RideInfoAdapter.RideViewHolder> {
+public class RideInfoAdapter extends RecyclerView.Adapter<RideInfoAdapter.RideInfoViewHolder> {
 
     private List<RideInfo> rideInfoList;
 
@@ -26,7 +26,7 @@ public class RideInfoAdapter extends RecyclerView.Adapter<RideInfoAdapter.RideVi
     }
 
     @Override
-    public void onBindViewHolder(RideViewHolder rideViewHolder, int i) {
+    public void onBindViewHolder(RideInfoViewHolder rideViewHolder, int i) {
         RideInfo r = rideInfoList.get(i);
         rideViewHolder.vName.setText(r.name);
         rideViewHolder.vSurname.setText(r.surname);
@@ -35,20 +35,20 @@ public class RideInfoAdapter extends RecyclerView.Adapter<RideInfoAdapter.RideVi
     }
 
     @Override
-    public RideViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RideInfoViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.ride_info_list_item, viewGroup, false);
-        return new RideViewHolder(itemView);
+        return new RideInfoViewHolder(itemView);
     }
 
     //Holds the RideInfo cardviews
-    public static class RideViewHolder extends RecyclerView.ViewHolder {
+    public static class RideInfoViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView vName;
         protected TextView vSurname;
         protected TextView vEmail;
         protected TextView vTitle;
 
-        public RideViewHolder(View v) {
+        public RideInfoViewHolder(View v) {
             super(v);
             vName =  (TextView) v.findViewById(R.id.txtName);
             vSurname = (TextView)  v.findViewById(R.id.txtSurname);
