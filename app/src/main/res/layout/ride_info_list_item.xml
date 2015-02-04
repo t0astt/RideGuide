@@ -13,6 +13,16 @@
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@android:color/transparent"
+        android:text="contact det"
+        android:gravity="center_vertical"
+        android:textColor="@android:color/white"
+        android:textSize="14dp"/>
+
+    <TextView
         android:id="@+id/txtName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
