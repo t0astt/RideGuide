@@ -34,16 +34,16 @@ public class RideInfoAdapter extends RecyclerView.Adapter<RideInfoAdapter.RideIn
 
     @Override
     public void onBindViewHolder(RideInfoViewHolder rideViewHolder, int i) {
-        DateFormat df = new SimpleDateFormat("E HH:mm");
-
+        DateFormat df = new SimpleDateFormat("E d, h:mma");
 
         RideInfo r = rideInfoList.get(i);
-        //Don't need to show ride ID
-        //rideViewHolder.rideId.setText(Integer.toString(r.id));
-        Picasso.with(c).load("https://graph.facebook.com/"+ r.user.fb_uid +"/picture?type=large").transform(new RoundedTransformation(100, 5)).into(rideViewHolder.userPic);
+        Picasso.with(c).load("https://graph.facebook.com/"+ r.user.getFbUid() +"/picture?type=large")
+                .transform(new RoundedTransformation(100, 5))
+                .into(rideViewHolder.userPic);
         rideViewHolder.name.setText(r.user.getFullName());
-        rideViewHolder.startTime.setText(df.format(r.start));
-        rideViewHolder.endTime.setText(df.format(r.end));
+        rideViewHolder.startTime.setText(df.format(r.getStart()));
+        rideViewHolder.endTime.setText(df.format(r.getEnd()));
+        rideViewHolder.seats.setText(Integer.toString(r.getSeats()));
     }
 
     @Override
@@ -68,6 +68,7 @@ public class RideInfoAdapter extends RecyclerView.Adapter<RideInfoAdapter.RideIn
             startTime = (TextView)v.findViewById(R.id.start_time);
             endTime = (TextView)v.findViewById(R.id.end_time);
             userPic = (ImageView)v.findViewById(R.id.user_pic);
+            seats = (TextView)v.findViewById(R.id.num_seats);
         }
 
     }

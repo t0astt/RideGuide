@@ -69,10 +69,6 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-
-
-        //String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
     }
 
     @Override
@@ -94,28 +90,12 @@ public class HomeFragment extends Fragment {
         return v;
     }
 
-//    private List<RideInfo> createList(int size) {
-//        List<RideInfo> result = new ArrayList<RideInfo>();
-//        for (int i = 1; i <= size; i++)
-//        {
-//            RideInfo r = new RideInfo();
-//            r.name = r.NAME_PREFIX + i;
-//            r.surname = r.SURNAME_PREFIX + i;
-//            r.email = r.EMAIL_PREFIX + i + "@test.com";
-//
-//            result.add(r);
-//        }
-//
-//        return result;
-//    }
-
     private List<RideInfo> createRideList() {
         List<RideInfo> result;
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         Type listType = new TypeToken<List<RideInfo>>(){}.getType();
 
-        String testJson = "[{\"id\":\"13\",\"user_id\":\"1\",\"start\":\"2015-02-02 18:30:00\",\"end\":\"2015-02-08 20:30:00\",\"user\":{\"id\":\"1\",\"fb_uid\":\"10205393671587549\",\"first_name\":\"Mike\",\"last_name\":\"Rinehart\"}},{\"id\":\"14\",\"user_id\":\"1\",\"start\":\"2015-02-02 10:42:00\",\"end\":\"2015-02-13 17:50:00\",\"user\":{\"id\":\"1\",\"fb_uid\":\"10205393671587549\",\"first_name\":\"Mike\",\"last_name\":\"Rinehart\"}},{\"id\":\"15\",\"user_id\":\"2\",\"start\":\"2015-02-03 00:00:00\",\"end\":\"2015-02-06 00:00:00\",\"user\":{\"id\":\"2\",\"fb_uid\":\"1493344104\",\"first_name\":\"Edward\",\"last_name\":\"Liu\"}}]";
-
+        String testJson = "[{\"id\":\"1\",\"user_id\":\"1\",\"seats\":\"4\",\"start\":\"2015-02-01 18:00:00\",\"end\":\"2015-02-07 00:00:00\",\"user\":{\"id\":\"1\",\"fb_uid\":\"10205393671587549\",\"first_name\":\"Mike\",\"last_name\":\"Rinehart\"}}]";
         result = (List<RideInfo>)gson.fromJson(testJson, listType);
 
         return result;

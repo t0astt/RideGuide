@@ -43,22 +43,22 @@ public class User implements Parcelable {
         }
     };
 
-    private String getFbUid()
+    public String getFbUid()
     {
         return fb_uid;
     }
 
-    private String getEmail()
+    public String getEmail()
     {
         return email;
     }
 
-    private String getFirstName()
+    public String getFirstName()
     {
         return first_name;
     }
 
-    private String getLastName()
+    public String getLastName()
     {
         return last_name;
     }
