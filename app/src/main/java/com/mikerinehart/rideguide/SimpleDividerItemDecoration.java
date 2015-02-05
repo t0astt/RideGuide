@@ -1,12 +1,10 @@
-package com.mikerinehart.navdrawertest2;
+package com.mikerinehart.rideguide;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
-import com.mikerinehart.navdrawertest2.R;
 
 public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable mDivider;

@@ -1,4 +1,4 @@
-package com.mikerinehart.navdrawertest2;
+package com.mikerinehart.rideguide;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -63,7 +63,7 @@ public class MainActivity extends ActionBarActivity implements
         TITLES = getResources().getStringArray(R.array.nav_drawer_items);
 
         Intent intent = getIntent();
-        myFbUid = intent.getStringExtra("com.mikerinehart.navdrawertest2.USER");
+        myFbUid = intent.getStringExtra("com.mikerinehart.rideguide.USER");
 
         RequestParams params = new RequestParams();
         params.put("fb_uid", myFbUid);

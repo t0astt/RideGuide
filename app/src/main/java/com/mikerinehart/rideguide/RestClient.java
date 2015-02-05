@@ -1,4 +1,4 @@
-package com.mikerinehart.navdrawertest2;
+package com.mikerinehart.rideguide;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;

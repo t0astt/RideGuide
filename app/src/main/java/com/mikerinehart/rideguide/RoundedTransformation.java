@@ -1,4 +1,4 @@
-package com.mikerinehart.navdrawertest2;
+package com.mikerinehart.rideguide;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;

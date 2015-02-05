@@ -1,4 +1,4 @@
-package com.mikerinehart.navdrawertest2;
+package com.mikerinehart.rideguide;
 
 import android.app.Activity;
 import android.net.Uri;

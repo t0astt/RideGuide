@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "com.mikerinehart.navdrawertest2"
+        applicationId "com.mikerinehart.rideguide"
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
@@ -29,4 +29,6 @@ dependencies {
     compile 'com.nispok:snackbar:2.7.3'
     compile 'com.loopj.android:android-async-http:1.4.6'
     compile 'com.squareup.picasso:picasso:2.4.0'
+    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'org.parceler:parceler-api:0.2+'
 }

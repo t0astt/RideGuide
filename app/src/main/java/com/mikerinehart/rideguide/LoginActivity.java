@@ -1,4 +1,4 @@
-package com.mikerinehart.navdrawertest2;
+package com.mikerinehart.rideguide;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
@@ -18,7 +17,6 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
-import com.facebook.widget.LoginButton;
 
 import com.loopj.android.http.*;
 import com.nispok.snackbar.Snackbar;
@@ -39,7 +37,7 @@ public class LoginActivity extends ActionBarActivity {
         //private Button emailButton;
 
     private String TAG = "LoginActivity";
-    public final static String USER = "com.mikerinehart.navdrawertest2.USER";
+    public final static String USER = "com.mikerinehart.rideguide.USER";
 
     private String fbUid;
     private String fName;

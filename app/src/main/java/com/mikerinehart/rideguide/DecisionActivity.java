@@ -1,4 +1,4 @@
-package com.mikerinehart.navdrawertest2;
+package com.mikerinehart.rideguide;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -21,7 +21,7 @@ import com.facebook.model.GraphUser;
 public class DecisionActivity extends ActionBarActivity {
 
     private static String TAG = "DecisionActivity";
-    public final static String USER = "com.mikerinehart.navdrawertest2.USER";
+    public final static String USER = "com.mikerinehart.rideguide.USER";
 
     ConnectivityManager cm;
 

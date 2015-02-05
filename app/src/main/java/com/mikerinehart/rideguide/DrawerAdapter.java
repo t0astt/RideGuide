@@ -1,4 +1,4 @@
-package com.mikerinehart.navdrawertest2;
+package com.mikerinehart.rideguide;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
