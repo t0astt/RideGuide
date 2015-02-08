@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">NavDrawerTest2</string>
+    <string name="app_name">RideGuide</string>
     <string name="facebook_app_id">790452704337105</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
