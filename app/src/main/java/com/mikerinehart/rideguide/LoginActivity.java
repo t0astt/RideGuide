@@ -25,23 +25,22 @@ import com.nispok.snackbar.listeners.ActionClickListener;
 import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.apache.commons.lang.BooleanUtils;
 
 
 public class LoginActivity extends ActionBarActivity {
 
     private UiLifecycleHelper uiHelper;
-    //private LoginButton loginButton;
     private FrameLayout fbContainer;
     private RelativeLayout emailContainer;
-        private EditText emailField;
-        //private Button emailButton;
+    private EditText emailField;
 
     private String TAG = "LoginActivity";
     public final static String USER = "com.mikerinehart.rideguide.USER";
 
-    private String fbUid;
-    private String fName;
-    private String lName;
+    private User me;
+    private GraphUser user;
+
     private boolean confCheckActive;
 
     @Override
@@ -70,36 +69,52 @@ public class LoginActivity extends ActionBarActivity {
             Request.newMeRequest(session, new Request.GraphUserCallback() {
                 // callback after Graph API response with user object
                 @Override
-                public void onCompleted(final GraphUser user, Response response) {
-                    if (user != null) {
-                        fbUid = user.getId();
-                        fName = user.getFirstName();
-                        lName = user.getLastName();
+                public void onCompleted(final GraphUser fbUser, Response response) {
+                    if (fbUser != null) {
+                        user = fbUser;
+                        Log.i(TAG, "Facebook user object set");
 
-                        // Check if user is confirmed
-                        RequestParams params = new RequestParams("fb_uid", fbUid);
-                        RestClient.post("users/checkConfirmation", params, new JsonHttpResponseHandler() {
+                        RequestParams params = new RequestParams("fb_uid", fbUser.getId());
+                        // checkExistence returns false if user does not exist, returns user model if user exists
+                        RestClient.post("users/checkExistence", params, new JsonHttpResponseHandler() {
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                 try {
-                                    String confirmedStatus = response.getString("confirmed");
-                                    if (confirmedStatus.equals("true")) {
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        intent.putExtra(USER, user.getId());
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                                        startActivity(intent);
-                                        finish();
-                                    } else if (confirmedStatus.equals("false")) {
+                                    Log.i(TAG, "Checking if user exists in database");
+                                    //If the exists key is present, it means they DO NOT EXIST
+                                    if (response.has("exists")) {
+                                        Log.i(TAG, "User does not exist, show email registration screen");
                                         fbContainer = (FrameLayout)findViewById(R.id.fb_container);
                                         emailContainer = (RelativeLayout)findViewById(R.id.email_container);
                                         fbContainer.setVisibility(FrameLayout.GONE);
                                         emailContainer.setVisibility(RelativeLayout.VISIBLE);
                                         emailField = (EditText)findViewById(R.id.email_field);
-                                        //emailButton = (Button)findViewById(R.id.email_button);
+
+                                    } else {
+                                        Log.i(TAG, "User exists, checking confirmation status");
+
+                                        if (BooleanUtils.toBoolean(response.getInt("confirmed"))) {
+                                            Log.i(TAG, "User is confirmed, starting MainActivity");
+                                            me = new User (response.getInt("id"),
+                                                    response.getString("fb_uid"),
+                                                    response.getString("email"),
+                                                    response.getString("first_name"),
+                                                    response.getString("last_name"),
+                                                    BooleanUtils.toBoolean(response.getInt("confirmed")));
+                                            launchMainActivity(me);
+                                        } else {
+                                            Log.i(TAG, "User is not confirmed, show email registration screen");
+                                            fbContainer = (FrameLayout)findViewById(R.id.fb_container);
+                                            emailContainer = (RelativeLayout)findViewById(R.id.email_container);
+                                            fbContainer.setVisibility(FrameLayout.GONE);
+                                            emailContainer.setVisibility(RelativeLayout.VISIBLE);
+                                            emailField = (EditText)findViewById(R.id.email_field);
+                                        }
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+
                             }
                             @Override
                             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
@@ -117,15 +132,16 @@ public class LoginActivity extends ActionBarActivity {
     public void submitEmail(View v) {
         String email = emailField.getText().toString();
 
+
         if (!email.equals("") && email.length() > 4 && email.substring(email.length()-4).equalsIgnoreCase(".edu"))
         {
             Snackbar.with(getApplicationContext()).text("Sending email...").show(LoginActivity.this);
             RequestParams params = new RequestParams();
-            Log.i(TAG, "Email: " + email + "| fb_uid: " + fbUid + "| first_name: " + fName + "| last_name: " + lName);
+
+            params.put("fb_uid", user.getId());
             params.put("email", email);
-            params.put("fb_uid", fbUid);
-            params.put("first_name", fName);
-            params.put("last_name", lName);
+            params.put("first_name", user.getFirstName());
+            params.put("last_name", user.getLastName());
 
             RestClient.post("registration/sendValidationEmail", params, new AsyncHttpResponseHandler() {
                 @Override
@@ -162,29 +178,37 @@ public class LoginActivity extends ActionBarActivity {
         }
     }
 
-    public void checkConfirmation() {
-        RequestParams params = new RequestParams("fb_uid", fbUid);
-        RestClient.get("users/" + fbUid, params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-                    int confirmedStatus = response.getInt("confirmed");
-                    if (confirmedStatus == 1) {
-                        confCheckActive = false;
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        startActivity(intent);
-                        finish();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.i(TAG, "Error: " + statusCode);
-            }
-        });
+//    public void checkConfirmation() {
+//        RequestParams params = new RequestParams("fb_uid", fbUid);
+//        RestClient.get("users/" + fbUid, params, new JsonHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                try {
+//                    int confirmedStatus = response.getInt("confirmed");
+//                    if (confirmedStatus == 1) {
+//                        confCheckActive = false;
+//                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                        startActivity(intent);
+//                        finish();
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+//                Log.i(TAG, "Error: " + statusCode);
+//            }
+//        });
+//    }
+
+    private void launchMainActivity(User me) {
+        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        intent.putExtra("me", me);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -220,6 +244,8 @@ public class LoginActivity extends ActionBarActivity {
     public void onResume() {
         super.onResume();
         uiHelper.onResume();
+        Log.i(TAG, "onResume reached");
+        onSessionStateChange(Session.getActiveSession(), SessionState.OPENED, new Exception());
     }
 
     @Override

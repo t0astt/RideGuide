@@ -6,13 +6,23 @@ import android.os.Parcelable;
 /**
  * Created by Mike on 2/4/2015.
  */
-public class User implements Parcelable {
+
+public class User implements Parcelable{
     protected int id;
     protected String fb_uid;
     protected String email;
     protected String first_name;
     protected String last_name;
+    protected boolean confirmed;
 
+    public User(int id, String fb_uid, String email, String first_name, String last_name, boolean confirmed) {
+        this.id = id;
+        this.fb_uid = fb_uid;
+        this.email = email;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.confirmed = confirmed;
+    }
     User(Parcel in) {
         this.id = in.readInt();
         this.fb_uid = in.readString();
@@ -66,5 +76,9 @@ public class User implements Parcelable {
     public String getFullName()
     {
         return first_name + " " + last_name;
+    }
+
+    public boolean getConfirmationStatus() {
+        return confirmed;
     }
 }

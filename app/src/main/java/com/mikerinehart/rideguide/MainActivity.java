@@ -47,10 +47,7 @@ public class MainActivity extends ActionBarActivity implements
     String[] TITLES;
     int ICONS[] = {R.drawable.ic_home, R.drawable.ic_profile, R.drawable.ic_rides, R.drawable.ic_settings, R.drawable.ic_about, R.drawable.ic_logout};
 
-    private String myFbUid;
-    String myFName;
-    private String myLName;
-    private String myEmail;
+    User me;
 
     String TAG = "MainActivity";
 
@@ -62,40 +59,40 @@ public class MainActivity extends ActionBarActivity implements
         setContentView(R.layout.activity_main);
         TITLES = getResources().getStringArray(R.array.nav_drawer_items);
 
-        Intent intent = getIntent();
-        myFbUid = intent.getStringExtra("com.mikerinehart.rideguide.USER");
+        me = getIntent().getExtras().getParcelable("me");
 
-        RequestParams params = new RequestParams();
-        params.put("fb_uid", myFbUid);
-        RestClient.get("users/show/", params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-                    myFName = response.getString("first_name");
-                    myLName = response.getString("last_name");
-                    myEmail = response.getString("email");
-
-                    mAdapter = new DrawerAdapter(TITLES, ICONS, myFName + " " + myLName, myEmail, myFbUid, getBaseContext());
-                    mRecyclerView.setAdapter(mAdapter);
-                } catch (JSONException e) {
-                    Log.i(TAG, e.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("Error")
-                        .setMessage("RideGuide requires an active data connection. Please enable data before continuing.")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                                System.exit(0);
-                            }
-                        }).show();
-            }
-        });
+//        RequestParams params = new RequestParams();
+//        params.put("fb_uid", myFbUid);
+//
+//        RestClient.get("users/show/", params, new JsonHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                try {
+//                    myFName = response.getString("first_name");
+//                    myLName = response.getString("last_name");
+//                    myEmail = response.getString("email");
+//
+//                    mAdapter = new DrawerAdapter(TITLES, ICONS, myFName + " " + myLName, myEmail, myFbUid, getBaseContext());
+//                    mRecyclerView.setAdapter(mAdapter);
+//                } catch (JSONException e) {
+//                    Log.i(TAG, e.getMessage());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+//                new AlertDialog.Builder(MainActivity.this)
+//                        .setTitle("Error")
+//                        .setMessage("RideGuide requires an active data connection. Please enable data before continuing.")
+//                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                finish();
+//                                System.exit(0);
+//                            }
+//                        }).show();
+//            }
+//        });
         toolbar = (Toolbar)findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Rides Available Now");
@@ -135,7 +132,9 @@ public class MainActivity extends ActionBarActivity implements
                     }
                     else if (itemClicked == 3) {
                         toolbar.setTitle("Search Rides");
-                        fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance("Test", "RidesFragment")).commit();
+                        Intent intent = new Intent(MainActivity.this, testactivity.class);
+                        startActivity(intent);
+                        //fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance("Test", "RidesFragment")).commit();
                     }
                     else if (itemClicked == 4) {
                         toolbar.setTitle("Settings");
@@ -168,6 +167,8 @@ public class MainActivity extends ActionBarActivity implements
         });
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new DrawerAdapter(TITLES, ICONS, me.getFirstName() + " " + me.getLastName(), me.getEmail(), me.getFbUid(), getBaseContext());
+        mRecyclerView.setAdapter(mAdapter);
         Drawer = (DrawerLayout)findViewById(R.id.DrawerLayout);
         mDrawerToggle = new ActionBarDrawerToggle(this, Drawer, toolbar, R.string.openDrawer, R.string.closeDrawer) {
             @Override
@@ -212,8 +213,8 @@ public class MainActivity extends ActionBarActivity implements
 
     }
 
-    private String getMyFName()
-    {
-        return this.myFName;
-    }
+//    private String getMyFName()
+//    {
+//        return this.myFName;
+//    }
 }

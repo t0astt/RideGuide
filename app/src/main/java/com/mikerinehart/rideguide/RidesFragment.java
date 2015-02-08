@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +65,9 @@ public class RidesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the ride_info_list_item for this fragment
-        return inflater.inflate(R.layout.fragment_rides, container, false);
+        //return inflater.inflate(R.layout.fragment_rides, container, false);
+        ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.fragment_rides, container, false);
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

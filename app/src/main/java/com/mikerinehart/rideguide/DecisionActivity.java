@@ -16,14 +16,21 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.parceler.apache.commons.lang.BooleanUtils;
 
 public class DecisionActivity extends ActionBarActivity {
 
     private static String TAG = "DecisionActivity";
-    public final static String USER = "com.mikerinehart.rideguide.USER";
 
     ConnectivityManager cm;
+
+    private User me;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,26 +41,55 @@ public class DecisionActivity extends ActionBarActivity {
         if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
             Session session = Session.getActiveSession();
 
+            // If active Facebook session exists
             if (session != null && session.isOpened()) {
-                Log.i(TAG, "Session active");
 
                 Request.newMeRequest(session, new Request.GraphUserCallback() {
                     // callback after Graph API response with user object
                     @Override
                     public void onCompleted(final GraphUser user, Response response) {
-                        Intent intent = new Intent(DecisionActivity.this, MainActivity.class);
+                        Log.i(TAG, "Session active, checking if user exists in db");
 
-                        intent.putExtra(USER, user.getId());
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        startActivity(intent);
-                        finish();
+                        RequestParams params = new RequestParams("fb_uid", user.getId());
+                        // checkExistence returns false if user does not exist, returns user model if user exists
+                        RestClient.post("users/checkExistence", params, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                try {
+                                    if (response.has("exists")) {
+                                        Log.i(TAG, "User does not exist, launching LoginActivity");
+                                        launchLoginActivity();
+                                    } else {
+                                        Log.i(TAG, "User exists, creating local User object");
+                                        me = new User (response.getInt("id"),
+                                                response.getString("fb_uid"),
+                                                response.getString("email"),
+                                                response.getString("first_name"),
+                                                response.getString("last_name"),
+                                                BooleanUtils.toBoolean(response.getInt("confirmed")));
+                                        if (me.getConfirmationStatus()) {
+                                            Log.i(TAG, "User is confirmed, starting MainActivity");
+                                            launchMainActivity(me);
+                                        } else {
+                                            Log.i(TAG, "User is not confirmed, launching LoginActivity");
+                                            launchLoginActivity();
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                Log.i(TAG, "Error: " + statusCode);
+                            }
+                        });
                     }
                 }).executeAsync();
             } else {
-                Log.i(TAG, "No session active");
-                Intent intent = new Intent(DecisionActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                Log.i(TAG, "No Facebook session active, start LoginActivity");
+                launchLoginActivity();
             }
         } else {
             new AlertDialog.Builder(DecisionActivity.this)
@@ -67,6 +103,20 @@ public class DecisionActivity extends ActionBarActivity {
                         }
                     }).show();
         }
+    }
+
+    private void launchMainActivity(User me) {
+        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        intent.putExtra("me", me);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
+        finish();
+    }
+
+    private void launchLoginActivity() {
+        Intent intent = new Intent(DecisionActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
