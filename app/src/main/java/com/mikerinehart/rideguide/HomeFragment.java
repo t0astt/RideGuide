@@ -1,17 +1,21 @@
 package com.mikerinehart.rideguide;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
 
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -34,21 +38,13 @@ public class HomeFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+    private static final int NUM_PAGES = 3;
+
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -76,15 +72,24 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
-        RecyclerView rideList = (RecyclerView)v.findViewById(R.id.ride_info_list);
-        rideList.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(rideList.getContext());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        rideList.setLayoutManager(llm);
 
-        RideInfoAdapter ra = new RideInfoAdapter(createRideList());
-        rideList.addItemDecoration(new SimpleDividerItemDecoration(rideList.getContext()));
-        rideList.setAdapter(ra);
+        ViewPager pager = (ViewPager)v.findViewById(R.id.home_pager);
+        pager.setAdapter(new HomeViewPagerAdapter(getFragmentManager()));
+
+        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip)v.findViewById(R.id.tabs);
+        tabs.setViewPager(pager);
+
+
+
+//        RecyclerView rideList = (RecyclerView)v.findViewById(R.id.ride_info_list);
+//        rideList.setHasFixedSize(true);
+//        LinearLayoutManager llm = new LinearLayoutManager(rideList.getContext());
+//        llm.setOrientation(LinearLayoutManager.VERTICAL);
+//        rideList.setLayoutManager(llm);
+//
+//        RideInfoAdapter ra = new RideInfoAdapter(createRideList());
+//        rideList.addItemDecoration(new SimpleDividerItemDecoration(rideList.getContext()));
+//        rideList.setAdapter(ra);
 
 
         return v;
@@ -95,7 +100,7 @@ public class HomeFragment extends Fragment {
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         Type listType = new TypeToken<List<RideInfo>>(){}.getType();
 
-        String testJson = "[{\"id\":\"1\",\"user_id\":\"1\",\"seats\":\"4\",\"start\":\"2015-02-01 18:00:00\",\"end\":\"2015-02-07 00:00:00\",\"user\":{\"id\":\"1\",\"fb_uid\":\"10205393671587549\",\"first_name\":\"Mike\",\"last_name\":\"Rinehart\"}}]";
+        String testJson = "[{\"id\":\"2\",\"user_id\":\"2\",\"seats\":\"4\",\"start\":\"2015-02-09 18:00:00\",\"end\":\"2015-02-10 02:00:00\",\"user\":{\"id\":\"2\",\"fb_uid\":\"1493344104\",\"first_name\":\"Edward\",\"last_name\":\"Liu\"}},{\"id\":\"3\",\"user_id\":\"4\",\"seats\":\"3\",\"start\":\"2015-02-09 17:00:00\",\"end\":\"2015-02-10 03:00:00\",\"user\":{\"id\":\"4\",\"fb_uid\":\"1302213537\",\"first_name\":\"Cole\",\"last_name\":\"Menzel\"}}]";
         result = (List<RideInfo>)gson.fromJson(testJson, listType);
 
         return result;
@@ -128,6 +133,29 @@ public class HomeFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    private class HomeViewPagerAdapter extends FragmentStatePagerAdapter {
+
+        public HomeViewPagerAdapter(android.support.v4.app.FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 1) {
+                return new ProfileFragment();
+            } else if (position == 2) {
+                return new ProfileFragment();
+            } else if (position == 3) {
+                return new ProfileFragment();
+            }
+            return new ProfileFragment();
+        }
+
+        public int getCount() {
+            return NUM_PAGES;
+        }
     }
 
 }

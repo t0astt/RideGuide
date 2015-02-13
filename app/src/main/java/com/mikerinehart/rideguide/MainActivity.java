@@ -61,38 +61,6 @@ public class MainActivity extends ActionBarActivity implements
 
         me = getIntent().getExtras().getParcelable("me");
 
-//        RequestParams params = new RequestParams();
-//        params.put("fb_uid", myFbUid);
-//
-//        RestClient.get("users/show/", params, new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                try {
-//                    myFName = response.getString("first_name");
-//                    myLName = response.getString("last_name");
-//                    myEmail = response.getString("email");
-//
-//                    mAdapter = new DrawerAdapter(TITLES, ICONS, myFName + " " + myLName, myEmail, myFbUid, getBaseContext());
-//                    mRecyclerView.setAdapter(mAdapter);
-//                } catch (JSONException e) {
-//                    Log.i(TAG, e.getMessage());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                new AlertDialog.Builder(MainActivity.this)
-//                        .setTitle("Error")
-//                        .setMessage("RideGuide requires an active data connection. Please enable data before continuing.")
-//                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                finish();
-//                                System.exit(0);
-//                            }
-//                        }).show();
-//            }
-//        });
         toolbar = (Toolbar)findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Rides Available Now");
@@ -102,6 +70,8 @@ public class MainActivity extends ActionBarActivity implements
         fm.beginTransaction().replace(R.id.container, HomeFragment.newInstance("Test", "HomeFragment")).commit();
 
         mRecyclerView = (RecyclerView)findViewById(R.id.RecyclerView);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
         final GestureDetector mGestureDetector = new GestureDetector(MainActivity.this, new GestureDetector.SimpleOnGestureListener() {
@@ -132,9 +102,7 @@ public class MainActivity extends ActionBarActivity implements
                     }
                     else if (itemClicked == 3) {
                         toolbar.setTitle("Search Rides");
-                        Intent intent = new Intent(MainActivity.this, testactivity.class);
-                        startActivity(intent);
-                        //fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance("Test", "RidesFragment")).commit();
+                        fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance("Test", "RidesFragment")).commit();
                     }
                     else if (itemClicked == 4) {
                         toolbar.setTitle("Settings");
@@ -165,8 +133,8 @@ public class MainActivity extends ActionBarActivity implements
                 Log.i(TAG, "TouchEvent");
             }
         });
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+//        mLayoutManager = new LinearLayoutManager(this);
+//        mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new DrawerAdapter(TITLES, ICONS, me.getFirstName() + " " + me.getLastName(), me.getEmail(), me.getFbUid(), getBaseContext());
         mRecyclerView.setAdapter(mAdapter);
         Drawer = (DrawerLayout)findViewById(R.id.DrawerLayout);

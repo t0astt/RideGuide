@@ -2,14 +2,27 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.mikerinehart.rideguide.HomeFragment"
-    android:background="#303030">
+    android:background="#FFFFFF">
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/ride_info_list"
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/tabs"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary" />
+
+    <android.support.v4.view.ViewPager
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/home_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/ride_info_list"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="350dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentTop="false"-->
+        <!--android:layout_alignParentStart="false"-->
+        <!--android:visibility="gone" />-->
 
 </RelativeLayout>
