@@ -1,14 +1,64 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mikerinehart.rideguide.ProfileFragment"
+    tools:context="com.mikerinehart.rideguide.main_fragments.ProfileFragment"
     android:background="#FFFFFF">
 
-    <!-- TODO: Update blank fragment ride_info_list_item -->
 
     <ImageView
-        android:layout_width="202dp"
-        android:layout_height="200dp"
-        android:id="@+id/profile_pic"
-        android:visibility="visible" />
-</LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:id="@+id/cover_photo"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#000000"
+        android:scaleType="centerCrop"
+        android:elevation="2dp" />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/profile_picture"
+        android:layout_marginTop="92dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="7dp"
+        android:src="@drawable/com_facebook_profile_picture_blank_square"
+        android:elevation="4dp" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="First Name"
+        android:id="@+id/first_name"
+        android:textColor="#FFFFFF"
+        android:gravity="center_horizontal"
+        android:layout_above="@+id/last_name"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/profile_picture"
+        android:layout_toEndOf="@+id/profile_picture"
+        android:textSize="27dp"
+        android:textStyle="bold"
+        android:elevation="2dp" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Last Name"
+        android:id="@+id/last_name"
+        android:textColor="#FFFFFF"
+        android:gravity="center_horizontal"
+        android:layout_alignBottom="@+id/cover_photo"
+        android:layout_toEndOf="@+id/profile_picture"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentBottom="false"
+        android:layout_toRightOf="@+id/profile_picture"
+        android:textSize="27dp"
+        android:textStyle="bold"
+        android:elevation="2dp" />
+
+</RelativeLayout>

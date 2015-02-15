@@ -1,4 +1,4 @@
-package com.mikerinehart.rideguide;
+package com.mikerinehart.rideguide.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -6,8 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +21,9 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.mikerinehart.rideguide.R;
+import com.mikerinehart.rideguide.RestClient;
+import com.mikerinehart.rideguide.models.User;
 
 import org.apache.http.Header;
 import org.json.JSONException;
@@ -29,15 +32,12 @@ import org.parceler.apache.commons.lang.BooleanUtils;
 
 public class DecisionActivity extends ActionBarActivity {
 
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static String TAG = "DecisionActivity";
     ConnectivityManager cm;
-
-
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     String SENDER_ID = "690520067451";
     GoogleCloudMessaging gcm;
     String regid;
-
 
 
     private User me;
@@ -48,7 +48,7 @@ public class DecisionActivity extends ActionBarActivity {
         setContentView(R.layout.activity_decision);
 
         if (checkPlayServices()) {
-            cm = (ConnectivityManager)getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            cm = (ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
             if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
 
@@ -82,7 +82,7 @@ public class DecisionActivity extends ActionBarActivity {
                                             launchLoginActivity();
                                         } else {
                                             Log.i(TAG, "User exists, creating local User object");
-                                            me = new User (response.getInt("id"),
+                                            me = new User(response.getInt("id"),
                                                     response.getString("fb_uid"),
                                                     response.getString("email"),
                                                     response.getString("first_name"),
@@ -101,6 +101,7 @@ public class DecisionActivity extends ActionBarActivity {
                                     }
 
                                 }
+
                                 @Override
                                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                                     Log.i(TAG, "Error: " + statusCode);

@@ -1,8 +1,8 @@
 package com.mikerinehart.rideguide;
 
 import android.app.IntentService;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -20,6 +20,10 @@ public class GcmIntentService extends IntentService {
     // TODO: Rename parameters
     private static final String EXTRA_PARAM1 = "com.mikerinehart.rideguide.extra.PARAM1";
     private static final String EXTRA_PARAM2 = "com.mikerinehart.rideguide.extra.PARAM2";
+
+    public GcmIntentService() {
+        super("GcmIntentService");
+    }
 
     /**
      * Starts this service to perform action Foo with the given parameters. If
@@ -49,10 +53,6 @@ public class GcmIntentService extends IntentService {
         intent.putExtra(EXTRA_PARAM1, param1);
         intent.putExtra(EXTRA_PARAM2, param2);
         context.startService(intent);
-    }
-
-    public GcmIntentService() {
-        super("GcmIntentService");
     }
 
     @Override

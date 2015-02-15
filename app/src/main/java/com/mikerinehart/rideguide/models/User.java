@@ -1,4 +1,4 @@
-package com.mikerinehart.rideguide;
+package com.mikerinehart.rideguide.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,7 +7,16 @@ import android.os.Parcelable;
  * Created by Mike on 2/4/2015.
  */
 
-public class User implements Parcelable{
+public class User implements Parcelable {
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
     protected int id;
     protected String fb_uid;
     protected String email;
@@ -23,6 +32,7 @@ public class User implements Parcelable{
         this.last_name = last_name;
         this.confirmed = confirmed;
     }
+
     User(Parcel in) {
         this.id = in.readInt();
         this.fb_uid = in.readString();
@@ -43,38 +53,23 @@ public class User implements Parcelable{
         return 0;
     }
 
-    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
-
-    public String getFbUid()
-    {
+    public String getFbUid() {
         return fb_uid;
     }
 
-    public String getEmail()
-    {
+    public String getEmail() {
         return email;
     }
 
-    public String getFirstName()
-    {
+    public String getFirstName() {
         return first_name;
     }
 
-    public String getLastName()
-    {
+    public String getLastName() {
         return last_name;
     }
 
-    public String getFullName()
-    {
+    public String getFullName() {
         return first_name + " " + last_name;
     }
 

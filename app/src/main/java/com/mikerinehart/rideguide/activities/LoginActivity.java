@@ -1,8 +1,8 @@
-package com.mikerinehart.rideguide;
+package com.mikerinehart.rideguide.activities;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,8 +17,12 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
-
-import com.loopj.android.http.*;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.mikerinehart.rideguide.R;
+import com.mikerinehart.rideguide.RestClient;
+import com.mikerinehart.rideguide.models.User;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.listeners.ActionClickListener;
 
@@ -30,18 +34,24 @@ import org.parceler.apache.commons.lang.BooleanUtils;
 
 public class LoginActivity extends ActionBarActivity {
 
+    public final static String USER = "com.mikerinehart.rideguide.USER";
     private UiLifecycleHelper uiHelper;
     private FrameLayout fbContainer;
     private RelativeLayout emailContainer;
     private EditText emailField;
-
     private String TAG = "LoginActivity";
-    public final static String USER = "com.mikerinehart.rideguide.USER";
-
     private User me;
     private GraphUser user;
 
     private boolean confCheckActive;
+    // Called when session changes
+    private Session.StatusCallback callback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state,
+                         Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,15 +61,6 @@ public class LoginActivity extends ActionBarActivity {
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
     }
-
-    // Called when session changes
-    private Session.StatusCallback callback = new Session.StatusCallback() {
-        @Override
-        public void call(Session session, SessionState state,
-                         Exception exception) {
-            onSessionStateChange(session, state, exception);
-        }
-    };
 
     // When session is changed, this method is called from callback method
     private void onSessionStateChange(final Session session, SessionState state, Exception exception) {
@@ -84,18 +85,18 @@ public class LoginActivity extends ActionBarActivity {
                                     //If the exists key is present, it means they DO NOT EXIST
                                     if (response.has("exists")) {
                                         Log.i(TAG, "User does not exist, show email registration screen");
-                                        fbContainer = (FrameLayout)findViewById(R.id.fb_container);
-                                        emailContainer = (RelativeLayout)findViewById(R.id.email_container);
+                                        fbContainer = (FrameLayout) findViewById(R.id.fb_container);
+                                        emailContainer = (RelativeLayout) findViewById(R.id.email_container);
                                         fbContainer.setVisibility(FrameLayout.GONE);
                                         emailContainer.setVisibility(RelativeLayout.VISIBLE);
-                                        emailField = (EditText)findViewById(R.id.email_field);
+                                        emailField = (EditText) findViewById(R.id.email_field);
 
                                     } else {
                                         Log.i(TAG, "User exists, checking confirmation status");
 
                                         if (BooleanUtils.toBoolean(response.getInt("confirmed"))) {
                                             Log.i(TAG, "User is confirmed, starting MainActivity");
-                                            me = new User (response.getInt("id"),
+                                            me = new User(response.getInt("id"),
                                                     response.getString("fb_uid"),
                                                     response.getString("email"),
                                                     response.getString("first_name"),
@@ -104,11 +105,11 @@ public class LoginActivity extends ActionBarActivity {
                                             launchMainActivity(me);
                                         } else {
                                             Log.i(TAG, "User is not confirmed, show email registration screen");
-                                            fbContainer = (FrameLayout)findViewById(R.id.fb_container);
-                                            emailContainer = (RelativeLayout)findViewById(R.id.email_container);
+                                            fbContainer = (FrameLayout) findViewById(R.id.fb_container);
+                                            emailContainer = (RelativeLayout) findViewById(R.id.email_container);
                                             fbContainer.setVisibility(FrameLayout.GONE);
                                             emailContainer.setVisibility(RelativeLayout.VISIBLE);
-                                            emailField = (EditText)findViewById(R.id.email_field);
+                                            emailField = (EditText) findViewById(R.id.email_field);
                                         }
                                     }
                                 } catch (JSONException e) {
@@ -116,6 +117,7 @@ public class LoginActivity extends ActionBarActivity {
                                 }
 
                             }
+
                             @Override
                             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                                 Log.i(TAG, "Error: " + statusCode);
@@ -133,8 +135,7 @@ public class LoginActivity extends ActionBarActivity {
         String email = emailField.getText().toString();
 
 
-        if (!email.equals("") && email.length() > 4 && email.substring(email.length()-4).equalsIgnoreCase(".edu"))
-        {
+        if (!email.equals("") && email.length() > 4 && email.substring(email.length() - 4).equalsIgnoreCase(".edu")) {
             Snackbar.with(getApplicationContext()).text("Sending email...").show(LoginActivity.this);
             RequestParams params = new RequestParams();
 

@@ -1,4 +1,4 @@
-package com.mikerinehart.rideguide;
+package com.mikerinehart.rideguide.main_fragments;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -9,8 +9,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mikerinehart.rideguide.R;
+import com.mikerinehart.rideguide.RestClient;
+import com.mikerinehart.rideguide.RoundedTransformation;
+import com.mikerinehart.rideguide.models.User;
 import com.squareup.picasso.Picasso;
+
+import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.parceler.apache.commons.lang.BooleanUtils;
 
 
 /**
@@ -22,18 +34,29 @@ import com.squareup.picasso.Picasso;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
+    private static final String ARG_PARAM2 = "param2";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
+    private static User ARG_PARAM1;
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private User user;
     private String mParam2;
 
-    private ImageView profilePicHolder;
+    private ImageView coverPhoto;
+    private ImageView profilePicture;
+    private TextView firstName;
+    private TextView lastName;
+
+    private String coverPhotoSource;
+
+    //    private OkHttpClient client;
+    private Gson gson;
 
     private OnFragmentInteractionListener mListener;
+
+    public ProfileFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -44,30 +67,26 @@ public class ProfileFragment extends Fragment {
      * @return A new instance of fragment ProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
+    public static ProfileFragment newInstance(User param1, String param2) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putParcelable("USER", param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public ProfileFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            user = getArguments().getParcelable("USER");
             mParam2 = getArguments().getString(ARG_PARAM2);
-
         }
+
+//        client = new OkHttpClient();
+        gson = new Gson();
     }
 
     @Override
@@ -75,11 +94,38 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the ride_info_list_item for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
-        profilePicHolder = (ImageView)v.findViewById(R.id.profile_pic);
-        Log.d("Profile", "profilePicHolder = " + profilePicHolder);
+        profilePicture = (ImageView) v.findViewById(R.id.profile_picture);
+        coverPhoto = (ImageView) v.findViewById(R.id.cover_photo);
+        firstName = (TextView) v.findViewById(R.id.first_name);
+        lastName = (TextView) v.findViewById(R.id.last_name);
+
+        // Get cover photo with the jankass Graph API call.
+        RestClient.fbGet(user.getFbUid() + "?fields=cover", null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    coverPhotoSource = response.getJSONObject("cover").getString("source");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Picasso.with(coverPhoto.getContext())
+                        .load(coverPhotoSource)
+                        .into(coverPhoto);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.i("ProfileFragment", "Error: " + errorResponse);
+            }
+        });
 
 
-        Picasso.with(profilePicHolder.getContext()).load("https://graph.facebook.com/10205393671587549/picture?type=large").into(profilePicHolder);
+        firstName.setText(user.getFirstName());
+        lastName.setText(user.getLastName());
+        Picasso.with(profilePicture.getContext())
+                .load("https://graph.facebook.com/" + user.getFbUid() + "/picture?height=1000&type=large&width=1000")
+                .transform(new RoundedTransformation(600, 5))
+                .into(profilePicture);
         return v;
     }
 

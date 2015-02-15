@@ -31,7 +31,7 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name" >
 
             <!-- <intent-filter> -->
@@ -42,7 +42,7 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".DecisionActivity"
+            android:name=".activities.DecisionActivity"
             android:label="@string/title_activity_decision" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,7 +51,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" >
         </activity>
         <activity android:name="com.facebook.LoginActivity" >
@@ -62,7 +62,7 @@
         <!-- android:parentActivityName=".MainActivity" > -->
         <!-- <meta-data -->
         <!-- android:name="android.support.PARENT_ACTIVITY" -->
-        <!-- android:value="com.mikerinehart.rideguide.MainActivity" /> -->
+        <!-- android:value="com.mikerinehart.rideguide.activities.MainActivity" /> -->
         <!-- </activity> -->
         <service
             android:name=".GcmIntentService"

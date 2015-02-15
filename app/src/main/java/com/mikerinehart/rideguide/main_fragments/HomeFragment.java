@@ -1,27 +1,18 @@
-package com.mikerinehart.rideguide;
+package com.mikerinehart.rideguide.main_fragments;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.support.v4.app.Fragment;
-
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-import java.util.List;
+import com.mikerinehart.rideguide.page_fragments.HomePageFragment;
+import com.mikerinehart.rideguide.R;
 
 
 /**
@@ -43,7 +34,9 @@ public class HomeFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private static final int NUM_PAGES = 3;
+    public HomeFragment() {
+        // Required empty public constructor
+    }
 
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
@@ -52,10 +45,6 @@ public class HomeFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public HomeFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -73,37 +62,13 @@ public class HomeFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
-        ViewPager pager = (ViewPager)v.findViewById(R.id.home_pager);
+        ViewPager pager = (ViewPager) v.findViewById(R.id.home_pager);
         pager.setAdapter(new HomeViewPagerAdapter(getFragmentManager()));
 
-        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip)v.findViewById(R.id.tabs);
+        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) v.findViewById(R.id.tabs);
         tabs.setViewPager(pager);
 
-
-
-//        RecyclerView rideList = (RecyclerView)v.findViewById(R.id.ride_info_list);
-//        rideList.setHasFixedSize(true);
-//        LinearLayoutManager llm = new LinearLayoutManager(rideList.getContext());
-//        llm.setOrientation(LinearLayoutManager.VERTICAL);
-//        rideList.setLayoutManager(llm);
-//
-//        RideInfoAdapter ra = new RideInfoAdapter(createRideList());
-//        rideList.addItemDecoration(new SimpleDividerItemDecoration(rideList.getContext()));
-//        rideList.setAdapter(ra);
-
-
         return v;
-    }
-
-    private List<RideInfo> createRideList() {
-        List<RideInfo> result;
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-        Type listType = new TypeToken<List<RideInfo>>(){}.getType();
-
-        String testJson = "[{\"id\":\"2\",\"user_id\":\"2\",\"seats\":\"4\",\"start\":\"2015-02-09 18:00:00\",\"end\":\"2015-02-10 02:00:00\",\"user\":{\"id\":\"2\",\"fb_uid\":\"1493344104\",\"first_name\":\"Edward\",\"last_name\":\"Liu\"}},{\"id\":\"3\",\"user_id\":\"4\",\"seats\":\"3\",\"start\":\"2015-02-09 17:00:00\",\"end\":\"2015-02-10 03:00:00\",\"user\":{\"id\":\"4\",\"fb_uid\":\"1302213537\",\"first_name\":\"Cole\",\"last_name\":\"Menzel\"}}]";
-        result = (List<RideInfo>)gson.fromJson(testJson, listType);
-
-        return result;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -137,24 +102,31 @@ public class HomeFragment extends Fragment {
 
     private class HomeViewPagerAdapter extends FragmentStatePagerAdapter {
 
+        private final String[] TITLES = {"Home", "Reservations", "My Shifts"};
+
         public HomeViewPagerAdapter(android.support.v4.app.FragmentManager fm) {
             super(fm);
         }
 
         @Override
+        public CharSequence getPageTitle(int position) {
+            return TITLES[position];
+        }
+
+        @Override
         public Fragment getItem(int position) {
-            if (position == 1) {
-                return new ProfileFragment();
+            if (position == 0) {
+                return new HomePageFragment();
+            } else if (position == 1) {
+                return new HomePageFragment();
             } else if (position == 2) {
                 return new ProfileFragment();
-            } else if (position == 3) {
-                return new ProfileFragment();
             }
-            return new ProfileFragment();
+            return new HomePageFragment();
         }
 
         public int getCount() {
-            return NUM_PAGES;
+            return TITLES.length;
         }
     }
 

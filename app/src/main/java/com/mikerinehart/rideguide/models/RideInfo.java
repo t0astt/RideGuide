@@ -1,4 +1,4 @@
-package com.mikerinehart.rideguide;
+package com.mikerinehart.rideguide.models;
 
 import java.util.Date;
 
@@ -11,7 +11,7 @@ public class RideInfo {
     protected int seats;
     protected Date start;
     protected Date end;
-    protected User user;
+    public User user;
 
     public int getRideId() {
         return id;
