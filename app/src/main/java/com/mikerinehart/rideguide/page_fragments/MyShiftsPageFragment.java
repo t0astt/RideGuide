@@ -1,52 +1,52 @@
-package com.mikerinehart.rideguide.main_fragments;
+package com.mikerinehart.rideguide.page_fragments;
 
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-import com.astuetz.PagerSlidingTabStrip;
-import com.mikerinehart.rideguide.page_fragments.HomePageFragment;
+import com.gc.materialdesign.views.ButtonFloat;
 import com.mikerinehart.rideguide.R;
-import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
-import com.mikerinehart.rideguide.page_fragments.ReservationsPageFragment;
-
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link HomeFragment.OnFragmentInteractionListener} interface
+ * {@link MyShiftsPageFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link HomeFragment#newInstance} factory method to
+ * Use the {@link MyShiftsPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class MyShiftsPageFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+    private ButtonFloat newShiftButton;
 
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
+
+    // TODO: Rename and change types and number of parameters
+    public static MyShiftsPageFragment newInstance(String param1, String param2) {
+        MyShiftsPageFragment fragment = new MyShiftsPageFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public MyShiftsPageFragment() {
+        // Required empty public constructor
     }
 
     @Override
@@ -61,14 +61,9 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        View v = inflater.inflate(R.layout.fragment_home, container, false);
-
-        ViewPager pager = (ViewPager) v.findViewById(R.id.home_pager);
-        pager.setAdapter(new HomeViewPagerAdapter(getFragmentManager()));
-
-        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) v.findViewById(R.id.tabs);
-        tabs.setViewPager(pager);
+        View v = inflater.inflate(R.layout.fragment_my_shifts_page, container, false);
+        newShiftButton = (ButtonFloat)v.findViewById(R.id.new_shift_fab);
+        newShiftButton.setBackgroundColor(getResources().getColor(R.color.ColorAccent));
 
         return v;
     }
@@ -97,39 +92,19 @@ public class HomeFragment extends Fragment {
         mListener = null;
     }
 
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
-    }
-
-    private class HomeViewPagerAdapter extends FragmentStatePagerAdapter {
-
-        private final String[] TITLES = {"Home", "Reservations", "My Shifts"};
-
-        public HomeViewPagerAdapter(android.support.v4.app.FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return TITLES[position];
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            if (position == 0) {
-                return new HomePageFragment();
-            } else if (position == 1) {
-                return new ReservationsPageFragment();
-            } else if (position == 2) {
-                return new MyShiftsPageFragment();
-            }
-            return new HomePageFragment();
-        }
-
-        public int getCount() {
-            return TITLES.length;
-        }
     }
 
 }
