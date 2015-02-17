@@ -49,7 +49,9 @@ public class MainActivity extends ActionBarActivity implements
     ActionBarDrawerToggle mDrawerToggle;
     String[] TITLES;
     int ICONS[] = {R.drawable.ic_home, R.drawable.ic_profile, R.drawable.ic_rides, R.drawable.ic_settings, R.drawable.ic_about, R.drawable.ic_logout};
-    User me;
+
+    public User me;
+
     String TAG = "MainActivity";
     private Toolbar toolbar;
     private GraphUser user;
@@ -68,7 +70,7 @@ public class MainActivity extends ActionBarActivity implements
 
 
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.container, HomeFragment.newInstance("Test", "HomeFragment")).commit();
+        fm.beginTransaction().replace(R.id.container, HomeFragment.newInstance(me, "HomeFragment")).commit();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         mLayoutManager = new LinearLayoutManager(this);
@@ -94,8 +96,8 @@ public class MainActivity extends ActionBarActivity implements
                     mAdapter.selectPosition(itemClicked);
 
                     if (itemClicked == 1) {
-                        toolbar.setTitle("Rides Available Now");
-                        fm.beginTransaction().replace(R.id.container, HomeFragment.newInstance("Test", "HomeFragment")).commit();
+                        toolbar.setTitle("Home");
+                        fm.beginTransaction().replace(R.id.container, HomeFragment.newInstance(me, "HomeFragment")).commit();
                     } else if (itemClicked == 2) {
                         toolbar.setTitle("My Profile");
                         fm.beginTransaction().replace(R.id.container, ProfileFragment.newInstance(me, "ProfileFragment")).commit();

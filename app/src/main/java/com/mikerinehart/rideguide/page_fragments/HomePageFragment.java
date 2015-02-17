@@ -15,8 +15,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
-import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
+import com.mikerinehart.rideguide.adapters.UpcomingReservationsAdapter;
+import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.Ride;
+import com.mikerinehart.rideguide.models.User;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -37,7 +39,7 @@ public class HomePageFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private User me;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
@@ -55,10 +57,10 @@ public class HomePageFragment extends Fragment {
      * @return A new instance of fragment HomePageFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HomePageFragment newInstance(String param1, String param2) {
+    public static HomePageFragment newInstance(User param1, String param2) {
         HomePageFragment fragment = new HomePageFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putParcelable("USER", param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -68,7 +70,7 @@ public class HomePageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            me = getArguments().getParcelable("USER");
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -78,27 +80,27 @@ public class HomePageFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home_page, container, false);
 
-        RecyclerView rideList = (RecyclerView) v.findViewById(R.id.upcoming_reservation_list);
-        rideList.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(rideList.getContext());
+        RecyclerView reservationList = (RecyclerView) v.findViewById(R.id.upcoming_reservation_list);
+        reservationList.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(reservationList.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-        rideList.setLayoutManager(llm);
+        reservationList.setLayoutManager(llm);
 
-        MyShiftsAdapter ra = new MyShiftsAdapter(createRideList());
-        rideList.addItemDecoration(new SimpleDividerItemDecoration(rideList.getContext()));
-        rideList.setAdapter(ra);
+        UpcomingReservationsAdapter ra = new UpcomingReservationsAdapter(createReservationList());
+        reservationList.addItemDecoration(new SimpleDividerItemDecoration(reservationList.getContext()));
+        reservationList.setAdapter(ra);
 
         return v;
     }
 
-    private List<Ride> createRideList() {
-        List<Ride> result;
+    private List<Reservation> createReservationList() {
+        List<Reservation> result;
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         Type listType = new TypeToken<List<Ride>>() {
         }.getType();
 
         String testJson = "[{\"id\":\"2\",\"user_id\":\"2\",\"seats\":\"4\",\"start\":\"2015-02-09 18:00:00\",\"end\":\"2015-02-10 02:00:00\",\"user\":{\"id\":\"2\",\"fb_uid\":\"1493344104\",\"first_name\":\"Edward\",\"last_name\":\"Liu\"}},{\"id\":\"3\",\"user_id\":\"4\",\"seats\":\"3\",\"start\":\"2015-02-09 17:00:00\",\"end\":\"2015-02-10 03:00:00\",\"user\":{\"id\":\"4\",\"fb_uid\":\"1302213537\",\"first_name\":\"Cole\",\"last_name\":\"Menzel\"}}]";
-        result = (List<Ride>) gson.fromJson(testJson, listType);
+        result = (List<Reservation>) gson.fromJson(testJson, listType);
 
         return result;
     }

@@ -4,13 +4,36 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.gc.materialdesign.views.ButtonFloat;
+import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
+import com.mikerinehart.rideguide.RestClient;
+import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
+import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
+import com.mikerinehart.rideguide.models.Shift;
+import com.mikerinehart.rideguide.models.User;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,23 +46,27 @@ import com.mikerinehart.rideguide.R;
 public class MyShiftsPageFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+    private static User ARG_PARAM1;
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private User user;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
     private ButtonFloat newShiftButton;
+    private TextView shiftShame;
+    private ProgressBarCircularIndeterminate loadingIcon;
+
+    private String TAG = "MyShiftsPageFragment";
 
 
     // TODO: Rename and change types and number of parameters
-    public static MyShiftsPageFragment newInstance(String param1, String param2) {
+    public static MyShiftsPageFragment newInstance(User param1, String param2) {
         MyShiftsPageFragment fragment = new MyShiftsPageFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putParcelable("USER", param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -53,7 +80,7 @@ public class MyShiftsPageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            user = getArguments().getParcelable("USER");
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -61,9 +88,50 @@ public class MyShiftsPageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_my_shifts_page, container, false);
-        newShiftButton = (ButtonFloat)v.findViewById(R.id.new_shift_fab);
+        final View v = inflater.inflate(R.layout.fragment_my_shifts_page, container, false);
+        newShiftButton = (ButtonFloat)v.findViewById(R.id.myshifts_new_shift_fab);
         newShiftButton.setBackgroundColor(getResources().getColor(R.color.ColorAccent));
+        shiftShame = (TextView)v.findViewById(R.id.myshifts_shift_shame);
+        loadingIcon = (ProgressBarCircularIndeterminate)v.findViewById(R.id.myshifts_circular_loading);
+
+        final RecyclerView shiftList = (RecyclerView) v.findViewById(R.id.myshifts_my_shifts_list);
+        shiftList.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(shiftList.getContext());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        shiftList.setLayoutManager(llm);
+
+        // Asynchronously load my shifts with POST
+        RequestParams params = new RequestParams("user_id", user.getId());
+        RestClient.post("shifts/myShifts", params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                List<Shift> result;
+                Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+                Type listType = new TypeToken<List<Shift>>() {
+                }.getType();
+
+                result = (List<Shift>)gson.fromJson(response.toString(), listType);
+
+                loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
+
+                // check whether or not to shame the user hehe
+                if (result.size() == 0) {
+                    shiftShame.setVisibility(TextView.VISIBLE);
+                    shiftList.setVisibility(RecyclerView.GONE);
+                } else {
+                    shiftList.setVisibility(RecyclerView.VISIBLE);
+                    MyShiftsAdapter shiftsAdapter = new MyShiftsAdapter(result);
+
+                    shiftList.addItemDecoration(new SimpleDividerItemDecoration(shiftList.getContext()));
+                    shiftList.setAdapter(shiftsAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.i(TAG, "Error: " + errorResponse);
+            }
+        });
 
         return v;
     }

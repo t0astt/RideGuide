@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Start"
-        android:id="@+id/start_time"
+        android:id="@+id/myshifts_start_time"
         android:visibility="visible"
         android:textColor="#8a000000"
         android:layout_marginLeft="11dp"
@@ -29,12 +29,12 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="End"
-        android:id="@+id/end_time"
+        android:id="@+id/myshifts_end_time"
         android:visibility="visible"
         android:paddingLeft="5dp"
-        android:layout_alignTop="@+id/time_divider"
-        android:layout_toRightOf="@+id/time_divider"
-        android:layout_toEndOf="@+id/time_divider"
+        android:layout_alignTop="@+id/myshifts_time_divider"
+        android:layout_toRightOf="@+id/myshifts_time_divider"
+        android:layout_toEndOf="@+id/myshifts_time_divider"
         android:textStyle="bold"
         android:layout_alignParentBottom="false"
         android:layout_centerVertical="true" />
@@ -44,10 +44,10 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="to"
-        android:id="@+id/time_divider"
+        android:id="@+id/myshifts_time_divider"
         android:paddingLeft="5dp"
-        android:layout_toRightOf="@+id/start_time"
-        android:layout_toEndOf="@+id/start_time"
+        android:layout_toRightOf="@+id/myshifts_start_time"
+        android:layout_toEndOf="@+id/myshifts_start_time"
         android:layout_alignParentBottom="false"
         android:layout_centerVertical="true" />
 
@@ -56,20 +56,20 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Number of Reservations:"
-        android:id="@+id/reservations_label"
-        android:layout_below="@+id/start_time"
-        android:layout_alignLeft="@+id/start_time"
-        android:layout_alignStart="@+id/start_time" />
+        android:id="@+id/myshifts_reservations_label"
+        android:layout_below="@+id/myshifts_start_time"
+        android:layout_alignLeft="@+id/myshifts_start_time"
+        android:layout_alignStart="@+id/myshifts_start_time" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="#"
-        android:id="@+id/num_reservations"
-        android:layout_below="@+id/end_time"
-        android:layout_toRightOf="@+id/reservations_label"
-        android:layout_toEndOf="@+id/reservations_label"
+        android:id="@+id/myshifts_num_reservations"
+        android:layout_below="@+id/myshifts_end_time"
+        android:layout_toRightOf="@+id/myshifts_reservations_label"
+        android:layout_toEndOf="@+id/myshifts_reservations_label"
         android:paddingLeft="5dp" />
 
     <TextView
@@ -77,7 +77,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:text="#"
-        android:id="@+id/num_seats"
+        android:id="@+id/myshifts_num_seats"
         android:layout_marginRight="38dp"
         android:layout_marginEnd="38dp"
         android:textColor="#de000000"
@@ -92,10 +92,10 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Seats"
-        android:id="@+id/seats_label"
+        android:id="@+id/myshifts_seats_label"
         android:gravity="center_horizontal"
-        android:layout_alignTop="@+id/reservations_label"
-        android:layout_alignLeft="@+id/num_seats"
-        android:layout_alignStart="@+id/num_seats" />
+        android:layout_alignTop="@+id/myshifts_reservations_label"
+        android:layout_alignLeft="@+id/myshifts_num_seats"
+        android:layout_alignStart="@+id/myshifts_num_seats" />
 
 </RelativeLayout>

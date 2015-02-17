@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.mikerinehart.rideguide.models.User;
 import com.mikerinehart.rideguide.page_fragments.HomePageFragment;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
@@ -31,7 +32,7 @@ public class HomeFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String mParam1;
+    private User me;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
@@ -40,10 +41,10 @@ public class HomeFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static HomeFragment newInstance(String param1, String param2) {
+    public static HomeFragment newInstance(User param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putParcelable("USER", param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -53,7 +54,7 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            me = getArguments().getParcelable("USER");
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -118,11 +119,11 @@ public class HomeFragment extends Fragment {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                return new HomePageFragment();
+                return HomePageFragment.newInstance(me,"HomePageFragment");
             } else if (position == 1) {
                 return new ReservationsPageFragment();
             } else if (position == 2) {
-                return new MyShiftsPageFragment();
+                return MyShiftsPageFragment.newInstance(me, "MyShiftsPageFragment");
             }
             return new HomePageFragment();
         }

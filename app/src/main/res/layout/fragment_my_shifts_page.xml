@@ -8,7 +8,7 @@
     android:background="#FFFFFF">
 
     <com.gc.materialdesign.views.ButtonFloat
-        android:id="@+id/new_shift_fab"
+        android:id="@+id/myshifts_new_shift_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/ColorAccent"
@@ -23,20 +23,33 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Booo! :&apos;( \nYou don&apos;t have any designated driver shifts.\n\nWhy not create one?"
-        android:id="@+id/shift_shame"
+        android:id="@+id/myshifts_shift_shame"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:textColor="#000000"
         android:textStyle="bold"
-        android:gravity="center_horizontal" />
+        android:gravity="center_horizontal"
+        android:visibility="gone" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/my_shifts_list"
+        android:id="@+id/myshifts_my_shifts_list"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="false"
         android:layout_alignParentStart="false"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:layout_below="@+id/myshifts_shift_shame" />
+
+    <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
+        android:id="@+id/myshifts_circular_loading"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="#1E88E5"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentRight="false"
+        android:layout_centerInParent="true" />
+
 
 </RelativeLayout>

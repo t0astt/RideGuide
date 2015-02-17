@@ -53,6 +53,14 @@ public class User implements Parcelable {
         return 0;
     }
 
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getFbUid() {
         return fb_uid;
     }

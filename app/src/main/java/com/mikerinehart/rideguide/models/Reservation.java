@@ -16,8 +16,9 @@ public class Reservation {
     protected String origin;
     protected String destination;
     protected Date pickup_time;
+    public User user;
 
-    public Reservation(int id, int user_id, int shift_id, int passengers, String origin, String destination, Date pickup_time) {
+    public Reservation(int id, int user_id, int shift_id, int passengers, String origin, String destination, Date pickup_time, User user) {
         this.id = id;
         this.user_id = user_id;
         this.shift_id = shift_id;
@@ -25,6 +26,7 @@ public class Reservation {
         this.origin = origin;
         this.destination = destination;
         this.pickup_time = pickup_time;
+        this.user = user;
     }
 
     public int getId() {
@@ -81,5 +83,13 @@ public class Reservation {
 
     public void setPickup_time(Date pickup_time) {
         this.pickup_time = pickup_time;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

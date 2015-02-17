@@ -5,28 +5,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mikerinehart.rideguide.R;
-import com.mikerinehart.rideguide.RoundedTransformation;
-import com.mikerinehart.rideguide.models.Ride;
 import com.mikerinehart.rideguide.models.Shift;
-import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-/**
- * Created by Mike on 2/3/2015.
- */
 public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShiftsViewHolder> {
 
     private List<Shift> shiftList;
     private Context c;
 
-    public MyShiftsAdapter(List<Ride> rideList) {
+    public MyShiftsAdapter(List<Shift> shiftList) {
         this.shiftList = shiftList;
     }
 
@@ -54,7 +47,7 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
     @Override
     public MyShiftsViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         this.c = viewGroup.getContext();
-        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.ride_info_list_item, viewGroup, false);
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.myshifts_list_item, viewGroup, false);
         return new MyShiftsViewHolder(itemView);
     }
 
@@ -68,10 +61,10 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
 
         public MyShiftsViewHolder(View v) {
             super(v);
-            startTime = (TextView) v.findViewById(R.id.start_time);
-            endTime = (TextView) v.findViewById(R.id.end_time);
-            reservations = (TextView) v.findViewById(R.id.num_reservations);
-            seats = (TextView) v.findViewById(R.id.num_seats);
+            startTime = (TextView) v.findViewById(R.id.myshifts_start_time);
+            endTime = (TextView) v.findViewById(R.id.myshifts_end_time);
+            reservations = (TextView) v.findViewById(R.id.myshifts_num_reservations);
+            seats = (TextView) v.findViewById(R.id.myshifts_num_seats);
         }
 
     }

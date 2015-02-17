@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:background="@drawable/drawer_item_background"
+    android:showDividers="end"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Name"
+        android:id="@+id/reservation_name"
+        android:visibility="visible"
+        android:textColor="#8a000000"
+        android:textStyle="bold"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/reservation_user_pic"
+        android:layout_toEndOf="@+id/reservation_user_pic"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Pickup Time: "
+        android:id="@+id/reservation_pickup_time_label"
+        android:visibility="visible"
+        android:layout_toEndOf="@+id/reservation_user_pic"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentTop="false"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/reservation_user_pic"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="false"
+        android:layout_marginLeft="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:text="#"
+        android:id="@+id/reservation_num_passengers"
+        android:layout_marginRight="38dp"
+        android:layout_marginEnd="38dp"
+        android:textColor="#de000000"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentEnd="true"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:layout_centerVertical="true"
+        android:visibility="visible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Passengers"
+        android:id="@+id/reservation_passengers_label"
+        android:gravity="center_horizontal"
+        android:layout_alignTop="@+id/reservation_pickup_time_label"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="18dp"
+        android:layout_marginEnd="18dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="00:00"
+        android:id="@+id/reservation_pickup_time"
+        android:layout_alignTop="@+id/reservation_pickup_time_label"
+        android:layout_toRightOf="@+id/reservation_pickup_time_label"
+        android:layout_toEndOf="@+id/myshifts_reservations_label" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/reservation_user_pic"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="11dp"
+        android:src="@drawable/com_facebook_profile_default_icon" />
+
+</RelativeLayout>

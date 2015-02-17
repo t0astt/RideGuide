@@ -34,11 +34,10 @@ import org.parceler.apache.commons.lang.BooleanUtils;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
-    private static final String ARG_PARAM2 = "param2";
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static User ARG_PARAM1;
-    // TODO: Rename and change types of parameters
+    private static final String ARG_PARAM2 = "param2";
+
     private User user;
     private String mParam2;
 
