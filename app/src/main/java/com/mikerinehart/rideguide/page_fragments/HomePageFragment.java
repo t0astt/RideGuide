@@ -15,8 +15,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
-import com.mikerinehart.rideguide.adapters.RideInfoAdapter;
-import com.mikerinehart.rideguide.models.RideInfo;
+import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
+import com.mikerinehart.rideguide.models.Ride;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -84,21 +84,21 @@ public class HomePageFragment extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         rideList.setLayoutManager(llm);
 
-        RideInfoAdapter ra = new RideInfoAdapter(createRideList());
+        MyShiftsAdapter ra = new MyShiftsAdapter(createRideList());
         rideList.addItemDecoration(new SimpleDividerItemDecoration(rideList.getContext()));
         rideList.setAdapter(ra);
 
         return v;
     }
 
-    private List<RideInfo> createRideList() {
-        List<RideInfo> result;
+    private List<Ride> createRideList() {
+        List<Ride> result;
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-        Type listType = new TypeToken<List<RideInfo>>() {
+        Type listType = new TypeToken<List<Ride>>() {
         }.getType();
 
         String testJson = "[{\"id\":\"2\",\"user_id\":\"2\",\"seats\":\"4\",\"start\":\"2015-02-09 18:00:00\",\"end\":\"2015-02-10 02:00:00\",\"user\":{\"id\":\"2\",\"fb_uid\":\"1493344104\",\"first_name\":\"Edward\",\"last_name\":\"Liu\"}},{\"id\":\"3\",\"user_id\":\"4\",\"seats\":\"3\",\"start\":\"2015-02-09 17:00:00\",\"end\":\"2015-02-10 03:00:00\",\"user\":{\"id\":\"4\",\"fb_uid\":\"1302213537\",\"first_name\":\"Cole\",\"last_name\":\"Menzel\"}}]";
-        result = (List<RideInfo>) gson.fromJson(testJson, listType);
+        result = (List<Ride>) gson.fromJson(testJson, listType);
 
         return result;
     }

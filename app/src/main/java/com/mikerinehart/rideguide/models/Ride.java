@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by Mike on 2/3/2015.
  */
-public class RideInfo {
+public class Ride {
     protected int id;
     protected int user_id;
     protected int seats;
