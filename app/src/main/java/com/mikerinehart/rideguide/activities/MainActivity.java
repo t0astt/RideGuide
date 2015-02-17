@@ -29,13 +29,13 @@ import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.main_fragments.RidesFragment;
 import com.mikerinehart.rideguide.main_fragments.SettingsFragment;
 import com.mikerinehart.rideguide.models.User;
+import com.mikerinehart.rideguide.page_fragments.MyReservationsPageFragment;
 import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
-import com.mikerinehart.rideguide.page_fragments.ReservationsPageFragment;
 
 public class MainActivity extends ActionBarActivity implements
         HomeFragment.OnFragmentInteractionListener,
         HomePageFragment.OnFragmentInteractionListener,
-        ReservationsPageFragment.OnFragmentInteractionListener,
+        MyReservationsPageFragment.OnFragmentInteractionListener,
         MyShiftsPageFragment.OnFragmentInteractionListener,
         ProfileFragment.OnFragmentInteractionListener,
         RidesFragment.OnFragmentInteractionListener,

@@ -14,8 +14,8 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.mikerinehart.rideguide.models.User;
 import com.mikerinehart.rideguide.page_fragments.HomePageFragment;
 import com.mikerinehart.rideguide.R;
+import com.mikerinehart.rideguide.page_fragments.MyReservationsPageFragment;
 import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
-import com.mikerinehart.rideguide.page_fragments.ReservationsPageFragment;
 
 
 /**
@@ -121,7 +121,7 @@ public class HomeFragment extends Fragment {
             if (position == 0) {
                 return HomePageFragment.newInstance(me,"HomePageFragment");
             } else if (position == 1) {
-                return new ReservationsPageFragment();
+                return MyReservationsPageFragment.newInstance(me, "MyReservationsPageFragment");
             } else if (position == 2) {
                 return MyShiftsPageFragment.newInstance(me, "MyShiftsPageFragment");
             }

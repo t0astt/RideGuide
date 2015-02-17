@@ -10,10 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.gc.materialdesign.views.ButtonFloat;
 import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,7 +27,6 @@ import com.mikerinehart.rideguide.models.User;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
@@ -38,12 +35,12 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MyShiftsPageFragment.OnFragmentInteractionListener} interface
+ * {@link MyReservationsPageFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MyShiftsPageFragment#newInstance} factory method to
+ * Use the {@link MyReservationsPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyShiftsPageFragment extends Fragment {
+public class MyReservationsPageFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static User ARG_PARAM1;
@@ -55,16 +52,21 @@ public class MyShiftsPageFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private ButtonFloat newShiftButton;
-    private TextView shiftShame;
     private ProgressBarCircularIndeterminate loadingIcon;
+    private TextView reservationFrowny;
+    private TextView reservationNoneFound;
 
-    private String TAG = "MyShiftsPageFragment";
-
-
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment MyReservationsPageFragment.
+     */
     // TODO: Rename and change types and number of parameters
-    public static MyShiftsPageFragment newInstance(User param1, String param2) {
-        MyShiftsPageFragment fragment = new MyShiftsPageFragment();
+    public static MyReservationsPageFragment newInstance(User param1, String param2) {
+        MyReservationsPageFragment fragment = new MyReservationsPageFragment();
         Bundle args = new Bundle();
         args.putParcelable("USER", param1);
         args.putString(ARG_PARAM2, param2);
@@ -72,7 +74,7 @@ public class MyShiftsPageFragment extends Fragment {
         return fragment;
     }
 
-    public MyShiftsPageFragment() {
+    public MyReservationsPageFragment() {
         // Required empty public constructor
     }
 
@@ -88,17 +90,13 @@ public class MyShiftsPageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_my_shifts_page, container, false);
-        newShiftButton = (ButtonFloat)v.findViewById(R.id.myshifts_new_shift_fab);
-        newShiftButton.setBackgroundColor(getResources().getColor(R.color.ColorAccent));
-        shiftShame = (TextView)v.findViewById(R.id.myshifts_shift_shame);
-        loadingIcon = (ProgressBarCircularIndeterminate)v.findViewById(R.id.myshifts_circular_loading);
+        View v = inflater.inflate(R.layout.fragment_reservations_page, container, false);
 
-        final RecyclerView shiftList = (RecyclerView) v.findViewById(R.id.myshifts_my_shifts_list);
-        shiftList.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(shiftList.getContext());
+        final RecyclerView reservationList = (RecyclerView) v.findViewById(R.id.reservation_list);
+        reservationList.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(reservationList.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-        shiftList.setLayoutManager(llm);
+        reservationList.setLayoutManager(llm);
 
         // Asynchronously load my shifts with POST
         RequestParams params = new RequestParams("user_id", me.getId());
@@ -110,16 +108,19 @@ public class MyShiftsPageFragment extends Fragment {
                 Type listType = new TypeToken<List<Shift>>() {
                 }.getType();
 
-                result = (List<Shift>)gson.fromJson(response.toString(), listType);
+                result = (List<Shift>) gson.fromJson(response.toString(), listType);
 
                 loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
 
                 // check whether or not to shame the user hehe
                 if (result.size() == 0) {
-                    shiftShame.setVisibility(TextView.VISIBLE);
-                    shiftList.setVisibility(RecyclerView.GONE);
+                    reservationNoneFound.setVisibility(TextView.VISIBLE);
+                    reservationFrowny.setVisibility(TextView.VISIBLE);
+                    reservationList.setVisibility(RecyclerView.GONE);
                 } else {
-                    shiftList.setVisibility(RecyclerView.VISIBLE);
+                    reservationList.setVisibility(RecyclerView.VISIBLE);
+
+                    // TODO: Create ReservationsAdapter and attach it
                     MyShiftsAdapter shiftsAdapter = new MyShiftsAdapter(result);
 
                     shiftList.addItemDecoration(new SimpleDividerItemDecoration(shiftList.getContext()));
