@@ -21,7 +21,8 @@ import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
-import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
+import com.mikerinehart.rideguide.adapters.ReservationAdapter;
+import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 
@@ -55,6 +56,8 @@ public class MyReservationsPageFragment extends Fragment {
     private ProgressBarCircularIndeterminate loadingIcon;
     private TextView reservationFrowny;
     private TextView reservationNoneFound;
+
+    private String TAG = "MyReservationsPageFragment";
 
     /**
      * Use this factory method to create a new instance of
@@ -91,6 +94,7 @@ public class MyReservationsPageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_reservations_page, container, false);
+        loadingIcon = (ProgressBarCircularIndeterminate)v.findViewById(R.id.reservation_circular_loading);
 
         final RecyclerView reservationList = (RecyclerView) v.findViewById(R.id.reservation_list);
         reservationList.setHasFixedSize(true);
@@ -98,17 +102,18 @@ public class MyReservationsPageFragment extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         reservationList.setLayoutManager(llm);
 
-        // Asynchronously load my shifts with POST
+        // Asynchronously load reservations with POST
         RequestParams params = new RequestParams("user_id", me.getId());
-        RestClient.post("shifts/myShifts", params, new JsonHttpResponseHandler() {
+        RestClient.post("reservations/myReservations", params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                List<Shift> result;
+
+                List<Reservation> result;
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-                Type listType = new TypeToken<List<Shift>>() {
+                Type listType = new TypeToken<List<Reservation>>() {
                 }.getType();
 
-                result = (List<Shift>) gson.fromJson(response.toString(), listType);
+                result = (List<Reservation>) gson.fromJson(response.toString(), listType);
 
                 loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
 
@@ -121,10 +126,10 @@ public class MyReservationsPageFragment extends Fragment {
                     reservationList.setVisibility(RecyclerView.VISIBLE);
 
                     // TODO: Create ReservationsAdapter and attach it
-                    MyShiftsAdapter shiftsAdapter = new MyShiftsAdapter(result);
+                    ReservationAdapter reservationAdapter = new ReservationAdapter(result);
 
-                    shiftList.addItemDecoration(new SimpleDividerItemDecoration(shiftList.getContext()));
-                    shiftList.setAdapter(shiftsAdapter);
+                    reservationList.addItemDecoration(new SimpleDividerItemDecoration(reservationList.getContext()));
+                    reservationList.setAdapter(reservationAdapter);
                 }
             }
 

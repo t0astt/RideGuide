@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.gc.materialdesign.views.ButtonFloat;
@@ -24,12 +23,12 @@ import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
 import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
+import com.mikerinehart.rideguide.adapters.ReservationAdapter;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;

@@ -29,6 +29,7 @@ public class Reservation {
         this.user = user;
     }
 
+
     public int getId() {
         return id;
     }
@@ -92,4 +93,5 @@ public class Reservation {
     public void setUser(User user) {
         this.user = user;
     }
+
 }
