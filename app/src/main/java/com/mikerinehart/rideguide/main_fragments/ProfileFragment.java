@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.RoundedTransformation;
+import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.models.User;
 import com.squareup.picasso.Picasso;
 

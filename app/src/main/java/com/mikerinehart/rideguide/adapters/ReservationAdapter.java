@@ -43,11 +43,11 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
 
         Log.i("ReservationAdapter", reservationViewHolder.name.toString());
         Reservation r = reservationList.get(i);
-        reservationViewHolder.name.setText(r.getUser().getFullName());
+        reservationViewHolder.name.setText(r.getShift().getUser().getFullName());
         reservationViewHolder.numPassengers.setText(Integer.toString(r.getPassengers()));
         reservationViewHolder.pickupTime.setText(df.format(r.getPickup_time()));
         Picasso.with(reservationViewHolder.userPic.getContext())
-                .load("https://graph.facebook.com/" + r.getUser().getFbUid() + "/picture?type=large")
+                .load("https://graph.facebook.com/" + r.getShift().getUser().getFbUid() + "/picture?type=large")
                 .transform(new RoundedTransformation(100, 5))
                 .into(reservationViewHolder.userPic);
     }

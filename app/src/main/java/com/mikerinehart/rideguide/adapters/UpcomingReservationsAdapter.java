@@ -45,11 +45,11 @@ public class UpcomingReservationsAdapter extends RecyclerView.Adapter<UpcomingRe
         DateFormat df = new SimpleDateFormat("E d, h:mma");
 
         Reservation r = reservationList.get(i);
-        upcomingReservationsViewHolder.name.setText(r.getUser().getFullName());
+        upcomingReservationsViewHolder.name.setText(r.getShift().getUser().getFullName());
         upcomingReservationsViewHolder.pickupTime.setText(df.format(r.getPickup_time()));
         upcomingReservationsViewHolder.passengers.setText(Integer.toString(r.getPassengers()));
         Picasso.with(upcomingReservationsViewHolder.userPic.getContext())
-                .load("https://graph.facebook.com/" + r.getUser().getFbUid() + "/picture?type=large")
+                .load("https://graph.facebook.com/" + r.getShift().getUser().getFbUid() + "/picture?type=large")
                 .transform(new RoundedTransformation(100, 5))
                 .into(upcomingReservationsViewHolder.userPic);
     }
