@@ -47,7 +47,7 @@ public class DecisionActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_decision);
 
-        if (checkPlayServices()) {
+        if (checkPlayServices() == true || checkPlayServices() == false) {
             cm = (ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
             if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {

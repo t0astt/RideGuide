@@ -8,10 +8,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.gc.materialdesign.views.ButtonFloat;
 import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 import com.google.gson.Gson;
@@ -22,8 +25,8 @@ import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
+import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
-import com.mikerinehart.rideguide.adapters.ReservationAdapter;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 
@@ -57,6 +60,7 @@ public class MyShiftsPageFragment extends Fragment {
     private ButtonFloat newShiftButton;
     private TextView shiftShame;
     private ProgressBarCircularIndeterminate loadingIcon;
+    private ButtonFloat createShiftButton;
 
     private String TAG = "MyShiftsPageFragment";
 
@@ -89,9 +93,28 @@ public class MyShiftsPageFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_my_shifts_page, container, false);
         newShiftButton = (ButtonFloat)v.findViewById(R.id.myshifts_new_shift_fab);
-        newShiftButton.setBackgroundColor(getResources().getColor(R.color.ColorAccent));
         shiftShame = (TextView)v.findViewById(R.id.myshifts_shift_shame);
         loadingIcon = (ProgressBarCircularIndeterminate)v.findViewById(R.id.myshifts_circular_loading);
+
+        createShiftButton = (ButtonFloat)v.findViewById(R.id.myshifts_new_shift_fab);
+        createShiftButton.setEnabled(true);
+        createShiftButton.setRippleSpeed(100);
+        createShiftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "Some shit happened");
+                Log.i(TAG, getActivity().getApplicationContext().toString());
+                MaterialDialog dialog = new MaterialDialog.Builder(MyShiftsPageFragment.this.getActivity())
+                        .title("Create new Shift")
+                        .content("Test!")
+                        .positiveText("Agree")
+                        .negativeText("Disagree")
+                        .build();
+                dialog.show();
+            }
+        });
+
+
 
         final RecyclerView shiftList = (RecyclerView) v.findViewById(R.id.myshifts_my_shifts_list);
         shiftList.setHasFixedSize(true);
@@ -135,8 +158,15 @@ public class MyShiftsPageFragment extends Fragment {
         return v;
     }
 
-    public void createShift(View v) {
-
+    public void createShift() {
+        Log.i(TAG, "Some shit happened");
+        MaterialDialog dialog = new MaterialDialog.Builder(this.getActivity().getApplicationContext())
+                .title("Create new Shift")
+                .content("Test!")
+                .positiveText("Agree")
+                .negativeText("Disagree")
+                .build();
+        dialog.show();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

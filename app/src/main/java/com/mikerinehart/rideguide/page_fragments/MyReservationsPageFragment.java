@@ -93,7 +93,7 @@ public class MyReservationsPageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_reservations_page, container, false);
+        final View v = inflater.inflate(R.layout.fragment_reservations_page, container, false);
         loadingIcon = (ProgressBarCircularIndeterminate)v.findViewById(R.id.reservation_circular_loading);
 
         final RecyclerView reservationList = (RecyclerView) v.findViewById(R.id.reservation_list);
@@ -118,7 +118,10 @@ public class MyReservationsPageFragment extends Fragment {
                 loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
 
                 // check whether or not to shame the user hehe
-                if (result.size() == 0) {
+                if (result == null || result.size() == 0) {
+                    reservationNoneFound = (TextView)v.findViewById(R.id.reservation_none_found);
+                    reservationFrowny = (TextView)v.findViewById(R.id.reservation_frowny);
+
                     reservationNoneFound.setVisibility(TextView.VISIBLE);
                     reservationFrowny.setVisibility(TextView.VISIBLE);
                     reservationList.setVisibility(RecyclerView.GONE);

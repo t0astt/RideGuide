@@ -7,17 +7,6 @@
     tools:context="com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment"
     android:background="#FFFFFF">
 
-    <com.gc.materialdesign.views.ButtonFloat
-        android:id="@+id/myshifts_new_shift_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/ColorAccent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginRight="24dp"
-        materialdesign:animate="true"
-        materialdesign:iconDrawable="@drawable/ic_add_new"/>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,6 +39,18 @@
         android:layout_alignParentBottom="false"
         android:layout_alignParentRight="false"
         android:layout_centerInParent="true" />
+
+    <com.gc.materialdesign.views.ButtonFloat
+        android:id="@+id/myshifts_new_shift_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/ColorPrimary"
+        android:visibility="visible"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="24dp"
+        materialdesign:iconDrawable="@drawable/ic_add_new" />
 
 
 </RelativeLayout>

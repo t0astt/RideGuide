@@ -190,9 +190,4 @@ public class MainActivity extends ActionBarActivity implements
     public void onFragmentInteraction(Uri uri) {
 
     }
-
-//    private String getMyFName()
-//    {
-//        return this.myFName;
-//    }
 }
