@@ -179,31 +179,6 @@ public class LoginActivity extends ActionBarActivity {
         }
     }
 
-//    public void checkConfirmation() {
-//        RequestParams params = new RequestParams("fb_uid", fbUid);
-//        RestClient.get("users/" + fbUid, params, new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                try {
-//                    int confirmedStatus = response.getInt("confirmed");
-//                    if (confirmedStatus == 1) {
-//                        confCheckActive = false;
-//                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//                        startActivity(intent);
-//                        finish();
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                Log.i(TAG, "Error: " + statusCode);
-//            }
-//        });
-//    }
-
     private void launchMainActivity(User me) {
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("me", me);

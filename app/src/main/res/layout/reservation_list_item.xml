@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Pickup Time: "
+        android:text="Pickup: "
         android:id="@+id/reservation_pickup_time_label"
         android:visibility="visible"
         android:layout_toEndOf="@+id/reservation_user_pic"
@@ -50,15 +50,15 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:text="#"
         android:id="@+id/reservation_num_passengers"
-        android:layout_marginRight="38dp"
-        android:layout_marginEnd="38dp"
+        android:layout_marginRight="28dp"
+        android:layout_marginEnd="28dp"
         android:textColor="#de000000"
-        android:layout_alignParentRight="false"
-        android:layout_alignParentEnd="true"
         android:textStyle="bold"
         android:textSize="25dp"
+        android:visibility="visible"
         android:layout_centerVertical="true"
-        android:visibility="visible" />
+        android:layout_alignRight="@+id/reservation_passengers_label"
+        android:layout_alignEnd="@+id/reservation_passengers_label" />
 
     <TextView
         android:layout_width="wrap_content"
