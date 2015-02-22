@@ -12,7 +12,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -35,9 +37,13 @@ import com.mikerinehart.rideguide.models.User;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.apache.commons.lang.BooleanUtils;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -156,35 +162,64 @@ public class MyShiftsPageFragment extends Fragment {
 
     public void createShiftDialog() {
 
-        Date start;
-        Date end;
-        int seats;
-        MaterialDialog dialog;
+        final DateFormat displayFormat = new SimpleDateFormat("yyyy-MM-dd h:mma");
+
+        MaterialDialog dialog = null;
         final EditText startTime;
         final EditText endTime;
+        final EditText seats;
+
+        LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
+        View dialogLayout = inflater.inflate(R.layout.myshifts_new_shift_dialog, null);
+
+        startTime = (EditText)dialogLayout.findViewById(R.id.myshifts_new_shift_dialog_start_time);
+        endTime = (EditText)dialogLayout.findViewById(R.id.myshifts_new_shift_dialog_end_time);
+        seats = (EditText)dialogLayout.findViewById(R.id.myshifts_new_shift_dialog_num_seats);
 
         dialog = new MaterialDialog.Builder(MyShiftsPageFragment.this.getActivity())
                 .title("Create new Shift")
-                .customView(R.layout.myshifts_new_shift_dialog)
+                .customView(dialogLayout)
                 .positiveText("Create")
                 .negativeText("Cancel")
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        Log.i(TAG, "STart Time is: " + startTime.getText());
+
+                        RequestParams params = new RequestParams("user_id", me.getId());
+                        params.put("seats", seats.getText());
+                        params.put("start", startTime.getText());
+                        params.put("end", endTime.getText());
+                        RestClient.post("shifts", params, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                Log.i(TAG, "Shift creation successful!");
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, String response, Throwable throwable) {
+                                Log.i(TAG, "Error: " + response);
+                            }
+                        });
+                    }
+                })
                 .build();
         dialog.show();
 
-        startTime = (EditText)dialog.findViewById(R.id.myshifts_new_shift_dialog_start_time);
-        endTime = (EditText)dialog.findViewById(R.id.myshifts_new_shift_dialog_end_time);
+        //startTime = (EditText)dialog.findViewById(R.id.myshifts_new_shift_dialog_start_time);
+        //endTime = (EditText)dialog.findViewById(R.id.myshifts_new_shift_dialog_end_time);
 
         final SlideDateTimeListener startListener = new SlideDateTimeListener() {
             @Override
             public void onDateTimeSet(Date date) {
-                startTime.setText(date.toString());
+                startTime.setText(displayFormat.format(date));
             }
         };
 
         final SlideDateTimeListener endListener = new SlideDateTimeListener() {
             @Override
             public void onDateTimeSet(Date date) {
-                endTime.setText(date.toString());
+                endTime.setText(displayFormat.format(date));
             }
         };
 
