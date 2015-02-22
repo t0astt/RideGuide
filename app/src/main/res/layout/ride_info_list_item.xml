@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="#"
-        android:id="@+id/myshifts_num_seats"
+        android:id="@+id/myshifts_num_reservations"
         android:layout_above="@+id/myshifts_end_time"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"

@@ -50,14 +50,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MyShiftsPageFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MyShiftsPageFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MyShiftsPageFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -129,6 +121,8 @@ public class MyShiftsPageFragment extends Fragment {
             }
         });
 
+
+
         shiftList = (RecyclerView) v.findViewById(R.id.myshifts_my_shifts_list);
         shiftList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(shiftList.getContext());
@@ -145,6 +139,7 @@ public class MyShiftsPageFragment extends Fragment {
      * Returns false if no list items, true if list items present
      */
     private void refreshContent() {
+
         RequestParams params = new RequestParams("user_id", me.getId());
         RestClient.post("shifts/myShifts", params, new JsonHttpResponseHandler() {
             @Override
