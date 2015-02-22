@@ -1,6 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp" android:layout_height="375dp"
-    android:background="#ffffffff">
+    android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Start Time"
+        android:id="@+id/myshifts_new_shift_dialog_start_time_label"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/myshifts_new_shift_dialog_start_time"
+        android:layout_alignStart="@+id/myshifts_new_shift_dialog_start_time" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:ems="10"
+        android:id="@+id/myshifts_new_shift_dialog_start_time"
+        android:hint="Start Time"
+        android:elegantTextHeight="false"
+        android:gravity="center_horizontal"
+        android:textColor="@android:color/black"
+        android:textColorHint="#ffb4b4b4"
+        android:textIsSelectable="true"
+        android:theme="@style/Base.Widget.AppCompat.EditText"
+        android:layout_below="@+id/myshifts_new_shift_dialog_start_time_label"
+        android:layout_marginTop="11dp"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:ems="10"
+        android:id="@+id/myshifts_new_shift_dialog_end_time"
+        android:layout_marginTop="66dp"
+        android:hint="End Time"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/myshifts_new_shift_dialog_start_time"
+        android:layout_alignLeft="@+id/myshifts_new_shift_dialog_start_time"
+        android:layout_alignStart="@+id/myshifts_new_shift_dialog_start_time" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="End Time"
+        android:id="@+id/myshifts_new_shift_dialog_end_time_label"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:layout_marginTop="36dp"
+        android:layout_below="@+id/myshifts_new_shift_dialog_start_time"
+        android:layout_alignLeft="@+id/myshifts_new_shift_dialog_end_time"
+        android:layout_alignStart="@+id/myshifts_new_shift_dialog_end_time" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/myshifts_new_shift_dialog_num_seats"
+        android:layout_marginTop="71dp"
+        android:hint="Number of Seats"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/myshifts_new_shift_dialog_end_time"
+        android:layout_alignLeft="@+id/myshifts_new_shift_dialog_end_time"
+        android:layout_alignStart="@+id/myshifts_new_shift_dialog_end_time" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Seats"
+        android:id="@+id/textView4"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_below="@+id/myshifts_new_shift_dialog_end_time"
+        android:layout_alignLeft="@+id/myshifts_new_shift_dialog_num_seats"
+        android:layout_alignStart="@+id/myshifts_new_shift_dialog_num_seats"
+        android:layout_marginTop="45dp" />
 
 </RelativeLayout>

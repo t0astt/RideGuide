@@ -11,12 +11,15 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gc.materialdesign.views.ButtonFloat;
 import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
+import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
+import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -35,6 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -102,15 +106,7 @@ public class MyShiftsPageFragment extends Fragment {
         createShiftButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Some shit happened");
-                Log.i(TAG, getActivity().getApplicationContext().toString());
-                MaterialDialog dialog = new MaterialDialog.Builder(MyShiftsPageFragment.this.getActivity())
-                        .title("Create new Shift")
-                        .content("Test!")
-                        .positiveText("Agree")
-                        .negativeText("Disagree")
-                        .build();
-                dialog.show();
+                createShiftDialog();
             }
         });
 
@@ -158,15 +154,62 @@ public class MyShiftsPageFragment extends Fragment {
         return v;
     }
 
-    public void createShift() {
-        Log.i(TAG, "Some shit happened");
-        MaterialDialog dialog = new MaterialDialog.Builder(this.getActivity().getApplicationContext())
+    public void createShiftDialog() {
+
+        Date start;
+        Date end;
+        int seats;
+        MaterialDialog dialog;
+        final EditText startTime;
+        final EditText endTime;
+
+        dialog = new MaterialDialog.Builder(MyShiftsPageFragment.this.getActivity())
                 .title("Create new Shift")
-                .content("Test!")
-                .positiveText("Agree")
-                .negativeText("Disagree")
+                .customView(R.layout.myshifts_new_shift_dialog)
+                .positiveText("Create")
+                .negativeText("Cancel")
                 .build();
         dialog.show();
+
+        startTime = (EditText)dialog.findViewById(R.id.myshifts_new_shift_dialog_start_time);
+        endTime = (EditText)dialog.findViewById(R.id.myshifts_new_shift_dialog_end_time);
+
+        final SlideDateTimeListener startListener = new SlideDateTimeListener() {
+            @Override
+            public void onDateTimeSet(Date date) {
+                startTime.setText(date.toString());
+            }
+        };
+
+        final SlideDateTimeListener endListener = new SlideDateTimeListener() {
+            @Override
+            public void onDateTimeSet(Date date) {
+                endTime.setText(date.toString());
+            }
+        };
+
+        startTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SlideDateTimePicker.Builder(getFragmentManager())
+                        .setListener(startListener)
+                        .setInitialDate(new Date())
+                        .build()
+                        .show();
+            }
+        });
+
+        endTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SlideDateTimePicker.Builder(getFragmentManager())
+                        .setListener(endListener)
+                        .setInitialDate(new Date())
+                        .build()
+                        .show();
+            }
+        });
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
