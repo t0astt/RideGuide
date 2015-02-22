@@ -3,7 +3,9 @@ package com.mikerinehart.rideguide.page_fragments;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gc.materialdesign.views.ButtonFloat;
@@ -71,6 +74,8 @@ public class MyShiftsPageFragment extends Fragment {
     private TextView shiftShame;
     private ProgressBarCircularIndeterminate loadingIcon;
     private ButtonFloat createShiftButton;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView shiftList;
 
     private String TAG = "MyShiftsPageFragment";
 
@@ -116,15 +121,30 @@ public class MyShiftsPageFragment extends Fragment {
             }
         });
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.myshifts_swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshContent();
+            }
+        });
 
-
-        final RecyclerView shiftList = (RecyclerView) v.findViewById(R.id.myshifts_my_shifts_list);
+        shiftList = (RecyclerView) v.findViewById(R.id.myshifts_my_shifts_list);
         shiftList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(shiftList.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         shiftList.setLayoutManager(llm);
 
-        // Asynchronously load my shifts with POST
+        refreshContent();
+        loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
+
+        return v;
+    }
+
+    /*
+     * Returns false if no list items, true if list items present
+     */
+    private void refreshContent() {
         RequestParams params = new RequestParams("user_id", me.getId());
         RestClient.post("shifts/myShifts", params, new JsonHttpResponseHandler() {
             @Override
@@ -136,28 +156,27 @@ public class MyShiftsPageFragment extends Fragment {
 
                 result = (List<Shift>)gson.fromJson(response.toString(), listType);
 
-                loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
-
                 // check whether or not to shame the user hehe
                 if (result.size() == 0) {
                     shiftShame.setVisibility(TextView.VISIBLE);
                     shiftList.setVisibility(RecyclerView.GONE);
                 } else {
+                    shiftShame.setVisibility(TextView.GONE);
                     shiftList.setVisibility(RecyclerView.VISIBLE);
                     MyShiftsAdapter shiftsAdapter = new MyShiftsAdapter(result);
 
                     shiftList.addItemDecoration(new SimpleDividerItemDecoration(shiftList.getContext()));
                     shiftList.setAdapter(shiftsAdapter);
                 }
+                mSwipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.i(TAG, "Error: " + errorResponse);
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
-
-        return v;
     }
 
     public void createShiftDialog() {
@@ -184,7 +203,6 @@ public class MyShiftsPageFragment extends Fragment {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        Log.i(TAG, "STart Time is: " + startTime.getText());
 
                         RequestParams params = new RequestParams("user_id", me.getId());
                         params.put("seats", seats.getText());
@@ -193,21 +211,18 @@ public class MyShiftsPageFragment extends Fragment {
                         RestClient.post("shifts", params, new JsonHttpResponseHandler() {
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                Log.i(TAG, "Shift creation successful!");
+                                refreshContent();
                             }
 
                             @Override
                             public void onFailure(int statusCode, Header[] headers, String response, Throwable throwable) {
-                                Log.i(TAG, "Error: " + response);
+                                Log.i(TAG, "Error " + statusCode + ": " + response);
                             }
                         });
                     }
                 })
                 .build();
         dialog.show();
-
-        //startTime = (EditText)dialog.findViewById(R.id.myshifts_new_shift_dialog_start_time);
-        //endTime = (EditText)dialog.findViewById(R.id.myshifts_new_shift_dialog_end_time);
 
         final SlideDateTimeListener startListener = new SlideDateTimeListener() {
             @Override
