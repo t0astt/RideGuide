@@ -51,7 +51,6 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
         return new MyShiftsViewHolder(itemView);
     }
 
-    //Holds the Ride cardviews
     public static class MyShiftsViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView startTime;

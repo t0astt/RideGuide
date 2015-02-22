@@ -82,10 +82,12 @@
         android:textStyle="bold"
         android:textSize="25dp"
         android:layout_centerVertical="true"
+        android:layout_alignRight="@+id/myshifts_seats_label"
+        android:layout_alignEnd="@+id/myshifts_seats_label"
         android:layout_alignLeft="@+id/myshifts_seats_label"
         android:layout_alignStart="@+id/myshifts_seats_label"
-        android:layout_marginLeft="31dp"
-        android:layout_marginStart="31dp" />
+        android:gravity="center_horizontal"
+        android:clickable="true" />
 
     <TextView
         android:layout_width="wrap_content"

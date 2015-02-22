@@ -1,6 +1,8 @@
 package com.mikerinehart.rideguide.page_fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,6 +38,11 @@ import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
 import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
+import com.mikerinehart.rideguide.main_fragments.AboutFragment;
+import com.mikerinehart.rideguide.main_fragments.HomeFragment;
+import com.mikerinehart.rideguide.main_fragments.ProfileFragment;
+import com.mikerinehart.rideguide.main_fragments.RidesFragment;
+import com.mikerinehart.rideguide.main_fragments.SettingsFragment;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 
@@ -121,13 +129,34 @@ public class MyShiftsPageFragment extends Fragment {
             }
         });
 
-
-
         shiftList = (RecyclerView) v.findViewById(R.id.myshifts_my_shifts_list);
         shiftList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(shiftList.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         shiftList.setLayoutManager(llm);
+
+        final GestureDetector mGestureDetector = new GestureDetector(MyShiftsPageFragment.this.getActivity(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+        });
+        shiftList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+                ViewGroup child = (ViewGroup) recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+
+                if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
+                    Log.i(TAG, child.toString());
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+                Log.i(TAG, "TouchEvent");
+            }
+        });
 
         refreshContent();
         loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
@@ -161,6 +190,7 @@ public class MyShiftsPageFragment extends Fragment {
                     MyShiftsAdapter shiftsAdapter = new MyShiftsAdapter(result);
 
                     shiftList.addItemDecoration(new SimpleDividerItemDecoration(shiftList.getContext()));
+
                     shiftList.setAdapter(shiftsAdapter);
                 }
                 mSwipeRefreshLayout.setRefreshing(false);
