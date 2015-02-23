@@ -107,7 +107,7 @@ public class MyShiftsPageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_my_shifts_page, container, false);
-        newShiftButton = (ButtonFloat)v.findViewById(R.id.myshifts_new_shift_fab);
+        //newShiftButton = (ButtonFloat)v.findViewById(R.id.myshifts_new_shift_fab);
         shiftShame = (TextView)v.findViewById(R.id.myshifts_shift_shame);
         loadingIcon = (ProgressBarCircularIndeterminate)v.findViewById(R.id.myshifts_circular_loading);
 
