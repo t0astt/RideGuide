@@ -1,10 +1,14 @@
 package com.mikerinehart.rideguide.adapters;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,8 +18,10 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
+import com.mikerinehart.rideguide.main_fragments.ProfileFragment;
 import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.Shift;
+import com.mikerinehart.rideguide.models.User;
 import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
 
 import org.apache.http.Header;
@@ -113,8 +119,13 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
     public void createReservationsDialog(Reservation[] reservations) {
         LayoutInflater inflater = LayoutInflater.from(c);
         View dialogLayout = inflater.inflate(R.layout.myshifts_view_shift_reservations_dialog, null);
-        MaterialDialog dialog;
+        final MaterialDialog dialog = new MaterialDialog.Builder(c)
+                                .title("Reservations")
+                                .customView(dialogLayout)
+                                .positiveText("OK")
+                                .build();
         RecyclerView reservationList = (RecyclerView)dialogLayout.findViewById(R.id.myshifts_view_shift_reservations_dialog_list);
+
 
 
         //reservationList.setHasFixedSize(true);
@@ -123,14 +134,42 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
         reservationList.setLayoutManager(llm);
 
         List<Reservation> resList = Arrays.asList(reservations);
-        MyShiftReservationsAdapter reservationAdapter = new MyShiftReservationsAdapter(resList);
+        final MyShiftReservationsAdapter reservationAdapter = new MyShiftReservationsAdapter(resList);
         reservationList.setAdapter(reservationAdapter);
 
-        dialog = new MaterialDialog.Builder(c)
-                .title("Reservations")
-                .customView(dialogLayout)
-                .positiveText("OK")
-                .build();
+        final GestureDetector mGestureDetector = new GestureDetector(c, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+        });
+        reservationList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+                ViewGroup child = (ViewGroup) recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+
+                if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
+                    dialog.dismiss();
+                    int itemClicked = recyclerView.getChildPosition(child);
+                    User u = reservationAdapter.getUserFromList(itemClicked);
+
+                    ((FragmentActivity)c).getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.container, ProfileFragment.newInstance(u, "ProfileFragment"))
+                            .addToBackStack("MyShifts")
+                            .commit();
+
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+                Log.i(TAG, "TouchEvent");
+            }
+        });
+
+
         dialog.show();
 
 

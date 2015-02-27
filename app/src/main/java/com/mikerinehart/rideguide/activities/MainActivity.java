@@ -57,7 +57,7 @@ public class MainActivity extends ActionBarActivity implements
     public User me;
 
     String TAG = "MainActivity";
-    private Toolbar toolbar;
+    public Toolbar toolbar;
     private GraphUser user;
 
     @Override
@@ -107,20 +107,30 @@ public class MainActivity extends ActionBarActivity implements
 
                     if (itemClicked == 1) {
                         toolbar.setTitle("Home");
-                        fm.beginTransaction().replace(R.id.container, HomeFragment.newInstance(me, "HomeFragment")).commit();
+                        fm.beginTransaction()
+                                .replace(R.id.container, HomeFragment.newInstance(me, "HomeFragment"))
+                                .addToBackStack("Home")
+                                .commit();
                     } else if (itemClicked == 2) {
                         toolbar.setTitle("My Profile");
-
-                        fm.beginTransaction().replace(R.id.container, ProfileFragment.newInstance(me, "ProfileFragment")).commit();
+                        fm.beginTransaction().replace(R.id.container, ProfileFragment.newInstance(me, "ProfileFragment"))
+                                .addToBackStack("MyProfile")
+                                .commit();
                     } else if (itemClicked == 3) {
                         toolbar.setTitle("Search Rides");
-                        fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance("Test", "RidesFragment")).commit();
+                        fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance("Test", "RidesFragment"))
+                                .addToBackStack("SearchRides")
+                                .commit();
                     } else if (itemClicked == 4) {
                         toolbar.setTitle("Settings");
-                        fm.beginTransaction().replace(R.id.container, SettingsFragment.newInstance("Test", "SettingsFragment")).commit();
+                        fm.beginTransaction().replace(R.id.container, SettingsFragment.newInstance("Test", "SettingsFragment"))
+                                .addToBackStack("Settings")
+                                .commit();
                     } else if (itemClicked == 5) {
                         toolbar.setTitle("About");
-                        fm.beginTransaction().replace(R.id.container, AboutFragment.newInstance("Test", "AboutFragment")).commit();
+                        fm.beginTransaction().replace(R.id.container, AboutFragment.newInstance("Test", "AboutFragment"))
+                                .addToBackStack("About")
+                                .commit();
                     } else if (itemClicked == 6) {
                         new AlertDialog.Builder(MainActivity.this)
                                 .setTitle("Confirm Logout")

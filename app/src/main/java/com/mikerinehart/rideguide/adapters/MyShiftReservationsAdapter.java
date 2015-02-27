@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RoundedTransformation;
 import com.mikerinehart.rideguide.models.Reservation;
+import com.mikerinehart.rideguide.models.User;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -51,6 +52,11 @@ public class MyShiftReservationsAdapter extends RecyclerView.Adapter<MyShiftRese
                 .load("https://graph.facebook.com/" + r.getUser().getFbUid() + "/picture?type=large")
                 .transform(new RoundedTransformation(100, 5))
                 .into(reservationViewHolder.userPic);
+    }
+
+    public User getUserFromList(int i) {
+        Reservation r = reservationList.get(i);
+        return r.getUser();
     }
 
     @Override
