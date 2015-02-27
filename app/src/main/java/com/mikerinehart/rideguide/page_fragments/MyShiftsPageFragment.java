@@ -2,6 +2,7 @@ package com.mikerinehart.rideguide.page_fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -134,29 +135,6 @@ public class MyShiftsPageFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(shiftList.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         shiftList.setLayoutManager(llm);
-
-        final GestureDetector mGestureDetector = new GestureDetector(MyShiftsPageFragment.this.getActivity(), new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                return true;
-            }
-        });
-        shiftList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-                ViewGroup child = (ViewGroup) recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-
-                if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
-                    Log.i(TAG, child.toString());
-                }
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-                Log.i(TAG, "TouchEvent");
-            }
-        });
 
         refreshContent();
         loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);

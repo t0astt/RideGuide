@@ -16,7 +16,7 @@
         android:text="Name"
         android:id="@+id/reservation_name"
         android:visibility="visible"
-        android:textColor="#8a000000"
+        android:textColor="#000000"
         android:textStyle="bold"
         android:layout_alignWithParentIfMissing="false"
         android:layout_centerVertical="true"
@@ -42,7 +42,8 @@
         android:layout_toRightOf="@+id/reservation_user_pic"
         android:layout_alignParentEnd="false"
         android:layout_alignParentStart="false"
-        android:layout_marginLeft="5dp" />
+        android:layout_marginLeft="5dp"
+        android:textColor="#000000" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -71,7 +72,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="18dp"
-        android:layout_marginEnd="18dp" />
+        android:layout_marginEnd="18dp"
+        android:textColor="#000000" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -81,7 +83,8 @@
         android:id="@+id/reservation_pickup_time"
         android:layout_alignTop="@+id/reservation_pickup_time_label"
         android:layout_toRightOf="@+id/reservation_pickup_time_label"
-        android:layout_toEndOf="@+id/myshifts_reservations_label" />
+        android:layout_toEndOf="@+id/myshifts_num_seats_label"
+        android:textColor="#000000" />
 
     <ImageView
         android:layout_width="50dp"

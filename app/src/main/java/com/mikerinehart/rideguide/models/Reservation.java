@@ -16,9 +16,10 @@ public class Reservation {
     protected String origin;
     protected String destination;
     protected Date pickup_time;
+    public User user;
     public Shift shift;
 
-    public Reservation(int id, int user_id, int shift_id, int passengers, String origin, String destination, Date pickup_time, Shift shift) {
+    public Reservation(int id, int user_id, int shift_id, int passengers, String origin, String destination, Date pickup_time, User user, Shift shift) {
         this.id = id;
         this.user_id = user_id;
         this.shift_id = shift_id;
@@ -26,6 +27,7 @@ public class Reservation {
         this.origin = origin;
         this.destination = destination;
         this.pickup_time = pickup_time;
+        this.user = user;
         this.shift = shift;
     }
 
@@ -38,13 +40,13 @@ public class Reservation {
         this.id = id;
     }
 
-    public int getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
-    }
+//    public int getUser_id() {
+//        return user_id;
+//    }
+//
+//    public void setUser_id(int user_id) {
+//        this.user_id = user_id;
+//    }
 
     public int getShift_id() {
         return shift_id;
@@ -84,6 +86,14 @@ public class Reservation {
 
     public void setPickup_time(Date pickup_time) {
         this.pickup_time = pickup_time;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Shift getShift() {

@@ -19,7 +19,7 @@
         android:textColor="#de000000"
 
         android:layout_toEndOf="@+id/user_pic"
-        android:layout_alignBottom="@+id/myshifts_seats_label"
+        android:layout_alignBottom="@+id/myshifts_num_reservations_label"
         android:layout_marginLeft="11dp"
         android:layout_alignParentBottom="false"
         android:layout_alignParentTop="false"
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Seats: "
-        android:id="@+id/myshifts_seats_label"
+        android:id="@+id/myshifts_num_reservations_label"
         android:visibility="visible"
         android:layout_marginEnd="22dp"
         android:layout_centerVertical="true"
