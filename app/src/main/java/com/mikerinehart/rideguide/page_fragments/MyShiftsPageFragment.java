@@ -1,28 +1,18 @@
 package com.mikerinehart.rideguide.page_fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ListAdapter;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gc.materialdesign.views.ButtonFloat;
@@ -37,21 +27,13 @@ import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
-import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
-import com.mikerinehart.rideguide.main_fragments.AboutFragment;
-import com.mikerinehart.rideguide.main_fragments.HomeFragment;
-import com.mikerinehart.rideguide.main_fragments.ProfileFragment;
-import com.mikerinehart.rideguide.main_fragments.RidesFragment;
-import com.mikerinehart.rideguide.main_fragments.SettingsFragment;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.parceler.apache.commons.lang.BooleanUtils;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
@@ -97,6 +79,7 @@ public class MyShiftsPageFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "In OnCreate");
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             me = getArguments().getParcelable("USER");
