@@ -33,7 +33,7 @@ public class RidesFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     public RidesFragment() {
-        // Required empty public constructora
+        // Required empty public constructor
     }
 
     public static RidesFragment newInstance(User param1, String param2) {
