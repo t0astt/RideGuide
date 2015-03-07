@@ -68,6 +68,7 @@
             android:name=".GcmIntentService"
             android:exported="false" >
         </service>
+
     </application>
 
 </manifest>

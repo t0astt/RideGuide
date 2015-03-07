@@ -34,6 +34,8 @@ import com.mikerinehart.rideguide.main_fragments.SettingsFragment;
 import com.mikerinehart.rideguide.models.User;
 import com.mikerinehart.rideguide.page_fragments.MyReservationsPageFragment;
 import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
+import com.mikerinehart.rideguide.page_fragments.RidesOnDemandFragment;
+import com.mikerinehart.rideguide.page_fragments.RidesSearchFragment;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 public class MainActivity extends ActionBarActivity implements
@@ -43,6 +45,8 @@ public class MainActivity extends ActionBarActivity implements
         MyShiftsPageFragment.OnFragmentInteractionListener,
         ProfileFragment.OnFragmentInteractionListener,
         RidesFragment.OnFragmentInteractionListener,
+        RidesOnDemandFragment.OnFragmentInteractionListener,
+        RidesSearchFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener,
         AboutFragment.OnFragmentInteractionListener {
 
@@ -118,7 +122,7 @@ public class MainActivity extends ActionBarActivity implements
                                 .commit();
                     } else if (itemClicked == 3) {
                         toolbar.setTitle("Search Rides");
-                        fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance("Test", "RidesFragment"))
+                        fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance(me, "RidesFragment"))
                                 .addToBackStack("SearchRides")
                                 .commit();
                     } else if (itemClicked == 4) {

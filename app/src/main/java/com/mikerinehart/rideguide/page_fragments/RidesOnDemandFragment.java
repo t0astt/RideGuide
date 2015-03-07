@@ -1,26 +1,25 @@
-package com.mikerinehart.rideguide.main_fragments;
+package com.mikerinehart.rideguide.page_fragments;
 
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.astuetz.PagerSlidingTabStrip;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.models.User;
-import com.mikerinehart.rideguide.page_fragments.HomePageFragment;
-import com.mikerinehart.rideguide.page_fragments.MyReservationsPageFragment;
-import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
-import com.mikerinehart.rideguide.page_fragments.RidesOnDemandFragment;
-import com.mikerinehart.rideguide.page_fragments.RidesSearchFragment;
 
-
-public class RidesFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link RidesOnDemandFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link RidesOnDemandFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class RidesOnDemandFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -32,17 +31,26 @@ public class RidesFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public RidesFragment() {
-        // Required empty public constructor
-    }
-
-    public static RidesFragment newInstance(User param1, String param2) {
-        RidesFragment fragment = new RidesFragment();
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment RidesOnDemandFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static RidesOnDemandFragment newInstance(User param1, String param2) {
+        RidesOnDemandFragment fragment = new RidesOnDemandFragment();
         Bundle args = new Bundle();
         args.putParcelable("USER", param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public RidesOnDemandFragment() {
+        // Required empty public constructor
     }
 
     @Override
@@ -57,16 +65,8 @@ public class RidesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        View v = inflater.inflate(R.layout.fragment_rides, container, false);
-
-        ViewPager pager = (ViewPager)v.findViewById(R.id.rides_pager);
-        pager.setAdapter(new RidesViewPagerAdapter(getFragmentManager()));
-
-        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip)v.findViewById(R.id.rides_tabs);
-        tabs.setViewPager(pager);
-
-        return v;
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_rides_on_demand, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -93,37 +93,19 @@ public class RidesFragment extends Fragment {
         mListener = null;
     }
 
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
-    }
-
-    private class RidesViewPagerAdapter extends FragmentStatePagerAdapter {
-
-        private final String[] TITLES = {"On Demand", "Search"};
-
-        public RidesViewPagerAdapter(android.support.v4.app.FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return TITLES[position];
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            if (position == 0) {
-                return RidesOnDemandFragment.newInstance(me, "RidesOnDemandFragment");
-            } else if (position == 1) {
-                return RidesSearchFragment.newInstance(me, "RidesSearchFragment");
-            }
-            return new RidesFragment();
-        }
-
-        public int getCount() {
-            return TITLES.length;
-        }
     }
 
 }
