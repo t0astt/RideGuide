@@ -40,14 +40,6 @@ public class Reservation {
         this.id = id;
     }
 
-//    public int getUser_id() {
-//        return user_id;
-//    }
-//
-//    public void setUser_id(int user_id) {
-//        this.user_id = user_id;
-//    }
-
     public int getShift_id() {
         return shift_id;
     }

@@ -2,7 +2,6 @@ package com.mikerinehart.rideguide.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -18,7 +17,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -34,7 +32,7 @@ import com.mikerinehart.rideguide.main_fragments.SettingsFragment;
 import com.mikerinehart.rideguide.models.User;
 import com.mikerinehart.rideguide.page_fragments.MyReservationsPageFragment;
 import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
-import com.mikerinehart.rideguide.page_fragments.RidesOnDemandFragment;
+import com.mikerinehart.rideguide.page_fragments.AvailableRidesPageFragment;
 import com.mikerinehart.rideguide.page_fragments.RidesSearchFragment;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -45,7 +43,7 @@ public class MainActivity extends ActionBarActivity implements
         MyShiftsPageFragment.OnFragmentInteractionListener,
         ProfileFragment.OnFragmentInteractionListener,
         RidesFragment.OnFragmentInteractionListener,
-        RidesOnDemandFragment.OnFragmentInteractionListener,
+        AvailableRidesPageFragment.OnFragmentInteractionListener,
         RidesSearchFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener,
         AboutFragment.OnFragmentInteractionListener {

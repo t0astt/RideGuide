@@ -13,10 +13,7 @@ import android.view.ViewGroup;
 import com.astuetz.PagerSlidingTabStrip;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.models.User;
-import com.mikerinehart.rideguide.page_fragments.HomePageFragment;
-import com.mikerinehart.rideguide.page_fragments.MyReservationsPageFragment;
-import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
-import com.mikerinehart.rideguide.page_fragments.RidesOnDemandFragment;
+import com.mikerinehart.rideguide.page_fragments.AvailableRidesPageFragment;
 import com.mikerinehart.rideguide.page_fragments.RidesSearchFragment;
 
 
@@ -100,7 +97,7 @@ public class RidesFragment extends Fragment {
 
     private class RidesViewPagerAdapter extends FragmentStatePagerAdapter {
 
-        private final String[] TITLES = {"On Demand", "Search"};
+        private final String[] TITLES = {"Available", "Search"};
 
         public RidesViewPagerAdapter(android.support.v4.app.FragmentManager fm) {
             super(fm);
@@ -114,7 +111,7 @@ public class RidesFragment extends Fragment {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                return RidesOnDemandFragment.newInstance(me, "RidesOnDemandFragment");
+                return AvailableRidesPageFragment.newInstance(me, "AvailableRidesPageFragment");
             } else if (position == 1) {
                 return RidesSearchFragment.newInstance(me, "RidesSearchFragment");
             }
