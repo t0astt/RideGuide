@@ -38,12 +38,12 @@ import java.util.List;
 
 public class AvailableRidesTimeSlotsAdapter extends RecyclerView.Adapter<AvailableRidesTimeSlotsAdapter.AvailableRidesTimeSlotsViewHolder> {
 
-    private List<Reservation> ridesList;
+    private List<List<Reservation>> ridesList;
     private Context c;
 
     private final String TAG = "MyShiftsAdapter";
 
-    public AvailableRidesTimeSlotsAdapter(List<Reservation> ridesList) {
+    public AvailableRidesTimeSlotsAdapter(List<List<Reservation>> ridesList) {
         this.ridesList = ridesList;
     }
 
@@ -61,17 +61,22 @@ public class AvailableRidesTimeSlotsAdapter extends RecyclerView.Adapter<Availab
     public void onBindViewHolder(final AvailableRidesTimeSlotsViewHolder vh, int i) {
         DateFormat df = new SimpleDateFormat("E d, h:mma");
 
-        final Reservation r = ridesList.get(i);
-        Log.i(TAG, r.getPickup_time() + "");
-        //vh.pickupTime.setText(df.format(r.getPickup_time()));
+        final List<Reservation> r = ridesList.get(i);
+        vh.pickupTime.setText(df.format(r.get(0).getPickup_time()));
+        vh.numRides.setText(Integer.toString(r.size()));
 
     }
 
     @Override
     public AvailableRidesTimeSlotsViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         this.c = viewGroup.getContext();
-        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.myshifts_list_item, viewGroup, false);
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.rides_available_timeslot_list_item, viewGroup, false);
         return new AvailableRidesTimeSlotsViewHolder(itemView);
+    }
+
+    public List<Reservation> getDrivers(int i)
+    {
+        return ridesList.get(i);
     }
 
 

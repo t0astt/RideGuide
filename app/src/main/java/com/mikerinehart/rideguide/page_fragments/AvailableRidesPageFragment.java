@@ -1,6 +1,8 @@
 package com.mikerinehart.rideguide.page_fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,11 +10,15 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,8 +28,14 @@ import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
+import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.adapters.AvailableRidesTimeSlotsAdapter;
 import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
+import com.mikerinehart.rideguide.main_fragments.AboutFragment;
+import com.mikerinehart.rideguide.main_fragments.HomeFragment;
+import com.mikerinehart.rideguide.main_fragments.ProfileFragment;
+import com.mikerinehart.rideguide.main_fragments.RidesFragment;
+import com.mikerinehart.rideguide.main_fragments.SettingsFragment;
 import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
@@ -50,9 +62,11 @@ public class AvailableRidesPageFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private TextView noRides;
+    private ProgressBarCircularIndeterminate loadingIcon;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView ridesList;
 
+    AvailableRidesTimeSlotsAdapter adapter;
     private String TAG = "AvailableRidesPageFragment";
 
 
@@ -84,6 +98,7 @@ public class AvailableRidesPageFragment extends Fragment {
         final View v = inflater.inflate(R.layout.fragment_rides_available_page, container, false);
 
         noRides = (TextView)v.findViewById(R.id.rides_available_none);
+        loadingIcon = (ProgressBarCircularIndeterminate)v.findViewById(R.id.rides_available_circular_loading);
         mSwipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.rides_available_swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -97,8 +112,50 @@ public class AvailableRidesPageFragment extends Fragment {
         ridesList.setLayoutManager(llm);
 
         refreshContent();
+        loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
+
+        final GestureDetector mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+        });
+        ridesList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+                ViewGroup child = (ViewGroup) recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+
+                if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
+                    int itemClicked = recyclerView.getChildPosition(child);
+                    List<Reservation> driverList = adapter.getDrivers(itemClicked);
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+                Log.i(TAG, "TouchEvent");
+            }
+        });
 
         return v;
+    }
+
+    private void createAvailableDriversDialog(List<Reservation> driverList) {
+        LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
+        View dialogLayout = inflater.inflate(R.layout.availablerides_view_drivers_dialog, null);
+        final MaterialDialog dialog = new MaterialDialog.Builder(getActivity().getBaseContext())
+                                .title("Pick a Driver")
+                                .customView(dialogLayout)
+                                .positiveText("Cancel")
+                                .build();
+        RecyclerView availableDriversList = (RecyclerView)dialogLayout.findViewById(R.id.rides_available_view_drivers_dialog_list);
+
+        LinearLayoutManager llm = new LinearLayoutManager(availableDriversList.getContext());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        availableDriversList.setLayoutManager(llm);
+
+        //set adapter
     }
 
     private void refreshContent() {
@@ -150,7 +207,7 @@ public class AvailableRidesPageFragment extends Fragment {
                         }
                     }
 
-                    AvailableRidesTimeSlotsAdapter adapter = new AvailableRidesTimeSlotsAdapter(result);
+                    adapter = new AvailableRidesTimeSlotsAdapter(mainList);
 
                     ridesList.addItemDecoration(new SimpleDividerItemDecoration(ridesList.getContext()));
 
