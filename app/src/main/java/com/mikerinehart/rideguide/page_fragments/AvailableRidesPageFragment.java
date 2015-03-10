@@ -29,6 +29,7 @@ import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
 import com.mikerinehart.rideguide.activities.MainActivity;
+import com.mikerinehart.rideguide.adapters.AvailableDriversAdapter;
 import com.mikerinehart.rideguide.adapters.AvailableRidesTimeSlotsAdapter;
 import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
 import com.mikerinehart.rideguide.main_fragments.AboutFragment;
@@ -128,6 +129,7 @@ public class AvailableRidesPageFragment extends Fragment {
                 if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
                     int itemClicked = recyclerView.getChildPosition(child);
                     List<Reservation> driverList = adapter.getDrivers(itemClicked);
+                    createAvailableDriversDialog(driverList);
                 }
                 return false;
             }
@@ -144,18 +146,21 @@ public class AvailableRidesPageFragment extends Fragment {
     private void createAvailableDriversDialog(List<Reservation> driverList) {
         LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
         View dialogLayout = inflater.inflate(R.layout.availablerides_view_drivers_dialog, null);
-        final MaterialDialog dialog = new MaterialDialog.Builder(getActivity().getBaseContext())
+        final MaterialDialog dialog = new MaterialDialog.Builder(AvailableRidesPageFragment.this.getActivity())
                                 .title("Pick a Driver")
                                 .customView(dialogLayout)
                                 .positiveText("Cancel")
                                 .build();
         RecyclerView availableDriversList = (RecyclerView)dialogLayout.findViewById(R.id.rides_available_view_drivers_dialog_list);
+        availableDriversList.addItemDecoration(new SimpleDividerItemDecoration(availableDriversList.getContext()));
 
         LinearLayoutManager llm = new LinearLayoutManager(availableDriversList.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         availableDriversList.setLayoutManager(llm);
 
-        //set adapter
+        final AvailableDriversAdapter adapter = new AvailableDriversAdapter(driverList);
+        availableDriversList.setAdapter(adapter);
+        dialog.show();
     }
 
     private void refreshContent() {
