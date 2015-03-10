@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RoundedTransformation;
 import com.mikerinehart.rideguide.models.Reservation;
+import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 import com.squareup.picasso.Picasso;
 
@@ -53,9 +54,14 @@ public class AvailableDriversAdapter extends RecyclerView.Adapter<AvailableDrive
                 .into(vh.userPic);
     }
 
-    public User getUserFromList(int i) {
+//    public User getUserFromList(int i) {
+//        Reservation r = reservationList.get(i);
+//        return r.getUser();
+//    }
+
+    public Shift getShiftFromUser(int i) {
         Reservation r = reservationList.get(i);
-        return r.getUser();
+        return r.getShift();
     }
 
     @Override

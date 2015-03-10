@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -144,7 +145,7 @@ public class AvailableRidesPageFragment extends Fragment {
     }
 
     private void createAvailableDriversDialog(List<Reservation> driverList) {
-        LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
+        final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
         View dialogLayout = inflater.inflate(R.layout.availablerides_view_drivers_dialog, null);
         final MaterialDialog dialog = new MaterialDialog.Builder(AvailableRidesPageFragment.this.getActivity())
                                 .title("Pick a Driver")
@@ -161,6 +162,49 @@ public class AvailableRidesPageFragment extends Fragment {
         final AvailableDriversAdapter adapter = new AvailableDriversAdapter(driverList);
         availableDriversList.setAdapter(adapter);
         dialog.show();
+
+        final GestureDetector mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+        });
+        availableDriversList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+                ViewGroup child = (ViewGroup) recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+
+                if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
+                    int itemClicked = recyclerView.getChildPosition(child);
+                    Shift s = adapter.getShiftFromUser(itemClicked);
+                    View dialogLayout = inflater.inflate(R.layout.rides_available_make_reservation_dialog, null);
+                    NumberPicker np = (NumberPicker)dialogLayout.findViewById(R.id.numberPicker);
+                    np.setMaxValue(s.getSeats());
+                    np.setMinValue(1);
+                    
+
+                    final MaterialDialog dialog = new MaterialDialog.Builder(AvailableRidesPageFragment.this.getActivity())
+                            .title("Create Reservation")
+                            .customView(dialogLayout)
+                            .negativeText("Cancel")
+                            .positiveText("Create")
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog dialog) {
+                                    //async to create reservation on backend
+                                }
+                            })
+                            .build();
+                    dialog.show();
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+                Log.i(TAG, "TouchEvent");
+            }
+        });
     }
 
     private void refreshContent() {
