@@ -1,8 +1,6 @@
 package com.mikerinehart.rideguide.page_fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,9 +13,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
@@ -29,17 +27,9 @@ import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
-import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.adapters.AvailableDriversAdapter;
 import com.mikerinehart.rideguide.adapters.AvailableRidesTimeSlotsAdapter;
-import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
-import com.mikerinehart.rideguide.main_fragments.AboutFragment;
-import com.mikerinehart.rideguide.main_fragments.HomeFragment;
-import com.mikerinehart.rideguide.main_fragments.ProfileFragment;
-import com.mikerinehart.rideguide.main_fragments.RidesFragment;
-import com.mikerinehart.rideguide.main_fragments.SettingsFragment;
 import com.mikerinehart.rideguide.models.Reservation;
-import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 
 import org.apache.http.Header;
@@ -48,10 +38,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class AvailableRidesPageFragment extends Fragment {
 
@@ -147,7 +134,7 @@ public class AvailableRidesPageFragment extends Fragment {
     private void createAvailableDriversDialog(List<Reservation> driverList) {
         final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
         View dialogLayout = inflater.inflate(R.layout.availablerides_view_drivers_dialog, null);
-        final MaterialDialog dialog = new MaterialDialog.Builder(AvailableRidesPageFragment.this.getActivity())
+        final MaterialDialog chooseDriverDialog = new MaterialDialog.Builder(AvailableRidesPageFragment.this.getActivity())
                                 .title("Pick a Driver")
                                 .customView(dialogLayout)
                                 .positiveText("Cancel")
@@ -161,7 +148,7 @@ public class AvailableRidesPageFragment extends Fragment {
 
         final AvailableDriversAdapter adapter = new AvailableDriversAdapter(driverList);
         availableDriversList.setAdapter(adapter);
-        dialog.show();
+        chooseDriverDialog.show();
 
         final GestureDetector mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -176,14 +163,15 @@ public class AvailableRidesPageFragment extends Fragment {
 
                 if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
                     int itemClicked = recyclerView.getChildPosition(child);
-                    Shift s = adapter.getShiftFromUser(itemClicked);
+                    final Reservation r = adapter.getReservation(itemClicked);
                     View dialogLayout = inflater.inflate(R.layout.rides_available_make_reservation_dialog, null);
-                    NumberPicker np = (NumberPicker)dialogLayout.findViewById(R.id.numberPicker);
-                    np.setMaxValue(s.getSeats());
-                    np.setMinValue(1);
-                    
+                        final NumberPicker np = (NumberPicker)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_passengers);
+                            np.setMaxValue(r.getShift().getSeats());
+                            np.setMinValue(1);
+                        final EditText origin = (EditText)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_origin);
+                        final EditText destination = (EditText)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_destination);
 
-                    final MaterialDialog dialog = new MaterialDialog.Builder(AvailableRidesPageFragment.this.getActivity())
+                    final MaterialDialog createReservationDialog = new MaterialDialog.Builder(AvailableRidesPageFragment.this.getActivity())
                             .title("Create Reservation")
                             .customView(dialogLayout)
                             .negativeText("Cancel")
@@ -191,11 +179,27 @@ public class AvailableRidesPageFragment extends Fragment {
                             .callback(new MaterialDialog.ButtonCallback() {
                                 @Override
                                 public void onPositive(MaterialDialog dialog) {
-                                    //async to create reservation on backend
-                                }
+                                    RequestParams params = new RequestParams("user_id", me.getId());
+                                    params.put("reservation_id", r.getId());
+                                    params.put("origin", origin.getText());
+                                    params.put("destination", destination.getText());
+                                    params.put("passengers", np.getValue());
+                                    RestClient.post("reservations/makeReservation", params, new JsonHttpResponseHandler() {
+                                        @Override
+                                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                            chooseDriverDialog.dismiss();
+                                            refreshContent();
+                                            Log.i(TAG, "Reservaiton successful!");
+                                        }
+
+                                        @Override
+                                        public void onFailure(int statusCode, Header[] headers, String response, Throwable throwable) {
+                                            Log.i(TAG, "Error " + statusCode + ": " + response);
+                                        }
+                                    });                                }
                             })
                             .build();
-                    dialog.show();
+                    createReservationDialog.show();
                 }
                 return false;
             }

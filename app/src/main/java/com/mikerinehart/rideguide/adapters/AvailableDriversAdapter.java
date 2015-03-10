@@ -59,9 +59,9 @@ public class AvailableDriversAdapter extends RecyclerView.Adapter<AvailableDrive
 //        return r.getUser();
 //    }
 
-    public Shift getShiftFromUser(int i) {
+    public Reservation getReservation(int i) {
         Reservation r = reservationList.get(i);
-        return r.getShift();
+        return r;
     }
 
     @Override

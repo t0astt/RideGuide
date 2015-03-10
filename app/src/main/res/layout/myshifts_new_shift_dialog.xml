@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Seats"
-        android:id="@+id/textView4"
+        android:id="@+id/rides_available_make_reservation_dialog_passengers_label"
         android:textStyle="bold"
         android:textColor="@android:color/black"
         android:layout_below="@+id/myshifts_new_shift_dialog_end_time"
