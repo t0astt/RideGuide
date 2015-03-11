@@ -87,8 +87,10 @@ public class DecisionActivity extends ActionBarActivity {
                                                     response.getString("email"),
                                                     response.getString("first_name"),
                                                     response.getString("last_name"),
-                                                    BooleanUtils.toBoolean(response.getInt("confirmed")));
-                                            if (me.getConfirmationStatus()) {
+                                                    response.getString("phone"),
+                                                    BooleanUtils.toBoolean(response.getInt("email_confirmed")),
+                                                    BooleanUtils.toBoolean(response.getInt("phone_confirmed")));
+                                            if (me.getEmailConfirmationStatus() && me.getPhoneConfirmationStatus()) {
                                                 Log.i(TAG, "User is confirmed, starting MainActivity");
                                                 launchMainActivity(me);
                                             } else {

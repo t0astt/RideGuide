@@ -22,15 +22,20 @@ public class User implements Parcelable {
     protected String email;
     protected String first_name;
     protected String last_name;
-    protected boolean confirmed;
+    protected String phone;
+    protected boolean email_confirmed;
+    protected boolean phone_confirmed;
 
-    public User(int id, String fb_uid, String email, String first_name, String last_name, boolean confirmed) {
+    public User(int id, String fb_uid, String email, String first_name, String last_name, String phone, boolean email_confirmed, boolean phone_confirmed) {
         this.id = id;
         this.fb_uid = fb_uid;
         this.email = email;
         this.first_name = first_name;
         this.last_name = last_name;
-        this.confirmed = confirmed;
+        this.phone = phone;
+        this.email_confirmed = email_confirmed;
+        this.phone_confirmed = phone_confirmed;
+
     }
 
     User(Parcel in) {
@@ -39,6 +44,7 @@ public class User implements Parcelable {
         this.email = in.readString();
         this.first_name = in.readString();
         this.last_name = in.readString();
+        this.phone = in.readString();
     }
 
     public void writeToParcel(Parcel dest, int flags) {
@@ -47,6 +53,7 @@ public class User implements Parcelable {
         dest.writeString(email);
         dest.writeString(first_name);
         dest.writeString(last_name);
+        dest.writeString(phone);
     }
 
     public int describeContents() {
@@ -81,7 +88,15 @@ public class User implements Parcelable {
         return first_name + " " + last_name;
     }
 
-    public boolean getConfirmationStatus() {
-        return confirmed;
+    public String getPhone() {
+        return phone;
+    }
+
+    public boolean getEmailConfirmationStatus() {
+        return email_confirmed;
+    }
+
+    public boolean getPhoneConfirmationStatus() {
+        return phone_confirmed;
     }
 }

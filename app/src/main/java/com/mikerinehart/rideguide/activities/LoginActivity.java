@@ -35,11 +35,18 @@ import org.parceler.apache.commons.lang.BooleanUtils;
 public class LoginActivity extends ActionBarActivity {
 
     public final static String USER = "com.mikerinehart.rideguide.USER";
+    private String TAG = "LoginActivity";
+
     private UiLifecycleHelper uiHelper;
     private FrameLayout fbContainer;
+
     private RelativeLayout emailContainer;
     private EditText emailField;
-    private String TAG = "LoginActivity";
+
+    private RelativeLayout phoneContainer;
+    private EditText phoneField;
+    private EditText phoneValidationField;
+
     private User me;
     private GraphUser user;
 
@@ -92,24 +99,37 @@ public class LoginActivity extends ActionBarActivity {
                                         emailField = (EditText) findViewById(R.id.email_field);
 
                                     } else {
-                                        Log.i(TAG, "User exists, checking confirmation status");
+                                        Log.i(TAG, "User exists, checking email confirmation status");
 
-                                        if (BooleanUtils.toBoolean(response.getInt("confirmed"))) {
+                                        if (BooleanUtils.toBoolean(response.getInt("email_confirmed")) && BooleanUtils.toBoolean(response.getInt("phone_confirmed"))) {
                                             Log.i(TAG, "User is confirmed, starting MainActivity");
                                             me = new User(response.getInt("id"),
                                                     response.getString("fb_uid"),
                                                     response.getString("email"),
                                                     response.getString("first_name"),
                                                     response.getString("last_name"),
-                                                    BooleanUtils.toBoolean(response.getInt("confirmed")));
+                                                    response.getString("phone"),
+                                                    BooleanUtils.toBoolean(response.getInt("email_confirmed")),
+                                                    BooleanUtils.toBoolean(response.getInt("phone_confirmed")));
                                             launchMainActivity(me);
-                                        } else {
-                                            Log.i(TAG, "User is not confirmed, show email registration screen");
+                                        } else if (!BooleanUtils.toBoolean(response.getInt("email_confirmed"))) {
+                                            Log.i(TAG, "User email is not confirmed, show email registration screen");
                                             fbContainer = (FrameLayout) findViewById(R.id.fb_container);
                                             emailContainer = (RelativeLayout) findViewById(R.id.email_container);
                                             fbContainer.setVisibility(FrameLayout.GONE);
                                             emailContainer.setVisibility(RelativeLayout.VISIBLE);
                                             emailField = (EditText) findViewById(R.id.email_field);
+                                        } else if (!BooleanUtils.toBoolean(response.getInt("phone_confirmed"))) {
+                                            Log.i(TAG, "User phone is not confirmed, show phone registration screen");
+                                            fbContainer = (FrameLayout) findViewById(R.id.fb_container);
+                                            emailContainer = (RelativeLayout) findViewById(R.id.email_container);
+                                            fbContainer.setVisibility(FrameLayout.GONE);
+                                            emailContainer.setVisibility(RelativeLayout.GONE);
+                                            phoneContainer = (RelativeLayout)findViewById(R.id.login_phone_container);
+                                            phoneField = (EditText) findViewById(R.id.login_phone_field);
+                                            phoneValidationField = (EditText)findViewById(R.id.login_phone_validation_field);
+                                            phoneContainer.setVisibility(RelativeLayout.VISIBLE);
+
                                         }
                                     }
                                 } catch (JSONException e) {
@@ -177,6 +197,99 @@ public class LoginActivity extends ActionBarActivity {
         } else {
             Snackbar.with(getApplicationContext()).text("Please enter a valid .edu email address!").show(LoginActivity.this);
         }
+    }
+
+    public void submitPhone(View v) {
+        String phone = phoneField.getText().toString();
+
+
+            Snackbar.with(getApplicationContext()).text("Sending validation text...").show(LoginActivity.this);
+            RequestParams params = new RequestParams();
+
+            params.put("fb_uid", user.getId());
+            params.put("phone", phone);
+
+            RestClient.post("registration/sendValidationText", params, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                    Snackbar.with(getApplicationContext()).text("Text Sent!")
+                            .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
+                            .actionLabel("Resend Text")
+                            .actionListener(new ActionClickListener() {
+                                @Override
+                                public void onActionClicked(Snackbar snackbar) {
+                                    submitEmail(findViewById(R.id.login_phone_container));
+                                }
+                            })
+                            .show(LoginActivity.this);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    Snackbar.with(getApplicationContext()).text("Error sending text: " + statusCode)
+                            .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
+                            .actionLabel("Try again")
+                            .actionListener(new ActionClickListener() {
+                                @Override
+                                public void onActionClicked(Snackbar snackbar) {
+                                    submitEmail(findViewById(R.id.login_phone_container));
+                                }
+                            })
+                            .show(LoginActivity.this);
+                }
+            });
+    }
+
+    public void checkPhoneValidation(View v) {
+        String validationCode = phoneValidationField.getText().toString();
+
+
+        Snackbar.with(getApplicationContext()).text("Checking validation code...").show(LoginActivity.this);
+        RequestParams params = new RequestParams();
+
+        params.put("fb_uid", user.getId());
+        params.put("validation_code", validationCode);
+
+        RestClient.post("registration/checkValidationTextCode", params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    if (response.has("fb_uid") || response.getString("status").equalsIgnoreCase("success")) {
+                        if (response.has("fb_uid")) {
+
+                            me = new User(response.getInt("id"),
+                                    response.getString("fb_uid"),
+                                    response.getString("email"),
+                                    response.getString("first_name"),
+                                    response.getString("last_name"),
+                                    response.getString("phone"),
+                                    BooleanUtils.toBoolean(response.getInt("email_confirmed")),
+                                    BooleanUtils.toBoolean(response.getInt("phone_confirmed")));
+
+
+
+                            launchMainActivity(me);
+                        } else if (response.getString("validation").equalsIgnoreCase("failed")) {
+                            Snackbar.with(getApplicationContext()).text("Validation Code Incorrect")
+                                    .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
+                                    .show(LoginActivity.this);
+                        }
+                    } else if (response.getString("status").equalsIgnoreCase("failed")) {
+                        Snackbar.with(getApplicationContext()).text("Validation failed, please retry")
+                                .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
+                                .show(LoginActivity.this);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String response, Throwable throwable) {
+                Log.i(TAG, "Error " + statusCode + ": " + response);
+            }
+        });
     }
 
     private void launchMainActivity(User me) {

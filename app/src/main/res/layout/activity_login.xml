@@ -14,7 +14,7 @@
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
     android:id="@+id/fb_container"
-    android:visibility="visible">
+        android:visibility="visible">
 
     <com.facebook.widget.LoginButton
         android:id="@+id/fb_login_button"
@@ -101,6 +101,128 @@
             android:textStyle="bold"
             android:textSize="15sp"
             android:gravity="center_horizontal" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="350dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/login_phone_container"
+        android:visibility="gone">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/login_phone_field"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:enabled="true"
+            android:focusable="true"
+            android:editable="false"
+            android:focusableInTouchMode="true"
+            android:singleLine="true"
+            android:layout_below="@+id/login_phone_field_text"
+            android:layout_alignParentLeft="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Phone Number"
+            android:id="@+id/login_phone_field_text"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:textColor="#00E5FF"
+            android:labelFor="@id/email_field"
+            android:paddingTop="20dp"
+            android:focusable="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send Validation Text"
+            android:id="@+id/login_phone_button"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:onClick="submitPhone"
+            android:layout_below="@+id/login_phone_field"
+            android:layout_alignParentLeft="true" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Certain features of RideGuide require a valid phone number for use. Please enter your phone number for validation."
+            android:id="@+id/login_phone_text"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Validation Code"
+            android:id="@+id/login_validation_code_text_view"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:textColor="#00E5FF"
+            android:labelFor="@id/email_field"
+            android:paddingTop="20dp"
+            android:focusable="true"
+            android:layout_below="@+id/login_phone_button"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/login_phone_validation_field"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:enabled="true"
+            android:focusable="true"
+            android:editable="false"
+            android:focusableInTouchMode="true"
+            android:singleLine="true"
+            android:layout_below="@+id/login_validation_code_text_view"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Check Validation Code"
+            android:id="@+id/login_check_phone_button"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:onClick="checkPhoneValidation"
+            android:layout_above="@+id/login_phone_text"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
     <ImageView
