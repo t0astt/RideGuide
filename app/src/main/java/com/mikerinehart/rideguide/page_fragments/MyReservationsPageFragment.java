@@ -50,6 +50,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -172,12 +174,16 @@ public class MyReservationsPageFragment extends Fragment {
                     final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
                     View dialogLayout = inflater.inflate(R.layout.user_actions_dialog, null);
 
+                    DateFormat df = new SimpleDateFormat("E d, h:mma");
+
                     final User u = reservationAdapter.getUserFromList(itemClicked);
                     final Reservation r = reservationAdapter.getReservationFromList(itemClicked);
 
                     ImageView userPic = (ImageView)dialogLayout.findViewById(R.id.user_actions_dialog_user_pic);
                     TextView firstName = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_first_name);
                     TextView lastName = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_last_name);
+                    TextView pickupOrigin = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_pickup_origin);
+                    TextView pickupTime = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_pickup_time);
                     com.gc.materialdesign.views.ButtonRectangle callUserButton = (ButtonRectangle)dialogLayout.findViewById(R.id.user_actions_dialog_call_user_button);
 
 
@@ -187,6 +193,8 @@ public class MyReservationsPageFragment extends Fragment {
                             .into(userPic);
                     firstName.setText(u.getFirstName());
                     lastName.setText(u.getLastName());
+                    pickupOrigin.setText(r.getOrigin());
+                    pickupTime.setText(df.format(r.getPickup_time()));
                     callUserButton.setText("CALL " + u.getFirstName().toUpperCase());
                     callUserButton.setRippleSpeed(9001); // IT'S OVER 9000!!!
 
@@ -233,7 +241,7 @@ public class MyReservationsPageFragment extends Fragment {
 
                                                         @Override
                                                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                                            Log.i(TAG, "Error: " + errorResponse);
+                                                            Toast.makeText(getActivity().getBaseContext(), "Network error, please try again", Toast.LENGTH_LONG);
                                                         }
                                                     });
                                                 }
