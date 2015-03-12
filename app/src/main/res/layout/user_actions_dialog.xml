@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent"
+    android:minHeight="450dp">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/user_actions_dialog_user_pic"
+        android:src="@drawable/com_facebook_profile_default_icon"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="First Name"
+        android:id="@+id/user_actions_dialog_first_name"
+        android:textColor="#000000"
+        android:gravity="center_horizontal"
+        android:textSize="27dp"
+        android:textStyle="bold"
+        android:layout_below="@+id/user_actions_dialog_user_pic"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Last Name"
+        android:id="@+id/user_actions_dialog_last_name"
+        android:textColor="#000000"
+        android:gravity="center_horizontal"
+        android:textSize="27dp"
+        android:textStyle="bold"
+        android:layout_below="@+id/user_actions_dialog_first_name"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/user_actions_dialog_user_rating"
+        android:layout_below="@+id/user_actions_dialog_last_name"
+        android:layout_centerHorizontal="true" />
+
+    <com.gc.materialdesign.views.ButtonRectangle
+        android:id="@+id/user_actions_dialog_call_user_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#1E88E5"
+        android:text="CALL USER"
+        android:visibility="visible"
+        android:layout_below="@+id/user_actions_dialog_user_rating"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

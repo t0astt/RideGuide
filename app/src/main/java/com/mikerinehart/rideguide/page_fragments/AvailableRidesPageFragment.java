@@ -196,7 +196,8 @@ public class AvailableRidesPageFragment extends Fragment {
                                         public void onFailure(int statusCode, Header[] headers, String response, Throwable throwable) {
                                             Log.i(TAG, "Error " + statusCode + ": " + response);
                                         }
-                                    });                                }
+                                    });
+                                }
                             })
                             .build();
                     createReservationDialog.show();

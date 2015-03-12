@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RoundedTransformation;
 import com.mikerinehart.rideguide.models.Reservation;
+import com.mikerinehart.rideguide.models.User;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -57,6 +58,10 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
         this.c = viewGroup.getContext();
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.reservation_list_item, viewGroup, false);
         return new ReservationViewHolder(itemView);
+    }
+
+    public User getUserFromList(int i) {
+        return reservationList.get(i).getShift().getUser();
     }
 
     //Holds the Ride cardviews

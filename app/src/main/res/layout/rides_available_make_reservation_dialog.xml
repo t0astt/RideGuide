@@ -81,13 +81,4 @@
         android:layout_alignLeft="@+id/rides_available_make_reservation_dialog_passengers_label"
         android:layout_alignStart="@+id/rides_available_make_reservation_dialog_passengers_label" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/rides_available_make_reservation_dialog_destination"
-        android:layout_alignStart="@+id/rides_available_make_reservation_dialog_destination"
-        android:layout_marginBottom="87dp" />
-
 </RelativeLayout>

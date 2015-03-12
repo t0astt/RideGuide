@@ -1,17 +1,26 @@
 package com.mikerinehart.rideguide.page_fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.gc.materialdesign.views.ButtonRectangle;
 import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,11 +29,19 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
+import com.mikerinehart.rideguide.RoundedTransformation;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
+import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.adapters.ReservationAdapter;
+import com.mikerinehart.rideguide.main_fragments.AboutFragment;
+import com.mikerinehart.rideguide.main_fragments.HomeFragment;
+import com.mikerinehart.rideguide.main_fragments.ProfileFragment;
+import com.mikerinehart.rideguide.main_fragments.RidesFragment;
+import com.mikerinehart.rideguide.main_fragments.SettingsFragment;
 import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -56,18 +73,10 @@ public class MyReservationsPageFragment extends Fragment {
     private ProgressBarCircularIndeterminate loadingIcon;
     private TextView reservationFrowny;
     private TextView reservationNoneFound;
+    private ReservationAdapter reservationAdapter;
 
     private String TAG = "MyReservationsPageFragment";
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MyReservationsPageFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static MyReservationsPageFragment newInstance(User param1, String param2) {
         MyReservationsPageFragment fragment = new MyReservationsPageFragment();
         Bundle args = new Bundle();
@@ -128,8 +137,7 @@ public class MyReservationsPageFragment extends Fragment {
                 } else {
                     reservationList.setVisibility(RecyclerView.VISIBLE);
 
-                    // TODO: Create ReservationsAdapter and attach it
-                    ReservationAdapter reservationAdapter = new ReservationAdapter(result);
+                    reservationAdapter = new ReservationAdapter(result);
 
                     reservationList.addItemDecoration(new SimpleDividerItemDecoration(reservationList.getContext()));
                     reservationList.setAdapter(reservationAdapter);
@@ -139,6 +147,66 @@ public class MyReservationsPageFragment extends Fragment {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.i(TAG, "Error: " + errorResponse);
+            }
+        });
+
+        final GestureDetector mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+        });
+        reservationList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+                ViewGroup child = (ViewGroup) recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+
+                if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
+                    int itemClicked = recyclerView.getChildPosition(child);
+
+                    final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
+                    View dialogLayout = inflater.inflate(R.layout.user_actions_dialog, null);
+
+                    final User u = reservationAdapter.getUserFromList(itemClicked);
+
+                    ImageView userPic = (ImageView)dialogLayout.findViewById(R.id.user_actions_dialog_user_pic);
+                    TextView firstName = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_first_name);
+                    TextView lastName = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_last_name);
+                    com.gc.materialdesign.views.ButtonRectangle callUserButton = (ButtonRectangle)dialogLayout.findViewById(R.id.user_actions_dialog_call_user_button);
+
+
+                    Picasso.with(userPic.getContext())
+                            .load("https://graph.facebook.com/" + u.getFbUid() + "/picture?height=1000&type=large&width=1000")
+                            .transform(new RoundedTransformation(600, 5))
+                            .into(userPic);
+                    firstName.setText(u.getFirstName());
+                    lastName.setText(u.getLastName());
+                    callUserButton.setText("CALL " + u.getFirstName().toUpperCase());
+                    callUserButton.setRippleSpeed(9001); // IT'S OVER 9000!!!
+
+                    final MaterialDialog userActionsDialog = new MaterialDialog.Builder(MyReservationsPageFragment.this.getActivity())
+                            .title("")
+                            .customView(dialogLayout)
+                            .negativeText("Cancel")
+                            .positiveText("Create")
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog dialog) {
+                                    Intent intent = new Intent(Intent.ACTION_CALL);
+                                    intent.setData(Uri.parse("tel:" + u.getPhone()));
+                                    startActivity(intent);
+                                }
+                            })
+                            .build();
+                    userActionsDialog.show();
+
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+                Log.i(TAG, "TouchEvent");
             }
         });
 
