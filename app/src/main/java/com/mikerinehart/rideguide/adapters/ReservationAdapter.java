@@ -64,6 +64,10 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
         return reservationList.get(i).getShift().getUser();
     }
 
+    public Reservation getReservationFromList(int i) {
+        return reservationList.get(i);
+    }
+
     //Holds the Ride cardviews
     public static class ReservationViewHolder extends RecyclerView.ViewHolder {
 

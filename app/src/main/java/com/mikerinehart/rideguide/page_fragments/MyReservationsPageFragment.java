@@ -32,6 +32,7 @@ import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.RoundedTransformation;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
 import com.mikerinehart.rideguide.activities.MainActivity;
+import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
 import com.mikerinehart.rideguide.adapters.ReservationAdapter;
 import com.mikerinehart.rideguide.main_fragments.AboutFragment;
 import com.mikerinehart.rideguide.main_fragments.HomeFragment;
@@ -45,6 +46,7 @@ import com.squareup.picasso.Picasso;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
@@ -73,6 +75,7 @@ public class MyReservationsPageFragment extends Fragment {
     private ProgressBarCircularIndeterminate loadingIcon;
     private TextView reservationFrowny;
     private TextView reservationNoneFound;
+    private RecyclerView reservationList;
     private ReservationAdapter reservationAdapter;
 
     private String TAG = "MyReservationsPageFragment";
@@ -105,50 +108,52 @@ public class MyReservationsPageFragment extends Fragment {
         final View v = inflater.inflate(R.layout.fragment_reservations_page, container, false);
         loadingIcon = (ProgressBarCircularIndeterminate)v.findViewById(R.id.reservation_circular_loading);
 
-        final RecyclerView reservationList = (RecyclerView) v.findViewById(R.id.reservation_list);
+        reservationNoneFound = (TextView)v.findViewById(R.id.reservation_none_found);
+        reservationFrowny = (TextView)v.findViewById(R.id.reservation_frowny);
+
+        reservationList = (RecyclerView) v.findViewById(R.id.reservation_list);
         reservationList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(reservationList.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         reservationList.setLayoutManager(llm);
 
-        // Asynchronously load reservations with POST
-        RequestParams params = new RequestParams("user_id", me.getId());
-        RestClient.post("reservations/myReservations", params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+        refreshContent();
 
-                List<Reservation> result;
-                Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-                Type listType = new TypeToken<List<Reservation>>() {
-                }.getType();
-
-                result = (List<Reservation>) gson.fromJson(response.toString(), listType);
-
-                loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
-
-                // check whether or not to shame the user hehe
-                if (result == null || result.size() == 0) {
-                    reservationNoneFound = (TextView)v.findViewById(R.id.reservation_none_found);
-                    reservationFrowny = (TextView)v.findViewById(R.id.reservation_frowny);
-
-                    reservationNoneFound.setVisibility(TextView.VISIBLE);
-                    reservationFrowny.setVisibility(TextView.VISIBLE);
-                    reservationList.setVisibility(RecyclerView.GONE);
-                } else {
-                    reservationList.setVisibility(RecyclerView.VISIBLE);
-
-                    reservationAdapter = new ReservationAdapter(result);
-
-                    reservationList.addItemDecoration(new SimpleDividerItemDecoration(reservationList.getContext()));
-                    reservationList.setAdapter(reservationAdapter);
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.i(TAG, "Error: " + errorResponse);
-            }
-        });
+//        // Asynchronously load reservations with POST
+//        RequestParams params = new RequestParams("user_id", me.getId());
+//        RestClient.post("reservations/myReservations", params, new JsonHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+//
+//                List<Reservation> result;
+//                Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+//                Type listType = new TypeToken<List<Reservation>>() {
+//                }.getType();
+//
+//                result = (List<Reservation>) gson.fromJson(response.toString(), listType);
+//
+//                loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
+//
+//                // check whether or not to shame the user hehe
+//                if (result == null || result.size() == 0) {
+//                    reservationNoneFound.setVisibility(TextView.VISIBLE);
+//                    reservationFrowny.setVisibility(TextView.VISIBLE);
+//                    reservationList.setVisibility(RecyclerView.GONE);
+//                } else {
+//                    reservationList.setVisibility(RecyclerView.VISIBLE);
+//
+//                    reservationAdapter = new ReservationAdapter(result);
+//
+//                    reservationList.addItemDecoration(new SimpleDividerItemDecoration(reservationList.getContext()));
+//                    reservationList.setAdapter(reservationAdapter);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+//                Log.i(TAG, "Error: " + errorResponse);
+//            }
+//        });
 
         final GestureDetector mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -168,6 +173,7 @@ public class MyReservationsPageFragment extends Fragment {
                     View dialogLayout = inflater.inflate(R.layout.user_actions_dialog, null);
 
                     final User u = reservationAdapter.getUserFromList(itemClicked);
+                    final Reservation r = reservationAdapter.getReservationFromList(itemClicked);
 
                     ImageView userPic = (ImageView)dialogLayout.findViewById(R.id.user_actions_dialog_user_pic);
                     TextView firstName = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_first_name);
@@ -184,17 +190,56 @@ public class MyReservationsPageFragment extends Fragment {
                     callUserButton.setText("CALL " + u.getFirstName().toUpperCase());
                     callUserButton.setRippleSpeed(9001); // IT'S OVER 9000!!!
 
+                    callUserButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(Intent.ACTION_CALL);
+                            intent.setData(Uri.parse("tel:" + u.getPhone()));
+                            startActivity(intent);
+                        }
+                    });
+
                     final MaterialDialog userActionsDialog = new MaterialDialog.Builder(MyReservationsPageFragment.this.getActivity())
                             .title("")
                             .customView(dialogLayout)
-                            .negativeText("Cancel")
-                            .positiveText("Create")
+                            .neutralText("Delete Reservation")
+                            .neutralColor(getResources().getColor(R.color.ColorNegative))
+                            .positiveText("Ok")
                             .callback(new MaterialDialog.ButtonCallback() {
+
                                 @Override
-                                public void onPositive(MaterialDialog dialog) {
-                                    Intent intent = new Intent(Intent.ACTION_CALL);
-                                    intent.setData(Uri.parse("tel:" + u.getPhone()));
-                                    startActivity(intent);
+                                public void onNeutral(MaterialDialog dialog) {
+                                    MaterialDialog confirmDeleteDialog = new MaterialDialog.Builder(MyReservationsPageFragment.this.getActivity())
+                                            .title("Confirm Reservation Deletion")
+                                            .content("Are you sure you want to delete your reservation with " + u.getFirstName() + "?")
+                                            .positiveText("Yes")
+                                            .negativeText("Cancel")
+                                            .callback(new MaterialDialog.ButtonCallback() {
+                                                public void onPositive(MaterialDialog materialDialog) {
+
+                                                    RequestParams params = new RequestParams("reservation_id", r.getId());
+                                                    RestClient.post("reservations/deleteReservation", params, new JsonHttpResponseHandler() {
+                                                        @Override
+                                                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                                            try {
+                                                                if (response.getString("status").equalsIgnoreCase("success")) {
+                                                                    refreshContent();
+                                                                    Toast.makeText(getActivity().getBaseContext(), "Reservation deleted!", Toast.LENGTH_LONG);
+                                                                }
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                                            Log.i(TAG, "Error: " + errorResponse);
+                                                        }
+                                                    });
+                                                }
+                                            })
+                                            .build();
+                                    confirmDeleteDialog.show();
                                 }
                             })
                             .build();
@@ -211,6 +256,43 @@ public class MyReservationsPageFragment extends Fragment {
         });
 
         return v;
+    }
+
+    private void refreshContent() {
+        RequestParams params = new RequestParams("user_id", me.getId());
+        RestClient.post("reservations/myReservations", params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+
+                List<Reservation> result;
+                Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+                Type listType = new TypeToken<List<Reservation>>() {
+                }.getType();
+
+                result = (List<Reservation>) gson.fromJson(response.toString(), listType);
+
+                loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
+
+                // check whether or not to shame the user hehe
+                if (result == null || result.size() == 0) {
+                    reservationNoneFound.setVisibility(TextView.VISIBLE);
+                    reservationFrowny.setVisibility(TextView.VISIBLE);
+                    reservationList.setVisibility(RecyclerView.GONE);
+                } else {
+                    reservationList.setVisibility(RecyclerView.VISIBLE);
+
+                    reservationAdapter = new ReservationAdapter(result);
+
+                    reservationList.addItemDecoration(new SimpleDividerItemDecoration(reservationList.getContext()));
+                    reservationList.setAdapter(reservationAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.i(TAG, "Error: " + errorResponse);
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

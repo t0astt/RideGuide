@@ -3,6 +3,7 @@
     <color name="ColorPrimary">#3F51B5</color>
     <color name="ColorPrimaryDark">#303F9F</color>
     <color name="ColorAccent">#00E5FF</color>
+    <color name="ColorNegative">#F44336</color>
     <color name="GradStart">#7986CB</color>
     <color name="GradEnd">#1A237E</color>
 </resources>
