@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -207,6 +208,7 @@ public class MyReservationsPageFragment extends Fragment {
                         }
                     });
 
+
                     final MaterialDialog userActionsDialog = new MaterialDialog.Builder(MyReservationsPageFragment.this.getActivity())
                             .title("")
                             .customView(dialogLayout)
@@ -252,6 +254,17 @@ public class MyReservationsPageFragment extends Fragment {
                             })
                             .build();
                     userActionsDialog.show();
+                    userPic.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            userActionsDialog.dismiss();
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.container, ProfileFragment.newInstance(u, "ProfileFragment"))
+                                    .addToBackStack("MyShifts")
+                                    .commit();
+                        }
+                    });
 
                 }
                 return false;
@@ -262,6 +275,8 @@ public class MyReservationsPageFragment extends Fragment {
                 Log.i(TAG, "TouchEvent");
             }
         });
+
+
 
         return v;
     }
