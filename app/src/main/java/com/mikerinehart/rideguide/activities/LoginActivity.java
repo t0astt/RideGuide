@@ -33,6 +33,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.apache.commons.lang.BooleanUtils;
 
+import java.io.IOException;
+
 
 public class LoginActivity extends ActionBarActivity {
 
@@ -51,8 +53,8 @@ public class LoginActivity extends ActionBarActivity {
 
     private User me;
     private GraphUser user;
-    GoogleCloudMessaging gcm;
-    String gcmRegId;
+    GCMHelper gcm;
+    private String gcmRegId;
 
     private boolean confCheckActive;
     // Called when session changes
@@ -68,6 +70,10 @@ public class LoginActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Get GCM registration ID
+        gcm = new GCMHelper(getApplicationContext());
+        getGCM();
 
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
@@ -163,14 +169,16 @@ public class LoginActivity extends ActionBarActivity {
             Snackbar.with(getApplicationContext()).text("Sending email...").show(LoginActivity.this);
 
             //GCM REGISTRATION
-            gcm = GoogleCloudMessaging.getInstance(this);
-            //gcmRegId = getRe
+
 
             RequestParams params = new RequestParams();
             params.put("fb_uid", user.getId());
             params.put("email", email);
             params.put("first_name", user.getFirstName());
             params.put("last_name", user.getLastName());
+            params.put("registration_type", "gcm");
+            params.put("registration_id", gcmRegId);
+
 
             RestClient.post("registration/sendValidationEmail", params, new AsyncHttpResponseHandler() {
                 @Override
@@ -300,16 +308,32 @@ public class LoginActivity extends ActionBarActivity {
         });
     }
 
-//    private String getRegistrationId(Context context) {
-//        int registeredVersion =
-//    }
-
     private void launchMainActivity(User me) {
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("me", me);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
         finish();
+    }
+
+    private void getGCM() {
+
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    GCMHelper  gcmRegistrationHelper = new GCMHelper (
+                            getApplicationContext());
+                    gcmRegId = gcmRegistrationHelper.GCMRegister(Constants.getGoogleApiProjectNumber());
+
+                } catch (Exception bug) {
+                    bug.printStackTrace();
+                }
+
+            }
+        });
+        thread.start();
     }
 
     @Override
