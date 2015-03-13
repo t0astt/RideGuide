@@ -46,7 +46,6 @@ public class GcmIntentService extends IntentService {
                 }
             }
 
-            //sendNotification("Test!");
             GcmBroadcastReceiver.completeWakefulIntent(intent);
         }
     }
