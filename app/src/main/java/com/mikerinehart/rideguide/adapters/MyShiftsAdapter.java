@@ -1,6 +1,8 @@
 package com.mikerinehart.rideguide.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,22 +14,28 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.gc.materialdesign.views.ButtonRectangle;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
+import com.mikerinehart.rideguide.RoundedTransformation;
 import com.mikerinehart.rideguide.main_fragments.ProfileFragment;
 import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.Header;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
@@ -153,13 +161,107 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                 if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
                     dialog.dismiss();
                     int itemClicked = recyclerView.getChildPosition(child);
-                    User u = reservationAdapter.getUserFromList(itemClicked);
 
-                    ((FragmentActivity)c).getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.container, ProfileFragment.newInstance(u, "ProfileFragment"))
-                            .addToBackStack("MyShifts")
-                            .commit();
+                    final LayoutInflater inflater = LayoutInflater.from(c);
+                    View dialogLayout = inflater.inflate(R.layout.user_actions_dialog, null);
+
+                    DateFormat df = new SimpleDateFormat("E d, h:mma");
+
+                    final User u = reservationAdapter.getUserFromList(itemClicked);
+                    final Reservation r = reservationAdapter.getReservationFromList(itemClicked);
+
+                    ImageView userPic = (ImageView)dialogLayout.findViewById(R.id.user_actions_dialog_user_pic);
+                    TextView firstName = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_first_name);
+                    TextView lastName = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_last_name);
+                    TextView pickupOrigin = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_pickup_origin);
+                    TextView pickupTime = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_pickup_time);
+                    com.gc.materialdesign.views.ButtonRectangle callUserButton = (ButtonRectangle)dialogLayout.findViewById(R.id.user_actions_dialog_call_user_button);
+
+
+                    Picasso.with(userPic.getContext())
+                            .load("https://graph.facebook.com/" + u.getFbUid() + "/picture?height=1000&type=large&width=1000")
+                            .transform(new RoundedTransformation(600, 5))
+                            .into(userPic);
+                    firstName.setText(u.getFirstName());
+                    lastName.setText(u.getLastName());
+                    pickupOrigin.setText(r.getOrigin());
+                    pickupTime.setText(df.format(r.getPickup_time()));
+                    callUserButton.setText("CALL " + u.getFirstName().toUpperCase());
+                    callUserButton.setRippleSpeed(9001); // IT'S OVER 9000!!!
+
+                    callUserButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(Intent.ACTION_CALL);
+                            intent.setData(Uri.parse("tel:" + u.getPhone()));
+                            c.startActivity(intent); // MAY BORK SHIT
+                        }
+                    });
+
+                    final MaterialDialog userActionsDialog = new MaterialDialog.Builder((FragmentActivity)c)
+                            .title("")
+                            .customView(dialogLayout)
+                            .neutralText("Delete Reservation")
+                            .neutralColor(c.getResources().getColor(R.color.ColorNegative))
+                            .positiveText("Ok")
+                            .callback(new MaterialDialog.ButtonCallback() {
+
+                                @Override
+                                public void onNeutral(MaterialDialog dialog) {
+                                    MaterialDialog confirmDeleteDialog = new MaterialDialog.Builder((FragmentActivity)c)
+                                            .title("Confirm Reservation Deletion")
+                                            .content("Are you sure you want to delete " + u.getFirstName() + "'s reservation?")
+                                            .positiveText("Yes")
+                                            .negativeText("Cancel")
+                                            .callback(new MaterialDialog.ButtonCallback() {
+                                                public void onPositive(MaterialDialog materialDialog) {
+
+                                                    RequestParams params = new RequestParams("reservation_id", r.getId());
+                                                    RestClient.post("reservations/deleteReservation", params, new JsonHttpResponseHandler() {
+                                                        @Override
+                                                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                                            try {
+                                                                if (response.getString("status").equalsIgnoreCase("success")) {
+                                                                    //refreshContent();
+                                                                    //Toast.makeText(getActivity().getBaseContext(), "Reservation deleted!", Toast.LENGTH_LONG);
+                                                                }
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                                            //Toast.makeText(getActivity().getBaseContext(), "Network error, please try again", Toast.LENGTH_LONG);
+                                                        }
+                                                    });
+                                                }
+                                            })
+                                            .build();
+                                    confirmDeleteDialog.show();
+                                }
+                            })
+                            .build();
+                    userActionsDialog.show();
+                    userPic.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            userActionsDialog.dismiss();
+                            ((FragmentActivity)c).getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.container, ProfileFragment.newInstance(u, "ProfileFragment"))
+                                    .addToBackStack("MyShifts")
+                                    .commit();
+                        }
+                    });
+
+
+
+//                    ((FragmentActivity)c).getSupportFragmentManager()
+//                            .beginTransaction()
+//                            .replace(R.id.container, ProfileFragment.newInstance(u, "ProfileFragment"))
+//                            .addToBackStack("MyShifts")
+//                            .commit();
 
                 }
                 return false;

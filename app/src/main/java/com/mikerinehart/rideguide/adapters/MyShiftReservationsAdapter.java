@@ -59,6 +59,10 @@ public class MyShiftReservationsAdapter extends RecyclerView.Adapter<MyShiftRese
         return r.getUser();
     }
 
+    public Reservation getReservationFromList(int i) {
+        return reservationList.get(i);
+    }
+
     @Override
     public MyShiftReservationsViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         this.c = viewGroup.getContext();
