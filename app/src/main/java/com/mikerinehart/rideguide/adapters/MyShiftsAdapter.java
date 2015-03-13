@@ -174,6 +174,7 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                     TextView firstName = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_first_name);
                     TextView lastName = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_last_name);
                     TextView pickupOrigin = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_pickup_origin);
+                    TextView pickupDestination = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_destination);
                     TextView pickupTime = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_pickup_time);
                     com.gc.materialdesign.views.ButtonRectangle callUserButton = (ButtonRectangle)dialogLayout.findViewById(R.id.user_actions_dialog_call_user_button);
 
@@ -185,6 +186,7 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                     firstName.setText(u.getFirstName());
                     lastName.setText(u.getLastName());
                     pickupOrigin.setText(r.getOrigin());
+                    pickupDestination.setText(r.getDestination());
                     pickupTime.setText(df.format(r.getPickup_time()));
                     callUserButton.setText("CALL " + u.getFirstName().toUpperCase());
                     callUserButton.setRippleSpeed(9001); // IT'S OVER 9000!!!

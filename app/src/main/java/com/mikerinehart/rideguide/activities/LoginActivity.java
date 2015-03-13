@@ -1,5 +1,6 @@
 package com.mikerinehart.rideguide.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -17,6 +18,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -49,6 +51,8 @@ public class LoginActivity extends ActionBarActivity {
 
     private User me;
     private GraphUser user;
+    GoogleCloudMessaging gcm;
+    String gcmRegId;
 
     private boolean confCheckActive;
     // Called when session changes
@@ -157,8 +161,12 @@ public class LoginActivity extends ActionBarActivity {
 
         if (!email.equals("") && email.length() > 4 && email.substring(email.length() - 4).equalsIgnoreCase(".edu")) {
             Snackbar.with(getApplicationContext()).text("Sending email...").show(LoginActivity.this);
-            RequestParams params = new RequestParams();
 
+            //GCM REGISTRATION
+            gcm = GoogleCloudMessaging.getInstance(this);
+            //gcmRegId = getRe
+
+            RequestParams params = new RequestParams();
             params.put("fb_uid", user.getId());
             params.put("email", email);
             params.put("first_name", user.getFirstName());
@@ -291,6 +299,10 @@ public class LoginActivity extends ActionBarActivity {
             }
         });
     }
+
+//    private String getRegistrationId(Context context) {
+//        int registeredVersion =
+//    }
 
     private void launchMainActivity(User me) {
         Intent intent = new Intent(getBaseContext(), MainActivity.class);

@@ -22,9 +22,13 @@
         android:theme="@style/AppTheme" >
         <receiver
             android:name=".GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND"
             android:enabled="true"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:exported="true" >
+            <intent-filter>
+                    <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                    <category android:name="com.mikerinehart.rideguide" />
+            </intent-filter>
         </receiver>
 
         <meta-data

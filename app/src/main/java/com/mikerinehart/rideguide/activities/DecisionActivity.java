@@ -39,7 +39,6 @@ public class DecisionActivity extends ActionBarActivity {
     GoogleCloudMessaging gcm;
     String regid;
 
-
     private User me;
 
     @Override
@@ -47,18 +46,10 @@ public class DecisionActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_decision);
 
-        if (checkPlayServices() == true || checkPlayServices() == false) {
+        if (checkPlayServices() == true) {
             cm = (ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
             if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
-
-                // GCM registration
-                gcm = GoogleCloudMessaging.getInstance(this);
-//                regid = getRegistrationId(getApplicationContext());
-//
-//                if (regid.isEmpty()) {
-//                    registerInBackground();
-//                }
 
                 Session session = Session.getActiveSession();
 
@@ -129,6 +120,7 @@ public class DecisionActivity extends ActionBarActivity {
             }
         } else {
             Log.i(TAG, "No valid Google Play Services APK found");
+            GooglePlayServicesUtil.getErrorDialog(GooglePlayServicesUtil.isGooglePlayServicesAvailable(this), this, PLAY_SERVICES_RESOLUTION_REQUEST).show();
         }
     }
 
