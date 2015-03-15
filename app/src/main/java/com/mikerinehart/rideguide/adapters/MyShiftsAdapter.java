@@ -219,7 +219,7 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                                                 public void onPositive(MaterialDialog materialDialog) {
 
                                                     RequestParams params = new RequestParams("reservation_id", r.getId());
-                                                    RestClient.post("reservations/deleteReservation", params, new JsonHttpResponseHandler() {
+                                                    RestClient.post("reservations/cancelUserReservation", params, new JsonHttpResponseHandler() {
                                                         @Override
                                                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                                             try {
