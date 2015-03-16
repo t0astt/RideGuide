@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gc.materialdesign.views.ButtonFloat;
@@ -30,6 +31,7 @@ import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
 import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
+import com.sleepbot.datetimepicker.time.TimePickerDialog;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -38,7 +40,9 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class MyShiftsPageFragment extends Fragment {
@@ -227,9 +231,15 @@ public class MyShiftsPageFragment extends Fragment {
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Date d = new Date();
+                GregorianCalendar calendar = new GregorianCalendar();
+                calendar.setTime(d);
+                calendar.add(Calendar.DATE, 7);
                 new SlideDateTimePicker.Builder(getFragmentManager())
                         .setListener(startListener)
-                        .setInitialDate(new Date())
+                        .setInitialDate(d)
+                        .setMinDate(d)
+                        .setMaxDate(calendar.getTime())
                         .build()
                         .show();
             }
@@ -238,9 +248,15 @@ public class MyShiftsPageFragment extends Fragment {
         endTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Date d = new Date();
+                GregorianCalendar calendar = new GregorianCalendar();
+                calendar.setTime(d);
+                calendar.add(Calendar.DATE, 7);
                 new SlideDateTimePicker.Builder(getFragmentManager())
                         .setListener(endListener)
-                        .setInitialDate(new Date())
+                        .setInitialDate(d)
+                        .setMinDate(d)
+                        .setMaxDate(calendar.getTime())
                         .build()
                         .show();
             }

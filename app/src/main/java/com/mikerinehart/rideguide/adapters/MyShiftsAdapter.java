@@ -136,9 +136,6 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                                 .build();
         RecyclerView reservationList = (RecyclerView)dialogLayout.findViewById(R.id.myshifts_view_shift_reservations_dialog_list);
 
-
-
-        //reservationList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(reservationList.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         reservationList.setLayoutManager(llm);
@@ -256,15 +253,6 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                                     .commit();
                         }
                     });
-
-
-
-//                    ((FragmentActivity)c).getSupportFragmentManager()
-//                            .beginTransaction()
-//                            .replace(R.id.container, ProfileFragment.newInstance(u, "ProfileFragment"))
-//                            .addToBackStack("MyShifts")
-//                            .commit();
-
                 }
                 return false;
             }
