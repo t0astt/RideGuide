@@ -23,12 +23,13 @@
         android:theme="@style/AppTheme" >
         <receiver
             android:name=".GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
-                    <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                    <category android:name="com.mikerinehart.rideguide" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="com.mikerinehart.rideguide" />
             </intent-filter>
         </receiver>
 
@@ -55,11 +56,16 @@
         </activity>
         <activity android:name="com.facebook.LoginActivity" >
         </activity>
+
         <service
             android:name=".GcmIntentService"
             android:exported="false" >
         </service>
 
+        <activity
+            android:name=".activities.MyHistoryActivity"
+            android:label="@string/title_activity_my_history" >
+        </activity>
     </application>
 
 </manifest>
