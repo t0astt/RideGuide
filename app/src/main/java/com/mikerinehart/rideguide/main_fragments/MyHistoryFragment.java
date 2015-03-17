@@ -1,4 +1,4 @@
-package com.mikerinehart.rideguide.page_fragments;
+package com.mikerinehart.rideguide.main_fragments;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -9,47 +9,30 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mikerinehart.rideguide.R;
-import com.mikerinehart.rideguide.models.User;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link RidesSearchFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link RidesSearchFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class RidesSearchFragment extends Fragment {
+
+public class MyHistoryFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private User me;
+    private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RidesSearchFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RidesSearchFragment newInstance(User param1, String param2) {
-        RidesSearchFragment fragment = new RidesSearchFragment();
+    public static MyHistoryFragment newInstance(String param1, String param2) {
+        MyHistoryFragment fragment = new MyHistoryFragment();
         Bundle args = new Bundle();
-        args.putParcelable("USER", param1);
+        args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public RidesSearchFragment() {
+    public MyHistoryFragment() {
         // Required empty public constructor
     }
 
@@ -57,7 +40,7 @@ public class RidesSearchFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            me = getArguments().getParcelable("USER");
+            mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -66,7 +49,7 @@ public class RidesSearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_rides_search, container, false);
+        return inflater.inflate(R.layout.fragment_my_history, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

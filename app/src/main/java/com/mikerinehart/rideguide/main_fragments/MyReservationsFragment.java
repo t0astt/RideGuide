@@ -1,8 +1,6 @@
-package com.mikerinehart.rideguide.page_fragments;
+package com.mikerinehart.rideguide.main_fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,16 +30,8 @@ import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.RoundedTransformation;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
-import com.mikerinehart.rideguide.activities.MainActivity;
-import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
 import com.mikerinehart.rideguide.adapters.ReservationAdapter;
-import com.mikerinehart.rideguide.main_fragments.AboutFragment;
-import com.mikerinehart.rideguide.main_fragments.HomeFragment;
-import com.mikerinehart.rideguide.main_fragments.ProfileFragment;
-import com.mikerinehart.rideguide.main_fragments.RidesFragment;
-import com.mikerinehart.rideguide.main_fragments.SettingsFragment;
 import com.mikerinehart.rideguide.models.Reservation;
-import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 import com.squareup.picasso.Picasso;
 
@@ -58,12 +48,12 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MyReservationsPageFragment.OnFragmentInteractionListener} interface
+ * {@link MyReservationsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MyReservationsPageFragment#newInstance} factory method to
+ * Use the {@link MyReservationsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyReservationsPageFragment extends Fragment {
+public class MyReservationsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static User ARG_PARAM1;
@@ -83,8 +73,8 @@ public class MyReservationsPageFragment extends Fragment {
 
     private String TAG = "MyReservationsPageFragment";
 
-    public static MyReservationsPageFragment newInstance(User param1, String param2) {
-        MyReservationsPageFragment fragment = new MyReservationsPageFragment();
+    public static MyReservationsFragment newInstance(User param1, String param2) {
+        MyReservationsFragment fragment = new MyReservationsFragment();
         Bundle args = new Bundle();
         args.putParcelable("USER", param1);
         args.putString(ARG_PARAM2, param2);
@@ -92,7 +82,7 @@ public class MyReservationsPageFragment extends Fragment {
         return fragment;
     }
 
-    public MyReservationsPageFragment() {
+    public MyReservationsFragment() {
         // Required empty public constructor
     }
 
@@ -175,7 +165,7 @@ public class MyReservationsPageFragment extends Fragment {
                     });
 
 
-                    final MaterialDialog userActionsDialog = new MaterialDialog.Builder(MyReservationsPageFragment.this.getActivity())
+                    final MaterialDialog userActionsDialog = new MaterialDialog.Builder(MyReservationsFragment.this.getActivity())
                             .title("")
                             .customView(dialogLayout)
                             .neutralText("Delete Reservation")
@@ -185,7 +175,7 @@ public class MyReservationsPageFragment extends Fragment {
 
                                 @Override
                                 public void onNeutral(MaterialDialog dialog) {
-                                    MaterialDialog confirmDeleteDialog = new MaterialDialog.Builder(MyReservationsPageFragment.this.getActivity())
+                                    MaterialDialog confirmDeleteDialog = new MaterialDialog.Builder(MyReservationsFragment.this.getActivity())
                                             .title("Confirm Reservation Deletion")
                                             .content("Are you sure you want to delete your reservation with " + u.getFirstName() + "?")
                                             .positiveText("Yes")
@@ -241,9 +231,6 @@ public class MyReservationsPageFragment extends Fragment {
                 Log.i(TAG, "TouchEvent");
             }
         });
-
-
-
         return v;
     }
 

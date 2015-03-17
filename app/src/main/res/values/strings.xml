@@ -13,10 +13,11 @@
 
     <string-array name="nav_drawer_items">
         <item>Home</item>
-        <item>Profile</item>
-        <item>Rides</item>
+        <item>Find a Ride</item>
+        <item>My Reservations</item>
+        <item>My Shifts</item>
+        <item>My History</item>
         <item>Settings</item>
-        <item>About</item>
         <item>Logout</item>
     </string-array>
 

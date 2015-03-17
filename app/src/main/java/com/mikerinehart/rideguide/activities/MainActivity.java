@@ -18,12 +18,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Toast;
 
+import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.mikerinehart.rideguide.main_fragments.AboutFragment;
 import com.mikerinehart.rideguide.adapters.DrawerAdapter;
 import com.mikerinehart.rideguide.main_fragments.HomeFragment;
+import com.mikerinehart.rideguide.main_fragments.MyHistoryFragment;
+import com.mikerinehart.rideguide.main_fragments.MyReservationsFragment;
 import com.mikerinehart.rideguide.page_fragments.HomePageFragment;
 import com.mikerinehart.rideguide.main_fragments.ProfileFragment;
 import com.mikerinehart.rideguide.R;
@@ -33,7 +35,6 @@ import com.mikerinehart.rideguide.models.User;
 import com.mikerinehart.rideguide.page_fragments.MyReservationsPageFragment;
 import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
 import com.mikerinehart.rideguide.page_fragments.AvailableRidesPageFragment;
-import com.mikerinehart.rideguide.page_fragments.RidesSearchFragment;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 public class MainActivity extends ActionBarActivity implements
@@ -43,8 +44,9 @@ public class MainActivity extends ActionBarActivity implements
         MyShiftsPageFragment.OnFragmentInteractionListener,
         ProfileFragment.OnFragmentInteractionListener,
         RidesFragment.OnFragmentInteractionListener,
+        MyReservationsFragment.OnFragmentInteractionListener,
         AvailableRidesPageFragment.OnFragmentInteractionListener,
-        RidesSearchFragment.OnFragmentInteractionListener,
+        MyHistoryFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener,
         AboutFragment.OnFragmentInteractionListener {
 
@@ -54,7 +56,7 @@ public class MainActivity extends ActionBarActivity implements
     DrawerLayout Drawer;
     ActionBarDrawerToggle mDrawerToggle;
     String[] TITLES;
-    int ICONS[] = {R.drawable.ic_home, R.drawable.ic_profile, R.drawable.ic_rides, R.drawable.ic_settings, R.drawable.ic_about, R.drawable.ic_logout};
+    int ICONS[] = {R.drawable.ic_home, R.drawable.ic_profile, R.drawable.ic_rides, R.drawable.ic_settings, R.drawable.ic_about, R.drawable.ic_logout, R.drawable.ic_logout};
 
     public User me;
 
@@ -80,9 +82,8 @@ public class MainActivity extends ActionBarActivity implements
         setSupportActionBar(toolbar);
         toolbar.setTitle("Rides Available Now");
 
-
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.container, HomeFragment.newInstance(me, "HomeFragment")).commit();
+        fm.beginTransaction().replace(R.id.container, HomePageFragment.newInstance(me, "HomePageFragment")).commit();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         mLayoutManager = new LinearLayoutManager(this);
@@ -107,40 +108,53 @@ public class MainActivity extends ActionBarActivity implements
                     int itemClicked = recyclerView.getChildPosition(child);
                     mAdapter.selectPosition(itemClicked);
 
-                    if (itemClicked == 1) {
+                    if (itemClicked == 0) {
+                        toolbar.setTitle("Profile");
+                        fm.beginTransaction()
+                                .replace(R.id.container, ProfileFragment.newInstance(me, "ProfileFragment"))
+                                .addToBackStack("Profile")
+                                .commit();
+                    } else if (itemClicked == 1) {
                         toolbar.setTitle("Home");
                         fm.beginTransaction()
-                                .replace(R.id.container, HomeFragment.newInstance(me, "HomeFragment"))
+                                .replace(R.id.container, HomePageFragment.newInstance(me, "HomePageFragment"))
                                 .addToBackStack("Home")
                                 .commit();
                     } else if (itemClicked == 2) {
-                        toolbar.setTitle("My Profile");
-                        fm.beginTransaction().replace(R.id.container, ProfileFragment.newInstance(me, "ProfileFragment"))
-                                .addToBackStack("MyProfile")
+                        toolbar.setTitle("Find a Ride");
+                        fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance(me, "RidesFragment"))
+                                .addToBackStack("Rides")
                                 .commit();
                     } else if (itemClicked == 3) {
-                        toolbar.setTitle("Search Rides");
-                        fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance(me, "RidesFragment"))
-                                .addToBackStack("SearchRides")
+                        toolbar.setTitle("My Reservations");
+                        fm.beginTransaction().replace(R.id.container, MyReservationsFragment.newInstance(me, "MyReservationsFragment"))
+                                .addToBackStack("MyReservations")
                                 .commit();
                     } else if (itemClicked == 4) {
-                        toolbar.setTitle("Settings");
-                        fm.beginTransaction().replace(R.id.container, SettingsFragment.newInstance("Test", "SettingsFragment"))
-                                .addToBackStack("Settings")
+                        toolbar.setTitle("My Shifts");
+                        fm.beginTransaction().replace(R.id.container, MyShiftsPageFragment.newInstance(me, "MyShiftsPageFragment"))
+                                .addToBackStack("MyShifts")
                                 .commit();
                     } else if (itemClicked == 5) {
-                        toolbar.setTitle("About");
-                        fm.beginTransaction().replace(R.id.container, AboutFragment.newInstance("Test", "AboutFragment"))
-                                .addToBackStack("About")
+                        toolbar.setTitle("My History");
+                        fm.beginTransaction().replace(R.id.container, MyHistoryFragment.newInstance("Test", "MyHistoryFragment"))
+                                .addToBackStack("MyHistory")
                                 .commit();
                     } else if (itemClicked == 6) {
+                            toolbar.setTitle("Settings");
+                            fm.beginTransaction().replace(R.id.container, SettingsFragment.newInstance("Test", "SettingsFragment"))
+                                    .addToBackStack("Settings")
+                                    .commit();
+                    } else if (itemClicked == 7) {
                         new AlertDialog.Builder(MainActivity.this)
                                 .setTitle("Confirm Logout")
                                 .setMessage("Do you wish to logout?")
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Toast.makeText(getBaseContext(), "Logged Out!", Toast.LENGTH_SHORT).show();
+                                        Session.getActiveSession().closeAndClearTokenInformation();
+                                        finish();
+                                        System.exit(0);
                                     }
                                 }).setNegativeButton("No", null).show();
                         return true;
