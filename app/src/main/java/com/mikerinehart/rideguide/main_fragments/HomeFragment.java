@@ -117,7 +117,7 @@ public class HomeFragment extends Fragment {
         }
 
         @Override
-        public Fragment getItem(int position) {
+        public android.support.v4.app.Fragment getItem(int position) {
             if (position == 0) {
                 return HomePageFragment.newInstance(me,"HomePageFragment");
             } else if (position == 1) {

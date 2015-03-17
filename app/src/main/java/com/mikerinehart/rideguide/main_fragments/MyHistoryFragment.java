@@ -4,11 +4,18 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.mikerinehart.rideguide.R;
+import com.mikerinehart.rideguide.models.User;
+import com.mikerinehart.rideguide.page_fragments.HomePageFragment;
+import com.mikerinehart.rideguide.page_fragments.MyReservationsPageFragment;
+import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
 
 
 public class MyHistoryFragment extends Fragment {
@@ -18,15 +25,15 @@ public class MyHistoryFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private User me;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    public static MyHistoryFragment newInstance(String param1, String param2) {
+    public static MyHistoryFragment newInstance(User param1, String param2) {
         MyHistoryFragment fragment = new MyHistoryFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putParcelable("USER", param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -40,7 +47,7 @@ public class MyHistoryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            me = getArguments().getParcelable("USER");
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -48,8 +55,15 @@ public class MyHistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_history, container, false);
+        View v = inflater.inflate(R.layout.fragment_my_history, container, false);
+
+        ViewPager pager = (ViewPager) v.findViewById(R.id.home_pager);
+        pager.setAdapter(new MyHistoryViewPagerAdapter(getFragmentManager()));
+
+        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) v.findViewById(R.id.tabs);
+        tabs.setViewPager(pager);
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -76,19 +90,36 @@ public class MyHistoryFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    private class MyHistoryViewPagerAdapter extends FragmentStatePagerAdapter {
+
+        private final String[] TITLES = {"Reservations", "Shifts"};
+
+        public MyHistoryViewPagerAdapter(android.support.v4.app.FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return TITLES[position];
+        }
+
+        @Override
+        public android.support.v4.app.Fragment getItem(int position) {
+            if (position == 0) {
+                //return HomePageFragment.newInstance(me, "HomePageFragment");
+            } else if (position == 1) {
+                //return MyReservationsPageFragment.newInstance(me, "MyReservationsPageFragment");
+            } return new MyHistoryFragment();
+        }
+
+        public int getCount() {
+            return TITLES.length;
+        }
     }
 
 }

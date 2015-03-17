@@ -47,12 +47,25 @@
         android:background="#1E88E5"
         android:text="CALL USER"
         android:visibility="visible"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/user_actions_dialog_pickup_time_label"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="77dp"
+        android:layout_marginTop="48dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <com.gc.materialdesign.views.ButtonRectangle
+        android:id="@+id/user_actions_dialog_donate_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#1E88E5"
+        android:text="DONATE"
+        android:visibility="visible"
+        android:layout_below="@+id/user_actions_dialog_call_user_button"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -63,7 +76,7 @@
         android:textColor="#000000"
         android:textSize="15dp"
         android:textStyle="bold"
-        android:paddingTop="35dp"
+        android:paddingTop="25dp"
         android:layout_below="@+id/user_actions_dialog_last_name"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -80,7 +93,7 @@
         android:textSize="15dp"
         android:textStyle="bold"
         android:visibility="visible"
-        android:paddingTop="35dp"
+        android:paddingTop="25dp"
         android:paddingLeft="11dp"
         android:layout_below="@+id/user_actions_dialog_last_name"
         android:layout_toRightOf="@+id/user_actions_dialog_destination_label"

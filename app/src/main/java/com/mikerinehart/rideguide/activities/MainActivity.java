@@ -137,7 +137,7 @@ public class MainActivity extends ActionBarActivity implements
                                 .commit();
                     } else if (itemClicked == 5) {
                         toolbar.setTitle("My History");
-                        fm.beginTransaction().replace(R.id.container, MyHistoryFragment.newInstance("Test", "MyHistoryFragment"))
+                        fm.beginTransaction().replace(R.id.container, MyHistoryFragment.newInstance(me, "MyHistoryFragment"))
                                 .addToBackStack("MyHistory")
                                 .commit();
                     } else if (itemClicked == 6) {

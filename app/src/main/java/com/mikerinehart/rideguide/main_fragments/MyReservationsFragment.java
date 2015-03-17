@@ -166,7 +166,6 @@ public class MyReservationsFragment extends Fragment {
 
 
                     final MaterialDialog userActionsDialog = new MaterialDialog.Builder(MyReservationsFragment.this.getActivity())
-                            .title("")
                             .customView(dialogLayout)
                             .neutralText("Delete Reservation")
                             .neutralColor(getResources().getColor(R.color.ColorNegative))
@@ -176,7 +175,6 @@ public class MyReservationsFragment extends Fragment {
                                 @Override
                                 public void onNeutral(MaterialDialog dialog) {
                                     MaterialDialog confirmDeleteDialog = new MaterialDialog.Builder(MyReservationsFragment.this.getActivity())
-                                            .title("Confirm Reservation Deletion")
                                             .content("Are you sure you want to delete your reservation with " + u.getFirstName() + "?")
                                             .positiveText("Yes")
                                             .negativeText("Cancel")
