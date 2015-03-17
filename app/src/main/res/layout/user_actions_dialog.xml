@@ -10,7 +10,8 @@
         android:src="@drawable/com_facebook_profile_default_icon"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentStart="false" />
+        android:layout_alignParentStart="false"
+        android:paddingTop="15dp" />
 
     <TextView
         android:layout_width="fill_parent"
@@ -24,7 +25,8 @@
         android:textStyle="bold"
         android:layout_below="@+id/user_actions_dialog_user_pic"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:paddingTop="15dp" />
 
     <TextView
         android:layout_width="fill_parent"
