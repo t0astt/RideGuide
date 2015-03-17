@@ -236,7 +236,7 @@ public class MyReservationsPageFragment extends Fragment {
                                                             try {
                                                                 if (response.getString("status").equalsIgnoreCase("success")) {
                                                                     refreshContent();
-                                                                    Toast.makeText(getActivity().getBaseContext(), "Reservation deleted!", Toast.LENGTH_LONG);
+                                                                    Toast.makeText(getActivity().getBaseContext(), "Reservation deleted!", Toast.LENGTH_LONG).show();
                                                                 }
                                                             } catch (JSONException e) {
                                                                 e.printStackTrace();
@@ -245,7 +245,7 @@ public class MyReservationsPageFragment extends Fragment {
 
                                                         @Override
                                                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                                            Toast.makeText(getActivity().getBaseContext(), "Network error, please try again", Toast.LENGTH_LONG);
+                                                            Toast.makeText(getActivity().getBaseContext(), "Network error, please try again", Toast.LENGTH_LONG).show();
                                                         }
                                                     });
                                                 }

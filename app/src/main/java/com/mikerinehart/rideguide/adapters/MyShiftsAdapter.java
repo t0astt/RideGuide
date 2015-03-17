@@ -1,5 +1,6 @@
 package com.mikerinehart.rideguide.adapters;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -221,8 +222,7 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                                                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                                             try {
                                                                 if (response.getString("status").equalsIgnoreCase("success")) {
-                                                                    //refreshContent();
-                                                                    //Toast.makeText(getActivity().getBaseContext(), "Reservation deleted!", Toast.LENGTH_LONG);
+                                                                    Toast.makeText(((FragmentActivity)c), "Reservation deleted!", Toast.LENGTH_LONG).show();
                                                                 }
                                                             } catch (JSONException e) {
                                                                 e.printStackTrace();

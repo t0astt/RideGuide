@@ -31,7 +31,6 @@ import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
 import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
-import com.sleepbot.datetimepicker.time.TimePickerDialog;
 
 import org.apache.http.Header;
 import org.json.JSONArray;

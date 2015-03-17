@@ -61,11 +61,6 @@
             android:name=".GcmIntentService"
             android:exported="false" >
         </service>
-
-        <activity
-            android:name=".activities.MyHistoryActivity"
-            android:label="@string/title_activity_my_history" >
-        </activity>
     </application>
 
 </manifest>
