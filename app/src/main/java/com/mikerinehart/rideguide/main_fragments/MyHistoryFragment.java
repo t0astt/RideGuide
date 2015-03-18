@@ -16,6 +16,8 @@ import com.mikerinehart.rideguide.models.User;
 import com.mikerinehart.rideguide.page_fragments.HomePageFragment;
 import com.mikerinehart.rideguide.page_fragments.MyReservationsPageFragment;
 import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
+import com.mikerinehart.rideguide.page_fragments.ReservationsHistoryPageFragment;
+import com.mikerinehart.rideguide.page_fragments.ShiftsHistoryPageFragment;
 
 
 public class MyHistoryFragment extends Fragment {
@@ -58,7 +60,7 @@ public class MyHistoryFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_my_history, container, false);
 
         ViewPager pager = (ViewPager) v.findViewById(R.id.home_pager);
-        pager.setAdapter(new MyHistoryViewPagerAdapter(getFragmentManager()));
+        pager.setAdapter(new MyHistoryViewPagerAdapter(getActivity().getSupportFragmentManager()));
 
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) v.findViewById(R.id.tabs);
         tabs.setViewPager(pager);
@@ -111,9 +113,9 @@ public class MyHistoryFragment extends Fragment {
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
             if (position == 0) {
-                //return HomePageFragment.newInstance(me, "HomePageFragment");
+                return ReservationsHistoryPageFragment.newInstance(me, "ReservationsHistory");
             } else if (position == 1) {
-                //return MyReservationsPageFragment.newInstance(me, "MyReservationsPageFragment");
+                return ShiftsHistoryPageFragment.newInstance(me, "ShiftsHistory");
             } return new MyHistoryFragment();
         }
 

@@ -35,6 +35,8 @@ import com.mikerinehart.rideguide.models.User;
 import com.mikerinehart.rideguide.page_fragments.MyReservationsPageFragment;
 import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
 import com.mikerinehart.rideguide.page_fragments.AvailableRidesPageFragment;
+import com.mikerinehart.rideguide.page_fragments.ReservationsHistoryPageFragment;
+import com.mikerinehart.rideguide.page_fragments.ShiftsHistoryPageFragment;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 public class MainActivity extends ActionBarActivity implements
@@ -48,7 +50,9 @@ public class MainActivity extends ActionBarActivity implements
         AvailableRidesPageFragment.OnFragmentInteractionListener,
         MyHistoryFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener,
-        AboutFragment.OnFragmentInteractionListener {
+        AboutFragment.OnFragmentInteractionListener,
+        ShiftsHistoryPageFragment.OnFragmentInteractionListener,
+        ReservationsHistoryPageFragment.OnFragmentInteractionListener {
 
     RecyclerView mRecyclerView;
     DrawerAdapter mAdapter;
