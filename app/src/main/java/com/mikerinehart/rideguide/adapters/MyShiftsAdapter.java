@@ -199,7 +199,6 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                     });
 
                     final MaterialDialog userActionsDialog = new MaterialDialog.Builder((FragmentActivity)c)
-                            .title("")
                             .customView(dialogLayout)
                             .neutralText("Delete Reservation")
                             .neutralColor(c.getResources().getColor(R.color.ColorNegative))

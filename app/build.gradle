@@ -45,6 +45,7 @@ dependencies {
     compile 'com.github.navasmdc:MaterialDesign:1.+'
     compile 'com.afollestad:material-dialogs:0.6.4.5'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+    compile 'com.timehop.stickyheadersrecyclerview:library:0.3.6@aar'
 
     compile project(':slideDateTimePicker')
 }

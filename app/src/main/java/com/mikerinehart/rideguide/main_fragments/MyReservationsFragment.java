@@ -34,6 +34,7 @@ import com.mikerinehart.rideguide.adapters.ReservationAdapter;
 import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.User;
 import com.squareup.picasso.Picasso;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -259,6 +260,8 @@ public class MyReservationsFragment extends Fragment {
 
                     reservationList.addItemDecoration(new SimpleDividerItemDecoration(reservationList.getContext()));
                     reservationList.setAdapter(reservationAdapter);
+                    StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(reservationAdapter);
+                    reservationList.addItemDecoration(headersDecor);
                 }
             }
 

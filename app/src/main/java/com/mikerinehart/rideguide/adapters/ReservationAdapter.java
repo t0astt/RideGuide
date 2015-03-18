@@ -14,12 +14,13 @@ import com.mikerinehart.rideguide.RoundedTransformation;
 import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.User;
 import com.squareup.picasso.Picasso;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.ReservationViewHolder> {
+public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.ReservationViewHolder> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
 
     private List<Reservation> reservationList;
     private Context c;
@@ -59,6 +60,32 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.reservation_list_item, viewGroup, false);
         return new ReservationViewHolder(itemView);
     }
+
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        Log.i("ReservationAdapter", "header stuff");
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reservation_view_header, parent, false);
+        return new RecyclerView.ViewHolder(view) { };
+    }
+
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+        Log.i("ReservationAdapter", "header stuff");
+        DateFormat df = new SimpleDateFormat("EEEE, MMMMMM d");
+        TextView textView = (TextView)holder.itemView;
+        textView.setText(df.format(getReservationFromList(position).getPickup_time()));
+    }
+
+    @Override
+    public long getHeaderId(int position) {
+        Log.i("ReservationAdapter", "header stuff");
+        if (position == 0) {
+            return 1;
+        } else {
+            return getReservationFromList(position).getPickup_time().toString().charAt(0);
+        }
+    }
+
+
+
 
     public User getUserFromList(int i) {
         return reservationList.get(i).getShift().getUser();
