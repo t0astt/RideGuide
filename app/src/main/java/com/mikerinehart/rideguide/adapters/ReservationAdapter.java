@@ -18,6 +18,7 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.ReservationViewHolder> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
@@ -42,8 +43,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
     @Override
     public void onBindViewHolder(ReservationViewHolder reservationViewHolder, int i) {
         DateFormat df = new SimpleDateFormat("E d, h:mma");
-
-        Log.i("ReservationAdapter", reservationViewHolder.name.toString());
+        
         Reservation r = reservationList.get(i);
         reservationViewHolder.name.setText(r.getShift().getUser().getFullName());
         reservationViewHolder.numPassengers.setText(Integer.toString(r.getPassengers()));
@@ -62,13 +62,11 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
     }
 
     public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
-        Log.i("ReservationAdapter", "header stuff");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reservation_view_header, parent, false);
         return new RecyclerView.ViewHolder(view) { };
     }
 
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Log.i("ReservationAdapter", "header stuff");
         DateFormat df = new SimpleDateFormat("EEEE, MMMMMM d");
         TextView textView = (TextView)holder.itemView;
         textView.setText(df.format(getReservationFromList(position).getPickup_time()));
@@ -76,12 +74,12 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
 
     @Override
     public long getHeaderId(int position) {
-        Log.i("ReservationAdapter", "header stuff");
-        if (position == 0) {
-            return 1;
-        } else {
-            return getReservationFromList(position).getPickup_time().toString().charAt(0);
-        }
+        DateFormat df = new SimpleDateFormat("D");
+        Reservation r = getReservationFromList(position);
+        Date d = r.getPickup_time();
+        String s = df.format(d);
+        long l = Long.parseLong(s, 10);
+        return l;
     }
 
 
