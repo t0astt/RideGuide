@@ -145,6 +145,7 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
         Shift s = shiftList.get(position);
         Date d = s.getStart();
         long l = Long.parseLong(df.format(d), 10);
+        Log.i(TAG, position + "");
         return l;
     }
 

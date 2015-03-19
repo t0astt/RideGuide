@@ -74,12 +74,12 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
 
     @Override
     public long getHeaderId(int position) {
-        DateFormat df = new SimpleDateFormat("D");
-        Reservation r = getReservationFromList(position);
-        Date d = r.getPickup_time();
-        String s = df.format(d);
-        long l = Long.parseLong(s, 10);
-        return l;
+            DateFormat df = new SimpleDateFormat("D");
+            Reservation r = getReservationFromList(position);
+            Date d = r.getPickup_time();
+            String s = df.format(d);
+            long l = Long.parseLong(s, 10);
+            return l;
     }
 
 

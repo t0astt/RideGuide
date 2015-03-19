@@ -96,7 +96,11 @@ public class RidesFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshContent();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, RidesFragment.newInstance(me, "RidesFragment"))
+                        .commit();
+                //refreshContent();
             }
         });
         ridesList = (RecyclerView)v.findViewById(R.id.rides_available_list);
