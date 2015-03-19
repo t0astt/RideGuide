@@ -15,9 +15,11 @@ import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 import com.squareup.picasso.Picasso;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class AvailableDriversAdapter extends RecyclerView.Adapter<AvailableDriversAdapter.AvailableDriversAdapterViewHolder> {
@@ -53,11 +55,6 @@ public class AvailableDriversAdapter extends RecyclerView.Adapter<AvailableDrive
                 .transform(new RoundedTransformation(100, 5))
                 .into(vh.userPic);
     }
-
-//    public User getUserFromList(int i) {
-//        Reservation r = reservationList.get(i);
-//        return r.getUser();
-//    }
 
     public Reservation getReservation(int i) {
         Reservation r = reservationList.get(i);

@@ -42,8 +42,8 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
 
     @Override
     public void onBindViewHolder(ReservationViewHolder reservationViewHolder, int i) {
-        DateFormat df = new SimpleDateFormat("E d, h:mma");
-        
+        DateFormat df = new SimpleDateFormat("h:mma");
+
         Reservation r = reservationList.get(i);
         reservationViewHolder.name.setText(r.getShift().getUser().getFullName());
         reservationViewHolder.numPassengers.setText(Integer.toString(r.getPassengers()));

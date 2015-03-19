@@ -26,6 +26,7 @@ import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
@@ -36,12 +37,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class AvailableRidesTimeSlotsAdapter extends RecyclerView.Adapter<AvailableRidesTimeSlotsAdapter.AvailableRidesTimeSlotsViewHolder> {
+public class AvailableRidesTimeSlotsAdapter extends RecyclerView.Adapter<AvailableRidesTimeSlotsAdapter.AvailableRidesTimeSlotsViewHolder>
+        implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
 
     private List<List<Reservation>> ridesList;
     private Context c;
 
-    private final String TAG = "MyShiftsAdapter";
+    private final String TAG = "AvailableRidesTimeSlotsAdapter";
 
     public AvailableRidesTimeSlotsAdapter(List<List<Reservation>> ridesList) {
         this.ridesList = ridesList;
@@ -59,12 +61,31 @@ public class AvailableRidesTimeSlotsAdapter extends RecyclerView.Adapter<Availab
 
     @Override
     public void onBindViewHolder(final AvailableRidesTimeSlotsViewHolder vh, int i) {
-        DateFormat df = new SimpleDateFormat("E d, h:mma");
+        DateFormat df = new SimpleDateFormat("h:mma");
 
         final List<Reservation> r = ridesList.get(i);
         vh.pickupTime.setText(df.format(r.get(0).getPickup_time()));
         vh.numRides.setText(Integer.toString(r.size()));
+    }
 
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reservation_view_header, parent, false);
+        return new RecyclerView.ViewHolder(view) { };
+    }
+
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+        DateFormat df = new SimpleDateFormat("EEEE, MMMMMM d");
+        TextView textView = (TextView)holder.itemView;
+        textView.setText(df.format(ridesList.get(position).get(0).getPickup_time()));
+    }
+
+    @Override
+    public long getHeaderId(int position) {
+        DateFormat df = new SimpleDateFormat("D");
+        Reservation r = ridesList.get(position).get(0);
+        Date d = r.getPickup_time();
+        long l = Long.parseLong(df.format(d), 10);
+        return l;
     }
 
     @Override

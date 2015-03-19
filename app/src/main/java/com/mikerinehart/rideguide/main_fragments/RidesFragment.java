@@ -31,6 +31,7 @@ import com.mikerinehart.rideguide.adapters.AvailableDriversAdapter;
 import com.mikerinehart.rideguide.adapters.AvailableRidesTimeSlotsAdapter;
 import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.User;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -269,6 +270,8 @@ public class RidesFragment extends Fragment {
                     ridesList.addItemDecoration(new SimpleDividerItemDecoration(ridesList.getContext()));
 
                     ridesList.setAdapter(adapter);
+                    StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(adapter);
+                    ridesList.addItemDecoration(headersDecor);
                 }
                 mSwipeRefreshLayout.setRefreshing(false);
             }

@@ -31,6 +31,7 @@ import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
 import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -156,6 +157,8 @@ public class MyShiftsPageFragment extends Fragment {
                     shiftList.addItemDecoration(new SimpleDividerItemDecoration(shiftList.getContext()));
 
                     shiftList.setAdapter(shiftsAdapter);
+                    StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(shiftsAdapter);
+                    shiftList.addItemDecoration(headersDecor);
                 }
                 mSwipeRefreshLayout.setRefreshing(false);
             }

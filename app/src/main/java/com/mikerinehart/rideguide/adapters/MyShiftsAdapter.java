@@ -34,6 +34,7 @@ import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
 import com.squareup.picasso.Picasso;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import org.apache.http.Header;
 import org.json.JSONException;
@@ -45,7 +46,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShiftsViewHolder> {
+public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShiftsViewHolder> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
 
     private List<Shift> shiftList;
     private Context c;
@@ -68,7 +69,7 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
 
     @Override
     public void onBindViewHolder(final MyShiftsViewHolder myShiftsViewHolder, int i) {
-        DateFormat df = new SimpleDateFormat("E d, h:mma");
+        DateFormat df = new SimpleDateFormat("h:mma");
 
         final Shift s = shiftList.get(i);
         myShiftsViewHolder.startTime.setText(df.format(s.getStart()));
@@ -125,6 +126,26 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
         this.c = viewGroup.getContext();
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.myshifts_list_item, viewGroup, false);
         return new MyShiftsViewHolder(itemView);
+    }
+
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reservation_view_header, parent, false);
+        return new RecyclerView.ViewHolder(view) { };
+    }
+
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+        DateFormat df = new SimpleDateFormat("EEEE, MMMMMM d");
+        TextView textView = (TextView)holder.itemView;
+        textView.setText(df.format(shiftList.get(position).getStart()));
+    }
+
+    @Override
+    public long getHeaderId(int position) {
+        DateFormat df = new SimpleDateFormat("D");
+        Shift s = shiftList.get(position);
+        Date d = s.getStart();
+        long l = Long.parseLong(df.format(d), 10);
+        return l;
     }
 
     public void createReservationsDialog(Reservation[] reservations) {
