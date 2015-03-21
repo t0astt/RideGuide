@@ -115,7 +115,6 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
             android:ems="10"
             android:id="@+id/login_phone_field"
             android:textColor="@android:color/white"
@@ -128,7 +127,8 @@
             android:focusableInTouchMode="true"
             android:singleLine="true"
             android:layout_below="@+id/login_phone_field_text"
-            android:layout_alignParentLeft="true" />
+            android:layout_alignParentLeft="true"
+            android:inputType="phone" />
 
         <TextView
             android:layout_width="wrap_content"
