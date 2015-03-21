@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +30,9 @@ import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.RoundedTransformation;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
+import com.mikerinehart.rideguide.VenmoLibrary;
+import com.mikerinehart.rideguide.VenmoLibrary.VenmoResponse;
+import com.mikerinehart.rideguide.activities.Constants;
 import com.mikerinehart.rideguide.adapters.ReservationAdapter;
 import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.User;
@@ -142,6 +145,7 @@ public class MyReservationsFragment extends Fragment {
                     TextView pickupDestination = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_destination);
                     TextView pickupTime = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_pickup_time);
                     com.gc.materialdesign.views.ButtonRectangle callUserButton = (ButtonRectangle)dialogLayout.findViewById(R.id.user_actions_dialog_call_user_button);
+                    com.gc.materialdesign.views.ButtonRectangle donateButton = (ButtonRectangle)dialogLayout.findViewById(R.id.user_actions_dialog_donate_button);
 
 
                     Picasso.with(userPic.getContext())
@@ -155,15 +159,10 @@ public class MyReservationsFragment extends Fragment {
                     pickupTime.setText(df.format(r.getPickup_time()));
                     callUserButton.setText("CALL " + u.getFirstName().toUpperCase());
                     callUserButton.setRippleSpeed(9001); // IT'S OVER 9000!!!
+                    donateButton.setRippleSpeed(9001);
 
-                    callUserButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(Intent.ACTION_CALL);
-                            intent.setData(Uri.parse("tel:" + u.getPhone()));
-                            startActivity(intent);
-                        }
-                    });
+
+
 
 
                     final MaterialDialog userActionsDialog = new MaterialDialog.Builder(MyReservationsFragment.this.getActivity())
@@ -220,6 +219,48 @@ public class MyReservationsFragment extends Fragment {
                                     .commit();
                         }
                     });
+
+                    callUserButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(Intent.ACTION_CALL);
+                            intent.setData(Uri.parse("tel:" + u.getPhone()));
+                            startActivity(intent);
+                        }
+                    });
+                    donateButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (VenmoLibrary.isVenmoInstalled(getActivity().getApplicationContext())) {
+
+                                final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
+                                View donationInputDialogLayout = inflater.inflate(R.layout.donation_input_dialog, null);
+                                final EditText donationAmount = (EditText)donationInputDialogLayout.findViewById(R.id.donation_input_dialog_amount_textfield);
+
+                                final MaterialDialog donationInputDialog = new MaterialDialog.Builder(MyReservationsFragment.this.getActivity())
+                                        .title("Select Donation Amount")
+                                        .customView(donationInputDialogLayout)
+                                        .neutralColor(getResources().getColor(R.color.ColorNegative))
+                                        .positiveText("Ok")
+                                        .negativeText("Cancel")
+                                        .callback(new MaterialDialog.ButtonCallback() {
+                                            @Override
+                                            public void onPositive(MaterialDialog dialog) {
+                                                Intent venmoIntent = VenmoLibrary.openVenmoPayment(Constants.getVenmoApiId(),
+                                                        Constants.getVenmoAppName(),
+                                                        u.getPhone(),
+                                                        donationAmount.getText().toString(),
+                                                        "RideGuide ride with " + u.getFullName(),
+                                                        "pay");
+                                                userActionsDialog.dismiss();
+                                                startActivity(venmoIntent);
+                                            }
+                                        }).build();
+                                donationInputDialog.show();
+                            } else {
+                                Toast.makeText(getActivity().getApplicationContext(), "Donation requires the Venmo app to be installed", Toast.LENGTH_LONG).show();
+                            }
+                        }});
 
                 }
                 return false;

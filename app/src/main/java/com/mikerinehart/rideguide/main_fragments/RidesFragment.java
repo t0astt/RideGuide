@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
@@ -196,13 +197,18 @@ public class RidesFragment extends Fragment {
                                         @Override
                                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                             chooseDriverDialog.dismiss();
-                                            refreshContent();
+                                            getActivity().getSupportFragmentManager()
+                                                    .beginTransaction()
+                                                    .replace(R.id.container, RidesFragment.newInstance(me, "RidesFragment"))
+                                                    .commit();
+                                            Toast.makeText(getActivity().getApplicationContext(), "Reservation successful!", Toast.LENGTH_SHORT).show();
                                             Log.i(TAG, "Reservaiton successful!");
                                         }
 
                                         @Override
                                         public void onFailure(int statusCode, Header[] headers, String response, Throwable throwable) {
                                             Log.i(TAG, "Error " + statusCode + ": " + response);
+                                            Toast.makeText(getActivity().getApplicationContext(), "Error, please try again", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
