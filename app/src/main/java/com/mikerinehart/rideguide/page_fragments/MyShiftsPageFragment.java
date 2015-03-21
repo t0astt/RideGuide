@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gc.materialdesign.views.ButtonFloat;
@@ -208,12 +209,18 @@ public class MyShiftsPageFragment extends Fragment {
                         RestClient.post("shifts", params, new JsonHttpResponseHandler() {
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                refreshContent();
+                                //refreshContent();
+                                getActivity().getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .replace(R.id.container, MyShiftsPageFragment.newInstance(me, "RidesFragment"))
+                                        .commit();
+                                Toast.makeText(getActivity().getApplicationContext(), "Shift created!", Toast.LENGTH_LONG).show();
                             }
 
                             @Override
                             public void onFailure(int statusCode, Header[] headers, String response, Throwable throwable) {
                                 Log.i(TAG, "Error " + statusCode + ": " + response);
+                                Toast.makeText(getActivity().getApplicationContext(), "Error, please try again", Toast.LENGTH_LONG).show();
                             }
                         });
                     }

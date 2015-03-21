@@ -11,7 +11,8 @@
         android:ems="10"
         android:id="@+id/donation_input_dialog_amount_textfield"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
