@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mikerinehart.rideguide.R;
+import com.mikerinehart.rideguide.activities.MainActivity;
 
 
 /**
@@ -65,6 +66,7 @@ public class AboutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        MainActivity.toolbar.setTitle("About");
         // Inflate the ride_info_list_item for this fragment
         return inflater.inflate(R.layout.fragment_about, container, false);
     }

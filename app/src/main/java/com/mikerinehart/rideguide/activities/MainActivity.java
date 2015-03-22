@@ -63,7 +63,7 @@ public class MainActivity extends ActionBarActivity implements
     public User me;
 
     String TAG = "MainActivity";
-    public Toolbar toolbar;
+    public static Toolbar toolbar;
     private GraphUser user;
 
     @Override

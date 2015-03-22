@@ -93,7 +93,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the ride_info_list_item for this fragment
+        MainActivity.toolbar.setTitle("Profile");
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
         profilePicture = (ImageView) v.findViewById(R.id.profile_picture);
         coverPhoto = (ImageView) v.findViewById(R.id.cover_photo);

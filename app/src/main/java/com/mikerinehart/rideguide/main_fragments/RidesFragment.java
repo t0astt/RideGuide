@@ -28,6 +28,7 @@ import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
+import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.adapters.AvailableDriversAdapter;
 import com.mikerinehart.rideguide.adapters.AvailableRidesTimeSlotsAdapter;
 import com.mikerinehart.rideguide.models.Reservation;
@@ -88,6 +89,7 @@ public class RidesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        MainActivity.toolbar.setTitle("Available Rides");
 
         final View v = inflater.inflate(R.layout.fragment_rides_available_page, container, false);
 

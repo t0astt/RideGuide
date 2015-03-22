@@ -33,6 +33,7 @@ import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
 import com.mikerinehart.rideguide.VenmoLibrary;
 import com.mikerinehart.rideguide.VenmoLibrary.VenmoResponse;
 import com.mikerinehart.rideguide.activities.Constants;
+import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.adapters.ReservationAdapter;
 import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.User;
@@ -102,6 +103,7 @@ public class MyReservationsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        MainActivity.toolbar.setTitle("My Reservations");
         final View v = inflater.inflate(R.layout.fragment_reservations_page, container, false);
         loadingIcon = (ProgressBarCircularIndeterminate)v.findViewById(R.id.reservation_circular_loading);
 
@@ -253,7 +255,7 @@ public class MyReservationsFragment extends Fragment {
                                                         "RideGuide ride with " + u.getFullName(),
                                                         "pay");
                                                 userActionsDialog.dismiss();
-                                                startActivity(venmoIntent);
+                                                startActivityForResult(venmoIntent, 1);
                                             }
                                         }).build();
                                 donationInputDialog.show();

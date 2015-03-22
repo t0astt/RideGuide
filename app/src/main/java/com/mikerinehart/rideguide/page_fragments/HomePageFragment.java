@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
+import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.adapters.UpcomingReservationsAdapter;
 import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.Ride;
@@ -78,6 +79,7 @@ public class HomePageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        MainActivity.toolbar.setTitle("Home");
         View v = inflater.inflate(R.layout.fragment_home_page, container, false);
 
         RecyclerView reservationList = (RecyclerView) v.findViewById(R.id.upcoming_reservation_list);
@@ -129,16 +131,6 @@ public class HomePageFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);

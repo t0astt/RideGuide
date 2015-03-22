@@ -29,6 +29,7 @@ import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
+import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
 import com.mikerinehart.rideguide.main_fragments.ProfileFragment;
 import com.mikerinehart.rideguide.models.Shift;
@@ -96,6 +97,7 @@ public class MyShiftsPageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        MainActivity.toolbar.setTitle("My Shifts");
         final View v = inflater.inflate(R.layout.fragment_my_shifts_page, container, false);
         //newShiftButton = (ButtonFloat)v.findViewById(R.id.myshifts_new_shift_fab);
         shiftShame = (TextView)v.findViewById(R.id.myshifts_shift_shame);
