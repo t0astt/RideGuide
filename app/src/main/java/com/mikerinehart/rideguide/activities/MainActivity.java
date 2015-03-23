@@ -2,6 +2,7 @@ package com.mikerinehart.rideguide.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -18,9 +19,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.mikerinehart.rideguide.VenmoLibrary;
 import com.mikerinehart.rideguide.main_fragments.AboutFragment;
 import com.mikerinehart.rideguide.adapters.DrawerAdapter;
 import com.mikerinehart.rideguide.main_fragments.HomeFragment;
@@ -190,6 +193,31 @@ public class MainActivity extends ActionBarActivity implements
         };
         Drawer.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case 1: {
+                if (resultCode == RESULT_OK) {
+                    String signedrequest = data.getStringExtra("signedrequest");
+                    if (signedrequest != null) {
+                        VenmoLibrary.VenmoResponse response = (new VenmoLibrary()).validateVenmoPaymentResponse(signedrequest, Constants.getVenmoSecret());
+                        if (response.getSuccess().equals("1")) {
+                            //Payment was successful
+                            String note = response.getNote();
+                            String amount = response.getAmount();
+                            Toast.makeText(this.getApplicationContext(), "Donation of $" + amount + " successful", Toast.LENGTH_LONG);
+                        }
+                    } else {
+                        String error_message = data.getStringExtra("error_message");
+                        Toast.makeText(this.getApplicationContext(), "Error in donation process", Toast.LENGTH_LONG);
+                    }
+                } else if (resultCode == RESULT_CANCELED) {
+                    Toast.makeText(this.getApplicationContext(), "Donation canceled", Toast.LENGTH_LONG);
+                }
+            }
+        }
     }
 
     @Override
