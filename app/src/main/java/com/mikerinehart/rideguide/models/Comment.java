@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Comment {
 
+    protected int id;
     protected int reviewee_user_id;
     protected int reviewer_user_id;
     protected String title;
@@ -11,12 +12,22 @@ public class Comment {
     protected Date created_at;
     protected Date updated_at;
 
-    public Comment(int reviewee_user_id, int reviewer_user_id, String comment, Date created_at, Date updated_at) {
+    public Comment(int id, int reviewee_user_id, int reviewer_user_id, String title, String comment, Date created_at, Date updated_at) {
+        this.id = id;
         this.reviewee_user_id = reviewee_user_id;
         this.reviewer_user_id = reviewer_user_id;
+        this.title = title;
         this.comment = comment;
         this.created_at = created_at;
         this.updated_at = updated_at;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getReviewee_user_id() {

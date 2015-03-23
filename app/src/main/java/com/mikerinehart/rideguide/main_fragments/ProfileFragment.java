@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,20 +13,34 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.RoundedTransformation;
+import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
 import com.mikerinehart.rideguide.activities.MainActivity;
+import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
+import com.mikerinehart.rideguide.adapters.ProfileCommentListAdapter;
+import com.mikerinehart.rideguide.models.Comment;
+import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 import com.squareup.picasso.Picasso;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.apache.commons.lang.BooleanUtils;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 
 /**
@@ -48,11 +63,11 @@ public class ProfileFragment extends Fragment {
     private ImageView profilePicture;
     private TextView firstName;
     private TextView lastName;
-    private RecyclerView commentList;
+    RecyclerView commentList;
 
     private String coverPhotoSource;
+    private final String TAG = "ProfileFragment";
 
-    //    private OkHttpClient client;
     private Gson gson;
 
     private OnFragmentInteractionListener mListener;
@@ -93,14 +108,21 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         MainActivity.toolbar.setTitle("Profile");
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        
         commentList = (RecyclerView)v.findViewById(R.id.profile_comments_list);
+        commentList.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(commentList.getContext());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        commentList.setLayoutManager(llm);
+
         profilePicture = (ImageView) v.findViewById(R.id.profile_picture);
         coverPhoto = (ImageView) v.findViewById(R.id.cover_photo);
         firstName = (TextView) v.findViewById(R.id.first_name);
         lastName = (TextView) v.findViewById(R.id.last_name);
-
+        refreshContent();
 
         // Get cover photo with the jankass Graph API call.
         RestClient.fbGet(user.getFbUid() + "?fields=cover", null, new JsonHttpResponseHandler() {
@@ -122,7 +144,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-
         firstName.setText(user.getFirstName());
         lastName.setText(user.getLastName());
         Picasso.with(profilePicture.getContext())
@@ -130,6 +151,33 @@ public class ProfileFragment extends Fragment {
                 .transform(new RoundedTransformation(600, 5))
                 .into(profilePicture);
         return v;
+    }
+
+    private void refreshContent() {
+        RequestParams params = new RequestParams("user_id", user.getId());
+        RestClient.post("comments/getUserComments", params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                List<Comment> result;
+                Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+                Type listType = new TypeToken<List<Comment>>() {
+                }.getType();
+
+                result = (List<Comment>)gson.fromJson(response.toString(), listType);
+
+                ProfileCommentListAdapter pcAdapter = new ProfileCommentListAdapter(result);
+                commentList.setAdapter(pcAdapter);
+                if (commentList.getAdapter() != null) {
+                    Log.i(TAG, "Adapter set");
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.i(TAG, "Error: " + errorResponse);
+                Toast.makeText(getActivity().getApplicationContext(), "Error retrieving comments", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
