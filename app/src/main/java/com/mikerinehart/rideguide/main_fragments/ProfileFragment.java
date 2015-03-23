@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +48,7 @@ public class ProfileFragment extends Fragment {
     private ImageView profilePicture;
     private TextView firstName;
     private TextView lastName;
+    private RecyclerView commentList;
 
     private String coverPhotoSource;
 
@@ -93,10 +95,12 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         MainActivity.toolbar.setTitle("Profile");
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        commentList = (RecyclerView)v.findViewById(R.id.profile_comments_list);
         profilePicture = (ImageView) v.findViewById(R.id.profile_picture);
         coverPhoto = (ImageView) v.findViewById(R.id.cover_photo);
         firstName = (TextView) v.findViewById(R.id.first_name);
         lastName = (TextView) v.findViewById(R.id.last_name);
+
 
         // Get cover photo with the jankass Graph API call.
         RestClient.fbGet(user.getFbUid() + "?fields=cover", null, new JsonHttpResponseHandler() {
