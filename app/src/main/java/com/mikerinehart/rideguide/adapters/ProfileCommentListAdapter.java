@@ -24,6 +24,7 @@ import java.util.List;
 public class ProfileCommentListAdapter extends RecyclerView.Adapter<ProfileCommentListAdapter.ProfileCommentViewHolder> {
 
     private List<Comment> commentList;
+    private Context context;
 
     public ProfileCommentListAdapter(List<Comment> commentList) {
         this.commentList = commentList;
@@ -44,14 +45,14 @@ public class ProfileCommentListAdapter extends RecyclerView.Adapter<ProfileComme
         DateFormat df = new SimpleDateFormat("h:mma");
 
         Comment c = commentList.get(i);
-        reservationViewHolder.title.setText(c.get);
-        reservationViewHolder.date.setText(Integer.toString(r.getPassengers()));
-        reservationViewHolder.content.setText(df.format(r.getPickup_time()));
+        reservationViewHolder.title.setText(c.getTitle());
+        reservationViewHolder.date.setText(df.format(c.getCreated_at()));
+        reservationViewHolder.content.setText(c.getComment());
     }
 
     @Override
     public ProfileCommentViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        this.c = viewGroup.getContext();
+        this.context = viewGroup.getContext();
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.reservation_list_item, viewGroup, false);
         return new ProfileCommentViewHolder(itemView);
     }
