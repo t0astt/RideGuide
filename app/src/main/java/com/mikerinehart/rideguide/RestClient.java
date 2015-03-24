@@ -12,10 +12,10 @@ import java.net.URLEncoder;
  */
 public class RestClient {
 
-    private static final String BASE_URL = "http://mikerinehart.me/api/v1/";
+    private static final String BASE_URL = "https://mikerinehart.me/api/v1/";
     private static final String FB_GRAPH_URL = "https://graph.facebook.com/v2.2/";
     private static final String FB_GRAPH_ACCESS_TOKEN = "790452704337105|ZR4rIogqLQ67Fz__MetopcKZj_I";
-    private static AsyncHttpClient client = new AsyncHttpClient();
+    private static AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
 
     public static void get(String url, RequestParams params, AsyncHttpResponseHandler rh) {
         client.get(getAbsoluteUrl(url), params, rh);

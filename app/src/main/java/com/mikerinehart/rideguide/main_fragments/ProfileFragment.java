@@ -56,6 +56,7 @@ public class ProfileFragment extends Fragment {
     private static User ARG_PARAM1;
     private static final String ARG_PARAM2 = "param2";
 
+    private User me;
     private User user;
     private String mParam2;
 
