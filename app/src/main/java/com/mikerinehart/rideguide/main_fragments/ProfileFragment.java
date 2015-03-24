@@ -278,7 +278,7 @@ public class ProfileFragment extends Fragment {
 
         final EditText reviewTitleField = (EditText)thumbUpLayout.findViewById(R.id.review_dialog_review_title);
         final TextView titleCharactersLeft = (TextView)thumbUpLayout.findViewById(R.id.review_dialog_title_characters_left_count);
-        final int titleMaxCharacters = 50;
+        final int titleMaxCharacters = 25;
         titleCharactersLeft.setText(String.valueOf(titleMaxCharacters));
 
         reviewTitleField.setFilters(new InputFilter[] {new InputFilter.LengthFilter(titleMaxCharacters)});
@@ -315,7 +315,7 @@ public class ProfileFragment extends Fragment {
         reviewField.addTextChangedListener(reviewWatcher);
 
         reviewTitleField.setText(myReview.getTitle());
-        reviewField.setText(myReview.getTitle());
+        reviewField.setText(myReview.getComment());
 
         final MaterialDialog thumbUpDialog = new MaterialDialog.Builder(ProfileFragment.this.getActivity())
                 .title("Update Review")
@@ -328,7 +328,7 @@ public class ProfileFragment extends Fragment {
                     public void onPositive(MaterialDialog dialog) {
                         RequestParams params = new RequestParams("user_id", user.getId());
                         params.put("me", me.getId());
-                        params.put("review_title", reviewField.getText().toString());
+                        params.put("review_title", reviewTitleField.getText().toString());
                         params.put("review_comment", reviewField.getText().toString());
                         params.put("review_type", reviewType);
                         params.put("review_id", myReview.getId());
@@ -363,7 +363,7 @@ public class ProfileFragment extends Fragment {
 
         final EditText reviewTitleField = (EditText)thumbUpLayout.findViewById(R.id.review_dialog_review_title);
         final TextView titleCharactersLeft = (TextView)thumbUpLayout.findViewById(R.id.review_dialog_title_characters_left_count);
-        final int titleMaxCharacters = 50;
+        final int titleMaxCharacters = 25;
         titleCharactersLeft.setText(String.valueOf(titleMaxCharacters));
 
         reviewTitleField.setFilters(new InputFilter[] {new InputFilter.LengthFilter(titleMaxCharacters)});
@@ -416,7 +416,7 @@ public class ProfileFragment extends Fragment {
                     public void onPositive(MaterialDialog dialog) {
                         RequestParams params = new RequestParams("user_id", user.getId());
                         params.put("me", me.getId());
-                        params.put("review_title", reviewField.getText().toString());
+                        params.put("review_title", reviewTitleField.getText().toString());
                         params.put("review_comment", reviewField.getText().toString());
                         params.put("review_type", reviewType);
                         RestClient.post("reviews/leaveReview", params, new JsonHttpResponseHandler() {
