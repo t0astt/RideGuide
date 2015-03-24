@@ -61,7 +61,13 @@ public class MainActivity extends ActionBarActivity implements
     DrawerLayout Drawer;
     ActionBarDrawerToggle mDrawerToggle;
     String[] TITLES;
-    int ICONS[] = {R.drawable.ic_home, R.drawable.ic_profile, R.drawable.ic_rides, R.drawable.ic_settings, R.drawable.ic_about, R.drawable.ic_logout, R.drawable.ic_logout};
+    int ICONS[] = {R.drawable.ic_home_gray,
+            R.drawable.ic_search_gray,
+            R.drawable.ic_event_gray,
+            R.drawable.ic_shift_gray,
+            R.drawable.ic_history_gray,
+            R.drawable.ic_settings_gray,
+            R.drawable.ic_exit_gray};
 
     public User me;
 
