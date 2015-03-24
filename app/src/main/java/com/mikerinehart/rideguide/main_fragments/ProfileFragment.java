@@ -160,34 +160,7 @@ public class ProfileFragment extends Fragment {
                 .transform(new RoundedTransformation(600, 5))
                 .into(profilePicture);
 
-        // Determine whether or not you've reviewed the user already. Show different dialogs on case
-        if (myReview == null) {
-            thumbUpButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    leaveReview(1);
-                }
-            });
-            thumbDownButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    leaveReview(0);
-                }
-            });
-        } else if (myReview != null) {
-            thumbUpButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    updateReview(1);
-                }
-            });
-            thumbDownButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    updateReview(0);
-                }
-            });
-        }
+
 
 
         return v;
@@ -221,15 +194,48 @@ public class ProfileFragment extends Fragment {
 
                 if (myReview != null) {
                     if (myReview.getType() == 1) {
+                        Log.i(TAG, myReview.toString());
                         thumbsUpButtonCount.setTextColor(getResources().getColor(R.color.ColorPrimary));
                         Picasso.with(thumbUpButton.getContext())
                                 .load(R.drawable.ic_thumb_up_blue)
                                 .into(thumbUpButton);
+
+                        Log.i(TAG, myReview.toString());
+                        thumbUpButton.setOnClickListener(null);
+                        thumbUpButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                updateReview(1);
+                            }
+                        });
+                        thumbDownButton.setOnClickListener(null);
+                        thumbDownButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                updateReview(0);
+                            }
+                        });
                     } else {
+                        Log.i(TAG, myReview.toString());
                         thumbsDownButtonCount.setTextColor(getResources().getColor(R.color.ColorPrimaryDark));
                         Picasso.with(thumbDownButton.getContext())
                                 .load(R.drawable.ic_thumb_down_blue)
                                 .into(thumbDownButton);
+
+                        thumbUpButton.setOnClickListener(null);
+                        thumbUpButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                leaveReview(1);
+                            }
+                        });
+                        thumbDownButton.setOnClickListener(null);
+                        thumbDownButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                leaveReview(0);
+                            }
+                        });
                     }
                 }
                 thumbsUpButtonCount.setText(String.valueOf(thumbsUpCount));
@@ -256,6 +262,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateReview(int type) {
+        Log.i(TAG, "In updateReview");
         final int reviewType = type;
         final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
         View thumbUpLayout = inflater.inflate(R.layout.review_dialog, null);
