@@ -74,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Comments"
+        android:text="Reviews"
         android:id="@+id/textView"
         android:layout_above="@+id/profile_comments_list"
         android:layout_alignParentLeft="true"
@@ -82,6 +82,28 @@
         android:textColor="#000000"
         android:textStyle="bold"
         android:layout_marginLeft="11dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView3"
+        android:src="@drawable/ic_thumb_up_gray"
+        android:layout_alignTop="@+id/imageView4"
+        android:layout_toLeftOf="@+id/imageView4"
+        android:layout_toStartOf="@+id/imageView4"
+        android:paddingTop="11dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView4"
+        android:src="@drawable/ic_thumb_down_gray"
+        android:layout_marginRight="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_below="@+id/cover_photo"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:paddingTop="11dp" />
 
 
 </RelativeLayout>

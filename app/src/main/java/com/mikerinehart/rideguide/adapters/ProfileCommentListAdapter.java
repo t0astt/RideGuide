@@ -31,18 +31,16 @@ public class ProfileCommentListAdapter extends RecyclerView.Adapter<ProfileComme
 
     @Override
     public void onBindViewHolder(ProfileCommentViewHolder profileCommentViewHolder, int i) {
-        Log.i("ProfileCommentAdap", "Looping " + i);
-        DateFormat df = new SimpleDateFormat("h:mma");
+        DateFormat df = new SimpleDateFormat("MMM d, yyyy");
 
         Comment c = commentList.get(i);
         profileCommentViewHolder.title.setText(c.getTitle());
         profileCommentViewHolder.date.setText(df.format(c.getCreated_at()));
-        profileCommentViewHolder.content.setText(c.getComment());
+        profileCommentViewHolder.content.setText("\"" + c.getComment() + "\"");
     }
 
     @Override
     public ProfileCommentViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        Log.i("ProfileCommentAdap", "onCreateViewHolder");
         this.context = viewGroup.getContext();
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.comment_list_item, viewGroup, false);
         return new ProfileCommentViewHolder(itemView);
