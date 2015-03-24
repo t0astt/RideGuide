@@ -1,9 +1,7 @@
 package com.mikerinehart.rideguide.adapters;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,7 @@ import android.widget.TextView;
 
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RoundedTransformation;
-import com.mikerinehart.rideguide.models.Comment;
+import com.mikerinehart.rideguide.models.Review;
 import com.mikerinehart.rideguide.models.User;
 import com.squareup.picasso.Picasso;
 
@@ -23,25 +21,25 @@ import java.util.List;
 
 public class ProfileCommentListAdapter extends RecyclerView.Adapter<ProfileCommentListAdapter.ProfileCommentViewHolder> {
 
-    private List<Comment> commentList;
+    private List<Review> reviewList;
     private User me;
     private Context context;
 
-    public ProfileCommentListAdapter(List<Comment> commentList, User me) {
-        this.commentList = commentList;
+    public ProfileCommentListAdapter(List<Review> reviewList, User me) {
+        this.reviewList = reviewList;
         this.me = me;
     }
 
     @Override
     public int getItemCount() {
-        return commentList.size();
+        return reviewList.size();
     }
 
     @Override
     public void onBindViewHolder(ProfileCommentViewHolder profileCommentViewHolder, int i) {
         DateFormat df = new SimpleDateFormat("MMM d, yyyy");
 
-        Comment c = commentList.get(i);
+        Review c = reviewList.get(i);
         profileCommentViewHolder.title.setText(c.getTitle());
         profileCommentViewHolder.date.setText(df.format(c.getCreated_at()));
         profileCommentViewHolder.content.setText("\"" + c.getComment() + "\"");

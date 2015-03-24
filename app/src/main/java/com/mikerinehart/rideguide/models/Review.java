@@ -2,23 +2,25 @@ package com.mikerinehart.rideguide.models;
 
 import java.util.Date;
 
-public class Comment {
+public class Review {
 
     protected int id;
     protected int reviewee_user_id;
     protected int reviewer_user_id;
     protected String title;
     protected String comment;
+    protected int type;
     protected Date created_at;
     protected Date updated_at;
     protected User user;
 
-    public Comment(int id, int reviewee_user_id, int reviewer_user_id, String title, String comment, Date created_at, Date updated_at, User user) {
+    public Review(int id, int reviewee_user_id, int reviewer_user_id, String title, String comment, int type, Date created_at, Date updated_at, User user) {
         this.id = id;
         this.reviewee_user_id = reviewee_user_id;
         this.reviewer_user_id = reviewer_user_id;
         this.title = title;
         this.comment = comment;
+        this.type = type;
         this.created_at = created_at;
         this.updated_at = updated_at;
         this.user = user;
@@ -62,6 +64,14 @@ public class Comment {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public Date getCreated_at() {
