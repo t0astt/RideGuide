@@ -23,7 +23,8 @@
             android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:text="Name" />
+            android:text="Name"
+            android:paddingLeft="11dp" />
 
         <TextView
             android:id="@+id/email"
@@ -35,7 +36,7 @@
             android:text="Email"
             android:textSize="14sp"
             android:textStyle="normal"
-            />
+            android:paddingLeft="11dp" />
     </LinearLayout>
 
     <!--<de.hdodenhof.circleimageview.CircleImageView-->
@@ -55,6 +56,7 @@
         android:visibility="visible"
         android:layout_above="@+id/linearLayout"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="15dp" />
+        android:layout_marginLeft="15dp"
+        android:paddingLeft="11dp" />
 
 </RelativeLayout>
