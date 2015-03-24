@@ -193,50 +193,59 @@ public class ProfileFragment extends Fragment {
                 }
 
                 if (myReview != null) {
+                    thumbUpButton.setOnClickListener(null);
+                    thumbUpButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            updateReview(1);
+                        }
+                    });
+                    thumbDownButton.setOnClickListener(null);
+                    thumbDownButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            updateReview(0);
+                        }
+                    });
                     if (myReview.getType() == 1) {
-                        Log.i(TAG, myReview.toString());
+
                         thumbsUpButtonCount.setTextColor(getResources().getColor(R.color.ColorPrimary));
                         Picasso.with(thumbUpButton.getContext())
                                 .load(R.drawable.ic_thumb_up_blue)
                                 .into(thumbUpButton);
+                        thumbsDownButtonCount.setTextColor(getResources().getColor(R.color.primary_text_default_material_light));
+                        Picasso.with(thumbDownButton.getContext())
+                                .load(R.drawable.ic_thumb_down_gray)
+                                .into(thumbDownButton);
 
-                        Log.i(TAG, myReview.toString());
-                        thumbUpButton.setOnClickListener(null);
-                        thumbUpButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                updateReview(1);
-                            }
-                        });
-                        thumbDownButton.setOnClickListener(null);
-                        thumbDownButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                updateReview(0);
-                            }
-                        });
+
+
                     } else {
-                        Log.i(TAG, myReview.toString());
+
                         thumbsDownButtonCount.setTextColor(getResources().getColor(R.color.ColorPrimaryDark));
                         Picasso.with(thumbDownButton.getContext())
                                 .load(R.drawable.ic_thumb_down_blue)
                                 .into(thumbDownButton);
-
-                        thumbUpButton.setOnClickListener(null);
-                        thumbUpButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                leaveReview(1);
-                            }
-                        });
-                        thumbDownButton.setOnClickListener(null);
-                        thumbDownButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                leaveReview(0);
-                            }
-                        });
+                        thumbsUpButtonCount.setTextColor(getResources().getColor(R.color.primary_text_default_material_light));
+                        Picasso.with(thumbUpButton.getContext())
+                                .load(R.drawable.ic_thumb_up_gray)
+                                .into(thumbUpButton);
                     }
+                } else {
+                    thumbUpButton.setOnClickListener(null);
+                    thumbUpButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            leaveReview(1);
+                        }
+                    });
+                    thumbDownButton.setOnClickListener(null);
+                    thumbDownButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            leaveReview(0);
+                        }
+                    });
                 }
                 thumbsUpButtonCount.setText(String.valueOf(thumbsUpCount));
                 thumbsDownButtonCount.setText(String.valueOf(thumbsDownCount));
