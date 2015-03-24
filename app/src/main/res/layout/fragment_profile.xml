@@ -91,19 +91,51 @@
         android:layout_alignTop="@+id/imageView4"
         android:layout_toLeftOf="@+id/imageView4"
         android:layout_toStartOf="@+id/imageView4"
-        android:paddingTop="11dp" />
+        android:paddingTop="11dp"
+        android:layout_below="@+id/profile_comments_list" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView4"
         android:src="@drawable/ic_thumb_down_gray"
-        android:layout_marginRight="50dp"
-        android:layout_marginEnd="50dp"
-        android:layout_below="@+id/cover_photo"
+        android:paddingTop="11dp"
+        android:layout_above="@+id/profile_comments_list"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:paddingTop="11dp" />
+        android:layout_marginRight="11dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="+35"
+        android:id="@+id/textView4"
+        android:layout_alignBottom="@+id/profile_picture"
+        android:layout_alignLeft="@+id/imageView3"
+        android:layout_alignStart="@+id/imageView3"
+        android:layout_toLeftOf="@+id/imageView4"
+        android:layout_toStartOf="@+id/imageView4"
+        android:gravity="center_horizontal"
+        android:textColor="#8C000000"
+        android:layout_below="@+id/cover_photo"
+        android:textStyle="bold"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="-17"
+        android:id="@+id/textView5"
+        android:gravity="center_horizontal"
+        android:layout_alignTop="@+id/textView4"
+        android:layout_toRightOf="@+id/imageView3"
+        android:textColor="#8C000000"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_alignRight="@+id/imageView4"
+        android:layout_alignEnd="@+id/imageView4" />
 
 
 </RelativeLayout>

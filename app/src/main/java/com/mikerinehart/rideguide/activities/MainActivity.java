@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.facebook.Session;
@@ -120,7 +121,6 @@ public class MainActivity extends ActionBarActivity implements
                     mAdapter.selectPosition(itemClicked);
 
                     if (itemClicked == 0) {
-                        toolbar.setTitle("Profile");
                         fm.beginTransaction()
                                 .replace(R.id.container, ProfileFragment.newInstance(me, me))
                                 .addToBackStack("Profile")

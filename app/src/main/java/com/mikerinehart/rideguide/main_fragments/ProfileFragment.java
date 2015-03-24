@@ -110,6 +110,7 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         MainActivity.toolbar.setTitle("Profile");
+
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
         commentList = (RecyclerView)v.findViewById(R.id.profile_comments_list);
