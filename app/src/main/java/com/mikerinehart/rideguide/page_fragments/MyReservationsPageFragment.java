@@ -226,7 +226,7 @@ public class MyReservationsPageFragment extends Fragment {
                             userActionsDialog.dismiss();
                             getActivity().getSupportFragmentManager()
                                     .beginTransaction()
-                                    .replace(R.id.container, ProfileFragment.newInstance(u, "ProfileFragment"))
+                                    .replace(R.id.container, ProfileFragment.newInstance(u, me))
                                     .addToBackStack("MyShifts")
                                     .commit();
                         }

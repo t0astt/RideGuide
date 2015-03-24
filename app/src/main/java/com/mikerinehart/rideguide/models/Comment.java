@@ -11,8 +11,9 @@ public class Comment {
     protected String comment;
     protected Date created_at;
     protected Date updated_at;
+    protected User user;
 
-    public Comment(int id, int reviewee_user_id, int reviewer_user_id, String title, String comment, Date created_at, Date updated_at) {
+    public Comment(int id, int reviewee_user_id, int reviewer_user_id, String title, String comment, Date created_at, Date updated_at, User user) {
         this.id = id;
         this.reviewee_user_id = reviewee_user_id;
         this.reviewer_user_id = reviewer_user_id;
@@ -20,6 +21,7 @@ public class Comment {
         this.comment = comment;
         this.created_at = created_at;
         this.updated_at = updated_at;
+        this.user = user;
     }
 
     public int getId() {
@@ -78,4 +80,11 @@ public class Comment {
         this.updated_at = updated_at;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

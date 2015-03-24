@@ -174,7 +174,7 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
         });
         reservationList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
-            public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+            public boolean onInterceptTouchEvent(RecyclerView recyclerView, final MotionEvent motionEvent) {
                 ViewGroup child = (ViewGroup) recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
 
                 if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
@@ -268,7 +268,7 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                             userActionsDialog.dismiss();
                             ((FragmentActivity)c).getSupportFragmentManager()
                                     .beginTransaction()
-                                    .replace(R.id.container, ProfileFragment.newInstance(u, "ProfileFragment"))
+                                    .replace(R.id.container, ProfileFragment.newInstance(u, null)) // TODO: move all this shit to a fragment
                                     .addToBackStack("MyShifts")
                                     .commit();
                         }

@@ -122,7 +122,7 @@ public class MainActivity extends ActionBarActivity implements
                     if (itemClicked == 0) {
                         toolbar.setTitle("Profile");
                         fm.beginTransaction()
-                                .replace(R.id.container, ProfileFragment.newInstance(me, "ProfileFragment"))
+                                .replace(R.id.container, ProfileFragment.newInstance(me, me))
                                 .addToBackStack("Profile")
                                 .commit();
                     } else if (itemClicked == 1) {

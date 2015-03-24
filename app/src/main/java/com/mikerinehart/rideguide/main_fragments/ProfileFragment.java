@@ -54,11 +54,10 @@ import java.util.List;
 public class ProfileFragment extends Fragment {
 
     private static User ARG_PARAM1;
-    private static final String ARG_PARAM2 = "param2";
+    private static User ARG_PARAM2;
 
     private User me;
     private User user;
-    private String mParam2;
 
     private ImageView coverPhoto;
     private ImageView profilePicture;
@@ -86,11 +85,11 @@ public class ProfileFragment extends Fragment {
      * @return A new instance of fragment ProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(User param1, String param2) {
+    public static ProfileFragment newInstance(User param1, User param2) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
         args.putParcelable("USER", param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelable("ME", param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -101,7 +100,7 @@ public class ProfileFragment extends Fragment {
 
         if (getArguments() != null) {
             user = getArguments().getParcelable("USER");
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            me = getArguments().getParcelable("ME");
         }
         gson = new Gson();
     }
@@ -156,6 +155,7 @@ public class ProfileFragment extends Fragment {
 
     private void refreshContent() {
         RequestParams params = new RequestParams("user_id", user.getId());
+        params.put("me", me.getId());
         RestClient.post("comments/getUserComments", params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -166,7 +166,7 @@ public class ProfileFragment extends Fragment {
 
                 result = (List<Comment>)gson.fromJson(response.toString(), listType);
 
-                ProfileCommentListAdapter pcAdapter = new ProfileCommentListAdapter(result);
+                ProfileCommentListAdapter pcAdapter = new ProfileCommentListAdapter(result, me);
                 commentList.setAdapter(pcAdapter);
                 if (commentList.getAdapter() != null) {
                     Log.i(TAG, "Adapter set");

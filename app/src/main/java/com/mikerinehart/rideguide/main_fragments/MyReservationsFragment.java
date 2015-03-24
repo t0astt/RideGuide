@@ -126,7 +126,7 @@ public class MyReservationsFragment extends Fragment {
         });
         reservationList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
-            public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+            public boolean onInterceptTouchEvent(RecyclerView recyclerView, final MotionEvent motionEvent) {
                 ViewGroup child = (ViewGroup) recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
 
                 if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
@@ -216,7 +216,7 @@ public class MyReservationsFragment extends Fragment {
                             userActionsDialog.dismiss();
                             getActivity().getSupportFragmentManager()
                                     .beginTransaction()
-                                    .replace(R.id.container, ProfileFragment.newInstance(u, "ProfileFragment"))
+                                    .replace(R.id.container, ProfileFragment.newInstance(u, me))
                                     .addToBackStack("MyShifts")
                                     .commit();
                         }
