@@ -51,6 +51,10 @@ public class ProfileCommentListAdapter extends RecyclerView.Adapter<ProfileComme
                     .into(profileCommentViewHolder.userPic);
             profileCommentViewHolder.listItemLayout.setBackgroundColor(context.getResources().getColor(R.color.background_material_light));
         }
+        Picasso.with(profileCommentViewHolder.reviewType.getContext())
+                .load((c.getType() == 1 ? R.drawable.ic_thumb_up_blue : R.drawable.ic_thumb_down_blue))
+                .into(profileCommentViewHolder.reviewType);
+
     }
 
     @Override
@@ -69,6 +73,7 @@ public class ProfileCommentListAdapter extends RecyclerView.Adapter<ProfileComme
         protected TextView date;
         protected TextView content;
         protected ImageView userPic;
+        protected ImageView reviewType;
 
         public ProfileCommentViewHolder(View v) {
             super(v);
@@ -77,6 +82,7 @@ public class ProfileCommentListAdapter extends RecyclerView.Adapter<ProfileComme
             date = (TextView) v.findViewById(R.id.profile_comment_list_date);
             content = (TextView) v.findViewById(R.id.profile_comment_list_content);
             userPic = (ImageView)v.findViewById(R.id.profile_comment_list_user_pic);
+            reviewType = (ImageView)v.findViewById(R.id.profile_comment_list_review_type);
         }
 
     }

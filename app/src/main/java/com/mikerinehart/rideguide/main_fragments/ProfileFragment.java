@@ -192,61 +192,64 @@ public class ProfileFragment extends Fragment {
                     }
                 }
 
-                if (myReview != null) {
-                    thumbUpButton.setOnClickListener(null);
-                    thumbUpButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            updateReview(1);
+                if (myReview != null && myReview.getReviewee_user_id() != me.getId()) {
+                    if (myReview.getReviewee_user_id() != me.getId()) {
+                        thumbUpButton.setOnClickListener(null);
+                        thumbUpButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                updateReview(1);
+                            }
+                        });
+                        thumbDownButton.setOnClickListener(null);
+                        thumbDownButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                updateReview(0);
+                            }
+                        });
+                        if (myReview.getType() == 1) {
+
+                            thumbsUpButtonCount.setTextColor(getResources().getColor(R.color.ColorPrimary));
+                            Picasso.with(thumbUpButton.getContext())
+                                    .load(R.drawable.ic_thumb_up_blue)
+                                    .into(thumbUpButton);
+                            thumbsDownButtonCount.setTextColor(getResources().getColor(R.color.primary_text_default_material_light));
+                            Picasso.with(thumbDownButton.getContext())
+                                    .load(R.drawable.ic_thumb_down_gray)
+                                    .into(thumbDownButton);
+
+
+
+                        } else {
+
+                            thumbsDownButtonCount.setTextColor(getResources().getColor(R.color.ColorPrimaryDark));
+                            Picasso.with(thumbDownButton.getContext())
+                                    .load(R.drawable.ic_thumb_down_blue)
+                                    .into(thumbDownButton);
+                            thumbsUpButtonCount.setTextColor(getResources().getColor(R.color.primary_text_default_material_light));
+                            Picasso.with(thumbUpButton.getContext())
+                                    .load(R.drawable.ic_thumb_up_gray)
+                                    .into(thumbUpButton);
                         }
-                    });
-                    thumbDownButton.setOnClickListener(null);
-                    thumbDownButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            updateReview(0);
-                        }
-                    });
-                    if (myReview.getType() == 1) {
-
-                        thumbsUpButtonCount.setTextColor(getResources().getColor(R.color.ColorPrimary));
-                        Picasso.with(thumbUpButton.getContext())
-                                .load(R.drawable.ic_thumb_up_blue)
-                                .into(thumbUpButton);
-                        thumbsDownButtonCount.setTextColor(getResources().getColor(R.color.primary_text_default_material_light));
-                        Picasso.with(thumbDownButton.getContext())
-                                .load(R.drawable.ic_thumb_down_gray)
-                                .into(thumbDownButton);
-
-
-
                     } else {
-
-                        thumbsDownButtonCount.setTextColor(getResources().getColor(R.color.ColorPrimaryDark));
-                        Picasso.with(thumbDownButton.getContext())
-                                .load(R.drawable.ic_thumb_down_blue)
-                                .into(thumbDownButton);
-                        thumbsUpButtonCount.setTextColor(getResources().getColor(R.color.primary_text_default_material_light));
-                        Picasso.with(thumbUpButton.getContext())
-                                .load(R.drawable.ic_thumb_up_gray)
-                                .into(thumbUpButton);
+                        thumbUpButton.setOnClickListener(null);
+                        thumbUpButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                leaveReview(1);
+                            }
+                        });
+                        thumbDownButton.setOnClickListener(null);
+                        thumbDownButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                leaveReview(0);
+                            }
+                        });
                     }
-                } else {
-                    thumbUpButton.setOnClickListener(null);
-                    thumbUpButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            leaveReview(1);
-                        }
-                    });
-                    thumbDownButton.setOnClickListener(null);
-                    thumbDownButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            leaveReview(0);
-                        }
-                    });
-                }
+                    }
+
                 thumbsUpButtonCount.setText(String.valueOf(thumbsUpCount));
                 thumbsDownButtonCount.setText(String.valueOf(thumbsDownCount));
 
@@ -271,8 +274,9 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateReview(int type) {
-        Log.i(TAG, "In updateReview");
         final int reviewType = type;
+        final String titleType = (type == 1 ? "Positive" : "Negative");
+
         final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
         View thumbUpLayout = inflater.inflate(R.layout.review_dialog, null);
 
@@ -318,7 +322,7 @@ public class ProfileFragment extends Fragment {
         reviewField.setText(myReview.getComment());
 
         final MaterialDialog thumbUpDialog = new MaterialDialog.Builder(ProfileFragment.this.getActivity())
-                .title("Update Review")
+                .title("Leave " + titleType + " Review" )
                 .customView(thumbUpLayout)
                 .neutralColor(getResources().getColor(R.color.ColorNegative))
                 .positiveText("Ok")
@@ -358,6 +362,8 @@ public class ProfileFragment extends Fragment {
 
     private void leaveReview(int type) {
         final int reviewType = type;
+        final String titleType = (type == 1 ? "Positive" : "Negative");
+
         final LayoutInflater inflater = LayoutInflater.from(getActivity().getBaseContext());
         View thumbUpLayout = inflater.inflate(R.layout.review_dialog, null);
 
@@ -399,14 +405,9 @@ public class ProfileFragment extends Fragment {
         };
         reviewField.addTextChangedListener(reviewWatcher);
 
-        String title;
-        if (type == 1) {
-            title = "Leave a Positive Review";
-        } else {
-            title = "Leave a Negative Review";
-        }
+
         final MaterialDialog thumbUpDialog = new MaterialDialog.Builder(ProfileFragment.this.getActivity())
-                .title(title)
+                .title("Leave " + titleType + " Review")
                 .customView(thumbUpLayout)
                 .neutralColor(getResources().getColor(R.color.ColorNegative))
                 .positiveText("Ok")
@@ -422,7 +423,6 @@ public class ProfileFragment extends Fragment {
                         RestClient.post("reviews/leaveReview", params, new JsonHttpResponseHandler() {
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                //thumbUpDialog.dismiss();
                                 refreshContent();
                                 Toast.makeText(getActivity().getApplicationContext(), "Review successful!", Toast.LENGTH_SHORT).show();
                             }
