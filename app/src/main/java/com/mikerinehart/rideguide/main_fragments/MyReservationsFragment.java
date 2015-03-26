@@ -163,12 +163,8 @@ public class MyReservationsFragment extends Fragment {
                     callUserButton.setRippleSpeed(9001); // IT'S OVER 9000!!!
                     donateButton.setRippleSpeed(9001);
 
-
-
-
-
                     final MaterialDialog userActionsDialog = new MaterialDialog.Builder(MyReservationsFragment.this.getActivity())
-                            .customView(dialogLayout)
+                            .customView(dialogLayout, false)
                             .neutralText("Delete Reservation")
                             .neutralColor(getResources().getColor(R.color.ColorNegative))
                             .positiveText("Ok")

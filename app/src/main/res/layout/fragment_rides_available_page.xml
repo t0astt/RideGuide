@@ -20,6 +20,18 @@
         android:gravity="center_horizontal"
         android:visibility="gone" />
 
+    <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
+        android:id="@+id/rides_available_circular_loading"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="#1E88E5"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentRight="false"
+        android:layout_centerInParent="true"
+        android:visibility="visible" />
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/rides_available_swipe_refresh_layout"
         android:layout_width="match_parent"
@@ -34,16 +46,5 @@
             android:visibility="gone"
             android:layout_below="@+id/rides_available_none" />
     </android.support.v4.widget.SwipeRefreshLayout>
-
-    <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
-        android:id="@+id/rides_available_circular_loading"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:background="#1E88E5"
-        android:layout_alignParentTop="false"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentBottom="false"
-        android:layout_alignParentRight="false"
-        android:layout_centerInParent="true" />
 
 </RelativeLayout>

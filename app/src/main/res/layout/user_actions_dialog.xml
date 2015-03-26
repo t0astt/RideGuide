@@ -26,7 +26,7 @@
         android:layout_below="@+id/user_actions_dialog_user_pic"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:paddingTop="15dp" />
+        android:paddingTop="7dp" />
 
     <TextView
         android:layout_width="fill_parent"
@@ -44,7 +44,7 @@
 
     <com.gc.materialdesign.views.ButtonRectangle
         android:id="@+id/user_actions_dialog_call_user_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#1E88E5"
         android:text="CALL USER"
@@ -52,9 +52,11 @@
         android:layout_below="@+id/user_actions_dialog_pickup_time_label"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="26dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp" />
 
     <com.gc.materialdesign.views.ButtonRectangle
         android:id="@+id/user_actions_dialog_donate_button"
@@ -67,7 +69,11 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -78,12 +84,15 @@
         android:textColor="#000000"
         android:textSize="15dp"
         android:textStyle="bold"
-        android:paddingTop="25dp"
+        android:paddingTop="10dp"
         android:layout_below="@+id/user_actions_dialog_last_name"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/user_actions_dialog_pickup_origin"
-        android:layout_toStartOf="@+id/user_actions_dialog_pickup_origin" />
+        android:layout_toStartOf="@+id/user_actions_dialog_pickup_origin"
+        android:layout_marginRight="0dp"
+        android:layout_alignLeft="@+id/user_actions_dialog_call_user_button"
+        android:layout_marginLeft="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -93,9 +102,8 @@
         android:id="@+id/user_actions_dialog_pickup_origin"
         android:textColor="#000000"
         android:textSize="15dp"
-        android:textStyle="bold"
         android:visibility="visible"
-        android:paddingTop="25dp"
+        android:paddingTop="10dp"
         android:paddingLeft="11dp"
         android:layout_below="@+id/user_actions_dialog_last_name"
         android:layout_toRightOf="@+id/user_actions_dialog_destination_label"
@@ -114,7 +122,10 @@
         android:layout_below="@+id/user_actions_dialog_destination_label"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:paddingTop="11dp" />
+        android:paddingTop="11dp"
+        android:layout_marginRight="0dp"
+        android:layout_alignLeft="@+id/user_actions_dialog_call_user_button"
+        android:layout_marginLeft="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -124,7 +135,6 @@
         android:id="@+id/user_actions_dialog_pickup_time"
         android:textColor="#000000"
         android:textSize="15dp"
-        android:textStyle="bold"
         android:visibility="visible"
         android:paddingLeft="11dp"
         android:layout_alignTop="@+id/user_actions_dialog_pickup_time_label"
@@ -145,7 +155,10 @@
         android:layout_below="@+id/user_actions_dialog_pickup_origin_label"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:paddingTop="11dp" />
+        android:paddingTop="11dp"
+        android:layout_marginRight="0dp"
+        android:layout_alignLeft="@+id/user_actions_dialog_call_user_button"
+        android:layout_marginLeft="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -155,7 +168,6 @@
         android:id="@+id/user_actions_dialog_destination"
         android:textColor="#000000"
         android:textSize="15dp"
-        android:textStyle="bold"
         android:visibility="visible"
         android:paddingLeft="11dp"
         android:layout_alignTop="@+id/user_actions_dialog_destination_label"

@@ -157,7 +157,7 @@ public class ReservationsHistoryPageFragment extends Fragment {
 
 
                     final MaterialDialog userActionsDialog = new MaterialDialog.Builder(ReservationsHistoryPageFragment.this.getActivity())
-                            .customView(dialogLayout)
+                            .customView(dialogLayout, false)
                             .neutralColor(getResources().getColor(R.color.ColorNegative))
                             .positiveText("Ok")
                             .callback(new MaterialDialog.ButtonCallback() {

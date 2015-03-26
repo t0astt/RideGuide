@@ -112,7 +112,7 @@ public class RidesFragment extends Fragment {
         ridesList.setLayoutManager(llm);
 
         refreshContent();
-        loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
+
 
         final GestureDetector mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -281,6 +281,7 @@ public class RidesFragment extends Fragment {
 
                     ridesList.addItemDecoration(new SimpleDividerItemDecoration(ridesList.getContext()));
 
+                    loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
                     ridesList.setAdapter(adapter);
                     StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(adapter);
                     ridesList.addItemDecoration(headersDecor);
