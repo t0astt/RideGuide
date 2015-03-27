@@ -244,6 +244,7 @@ public class RidesFragment extends Fragment {
                 if (result.size() == 0) {
                     noRides.setVisibility(TextView.VISIBLE);
                     ridesList.setVisibility(RecyclerView.GONE);
+                    loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
                 } else {
                     noRides.setVisibility(TextView.GONE);
                     ridesList.setVisibility(RecyclerView.VISIBLE);

@@ -156,6 +156,7 @@ public class MyShiftsPageFragment extends Fragment {
                 if (result.size() == 0) {
                     shiftShame.setVisibility(TextView.VISIBLE);
                     shiftList.setVisibility(RecyclerView.GONE);
+                    loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
                 } else {
                     shiftShame.setVisibility(TextView.GONE);
                     shiftList.setVisibility(RecyclerView.VISIBLE);
