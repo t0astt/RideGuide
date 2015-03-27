@@ -18,6 +18,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
+import com.facebook.widget.LoginButton;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -83,6 +84,12 @@ public class LoginActivity extends ActionBarActivity {
     private void onSessionStateChange(final Session session, SessionState state, Exception exception) {
         // When Session is successfully opened (User logged-in)
         if (state.isOpened()) {
+            if (Session.getActiveSession() != null)
+            {
+                LoginButton loginButton = (LoginButton)findViewById(R.id.fb_login_button);
+                loginButton.setVisibility(LoginButton.GONE);
+            }
+
             Log.i(TAG, "Logged into Facebook");
             Request.newMeRequest(session, new Request.GraphUserCallback() {
                 // callback after Graph API response with user object
