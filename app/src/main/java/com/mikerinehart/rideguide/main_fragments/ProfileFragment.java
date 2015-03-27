@@ -191,9 +191,8 @@ public class ProfileFragment extends Fragment {
                         myReview = r;
                     }
                 }
-
-                if (myReview != null && myReview.getReviewee_user_id() != me.getId()) {
-                    if (myReview.getReviewee_user_id() != me.getId()) {
+            if (user.getId() != me.getId()) {
+                if (myReview != null) {
                         thumbUpButton.setOnClickListener(null);
                         thumbUpButton.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -218,9 +217,6 @@ public class ProfileFragment extends Fragment {
                             Picasso.with(thumbDownButton.getContext())
                                     .load(R.drawable.ic_thumb_down_gray)
                                     .into(thumbDownButton);
-
-
-
                         } else {
 
                             thumbsDownButtonCount.setTextColor(getResources().getColor(R.color.ColorPrimaryDark));
@@ -248,7 +244,8 @@ public class ProfileFragment extends Fragment {
                             }
                         });
                     }
-                    }
+            }
+
 
                 thumbsUpButtonCount.setText(String.valueOf(thumbsUpCount));
                 thumbsDownButtonCount.setText(String.valueOf(thumbsDownCount));
