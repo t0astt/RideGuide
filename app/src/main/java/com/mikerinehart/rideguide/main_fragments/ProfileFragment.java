@@ -1,6 +1,7 @@
 package com.mikerinehart.rideguide.main_fragments;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.RoundedTransformation;
@@ -60,7 +62,7 @@ public class ProfileFragment extends Fragment {
     private Review myReview;
 
     private ImageView coverPhoto;
-    private ImageView profilePicture;
+    private RoundedImageView profilePicture;
     private TextView firstName;
     private TextView lastName;
     private ImageView thumbUpButton;
@@ -122,7 +124,9 @@ public class ProfileFragment extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         commentList.setLayoutManager(llm);
 
-        profilePicture = (ImageView) v.findViewById(R.id.profile_picture);
+        profilePicture = (RoundedImageView) v.findViewById(R.id.profile_picture);
+        profilePicture.setBorderWidth((float)7);
+        profilePicture.setBorderColor(Color.WHITE);
         coverPhoto = (ImageView) v.findViewById(R.id.cover_photo);
         firstName = (TextView) v.findViewById(R.id.first_name);
         lastName = (TextView) v.findViewById(R.id.last_name);
@@ -157,7 +161,7 @@ public class ProfileFragment extends Fragment {
         lastName.setText(user.getLastName());
         Picasso.with(profilePicture.getContext())
                 .load("https://graph.facebook.com/" + user.getFbUid() + "/picture?height=1000&type=large&width=1000")
-                .transform(new RoundedTransformation(600, 5))
+//                .transform(new RoundedTransformation(600, 5))
                 .into(profilePicture);
 
 

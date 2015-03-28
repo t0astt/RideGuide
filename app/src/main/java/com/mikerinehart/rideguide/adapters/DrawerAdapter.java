@@ -1,6 +1,7 @@
 package com.mikerinehart.rideguide.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RoundedTransformation;
 import com.squareup.picasso.Picasso;
@@ -59,7 +61,8 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             holder.textView.setText(mNavTitles[position - 1]);
             holder.imageView.setImageResource(mIcons[position - 1]);
         } else {
-            Picasso.with(context).load("https://graph.facebook.com/" + myFbUid + "/picture?type=large").transform(new RoundedTransformation(100, 5)).into(holder.pic);
+            Picasso.with(context).load("https://graph.facebook.com/" + myFbUid + "/picture?type=large").into(holder.pic);
+
             holder.name.setText((myName));
             holder.email.setText(myEmail);
         }
@@ -94,7 +97,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         ImageView imageView;
         TextView name;
         TextView email;
-        ImageView pic;
+        RoundedImageView pic;
 
         View v;
 
@@ -109,7 +112,9 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             } else {
                 name = (TextView) itemView.findViewById(R.id.name);
                 email = (TextView) itemView.findViewById(R.id.email);
-                pic = (ImageView) itemView.findViewById(R.id.imageView);
+                pic = (RoundedImageView) itemView.findViewById(R.id.imageView);
+                pic.setBorderWidth((float)7);
+                pic.setBorderColor(Color.WHITE);
 
                 holderId = 0;
             }

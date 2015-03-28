@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="178dp"
     android:background="@color/ColorPrimary"
@@ -39,16 +40,7 @@
             android:paddingLeft="11dp" />
     </LinearLayout>
 
-    <!--<de.hdodenhof.circleimageview.CircleImageView-->
-        <!--android:layout_width="70dp"-->
-        <!--android:layout_height="70dp"-->
-        <!--android:src="@drawable/ic_launcher"-->
-        <!--android:layout_marginLeft="16dp"-->
-        <!--android:layout_marginTop="38dp"-->
-        <!--android:id="@+id/fb_profile_img"-->
-        <!--android:visibility="gone" />-->
-
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:id="@+id/imageView"
@@ -57,6 +49,7 @@
         android:layout_above="@+id/linearLayout"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="15dp"
-        android:paddingLeft="11dp" />
+        android:paddingLeft="11dp"
+        app:riv_oval="true"/>
 
 </RelativeLayout>
