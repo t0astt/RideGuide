@@ -6,12 +6,17 @@ package com.mikerinehart.rideguide.activities;
 public class Constants {
 
     private static String googleApiProjectNumber = "690520067451";
+    private static String googleServerAppApiKey = "AIzaSyBF2GCIBBUyJShxmc2n6KqwyHRBVAeVjts";
     private static String venmoApiId = "2449";
     private static String venmoAppName = "RideGuide";
     private static String venmoSecret = "BWxNqRRQ6k8xURUSkfKJVZeCVrFmqdW6";
 
     static String getGoogleApiProjectNumber() {
         return googleApiProjectNumber;
+    }
+
+    public static String getGoogleServerAppApiKey() {
+        return googleServerAppApiKey;
     }
 
     public static String getVenmoApiId() {

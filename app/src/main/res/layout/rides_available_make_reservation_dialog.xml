@@ -14,7 +14,7 @@
         android:layout_alignLeft="@+id/rides_available_make_reservation_dialog_origin"
         android:layout_alignStart="@+id/rides_available_make_reservation_dialog_origin" />
 
-    <EditText
+    <AutoCompleteTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"

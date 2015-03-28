@@ -2,17 +2,22 @@ package com.mikerinehart.rideguide.main_fragments;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -28,6 +33,7 @@ import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
+import com.mikerinehart.rideguide.activities.Constants;
 import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.adapters.AvailableDriversAdapter;
 import com.mikerinehart.rideguide.adapters.AvailableRidesTimeSlotsAdapter;
@@ -42,6 +48,9 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import se.walkercrou.places.GooglePlaces;
+import se.walkercrou.places.Place;
 
 
 public class RidesFragment extends Fragment {
@@ -150,7 +159,7 @@ public class RidesFragment extends Fragment {
                 .customView(dialogLayout)
                 .positiveText("Cancel")
                 .build();
-        RecyclerView availableDriversList = (RecyclerView)dialogLayout.findViewById(R.id.rides_available_view_drivers_dialog_list);
+        final RecyclerView availableDriversList = (RecyclerView)dialogLayout.findViewById(R.id.rides_available_view_drivers_dialog_list);
         availableDriversList.addItemDecoration(new SimpleDividerItemDecoration(availableDriversList.getContext()));
 
         LinearLayoutManager llm = new LinearLayoutManager(availableDriversList.getContext());
@@ -175,12 +184,50 @@ public class RidesFragment extends Fragment {
                 if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
                     int itemClicked = recyclerView.getChildPosition(child);
                     final Reservation r = adapter.getReservation(itemClicked);
-                    View dialogLayout = inflater.inflate(R.layout.rides_available_make_reservation_dialog, null);
+                    final View dialogLayout = inflater.inflate(R.layout.rides_available_make_reservation_dialog, null);
                     final NumberPicker np = (NumberPicker)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_passengers);
                     np.setMaxValue(r.getShift().getSeats());
                     np.setMinValue(1);
-                    final EditText origin = (EditText)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_origin);
+
                     final EditText destination = (EditText)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_destination);
+                    final AutoCompleteTextView origin = (AutoCompleteTextView)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_origin);
+
+                            final AutoCompleteTextView originThreaded = (AutoCompleteTextView)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_origin);
+                            final GooglePlaces client = new GooglePlaces("AIzaSyCfg_jCCi8boOcSSzMuPY0TAVhHKn7W2X4");
+
+                            originThreaded.addTextChangedListener(new TextWatcher() {
+                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                }
+
+                                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                }
+
+                                public void afterTextChanged(final Editable s) {
+
+                                    new AsyncTask<Void, Void, Void>() {
+                                        protected Void doInBackground(Void... params) {
+                                            final List<Place> places = client.getPlacesByQuery(s.toString(), GooglePlaces.DEFAULT_RESULTS);
+                                            Log.i(TAG, places.get(0).getName());
+                                            final ArrayAdapter<Place> originAdapter = new ArrayAdapter<Place>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, places) {
+                                                @Override
+                                                public View getView(int position, View convertView, ViewGroup parent) {
+                                                    View view = super.getView(position, convertView, parent);
+                                                    TextView text = (TextView)view.findViewById(android.R.id.text1);
+                                                    text.setText(places.get(position).getName());
+                                                    return view;
+                                                }
+                                            };
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                public void run() {
+                                                    Log.i(TAG, "Thread running");
+                                                    originAdapter.notifyDataSetChanged();
+                                                }
+                                            });
+                                            return null;
+                                        }
+                                    }.execute();
+                                }
+                            });
 
                     final MaterialDialog createReservationDialog = new MaterialDialog.Builder(RidesFragment.this.getActivity())
                             .title("Create Reservation")
@@ -296,13 +343,6 @@ public class RidesFragment extends Fragment {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
