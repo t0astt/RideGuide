@@ -144,7 +144,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
                 email = (TextView) itemView.findViewById(R.id.email);
                 background = (ImageView)itemView.findViewById(R.id.imageView3);
                 pic = (RoundedImageView) itemView.findViewById(R.id.imageView);
-                pic.setBorderWidth((float)7);
+                pic.setBorderWidth((float)5);
                 pic.setBorderColor(Color.WHITE);
 
                 holderId = 0;
