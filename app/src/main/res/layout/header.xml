@@ -7,6 +7,26 @@
     android:orientation="vertical"
     android:weightSum="1">
 
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/imageView3"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="29.70"
+        android:scaleType="fitXY"/>
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/imageView"
+        android:contentDescription="pic"
+        android:visibility="visible"
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15dp"
+        android:paddingLeft="11dp"
+        app:riv_oval="true"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -14,7 +34,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/linearLayout">
+        android:id="@+id/linearLayout"
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/name"
@@ -38,18 +59,7 @@
             android:textSize="14sp"
             android:textStyle="normal"
             android:paddingLeft="11dp" />
-    </LinearLayout>
 
-    <com.makeramen.roundedimageview.RoundedImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:id="@+id/imageView"
-        android:contentDescription="pic"
-        android:visibility="visible"
-        android:layout_above="@+id/linearLayout"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="15dp"
-        android:paddingLeft="11dp"
-        app:riv_oval="true"/>
+    </LinearLayout>
 
 </RelativeLayout>

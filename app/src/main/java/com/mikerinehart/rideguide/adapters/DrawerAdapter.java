@@ -3,16 +3,24 @@ package com.mikerinehart.rideguide.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.mikerinehart.rideguide.R;
+import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.RoundedTransformation;
+import com.mikerinehart.rideguide.models.User;
 import com.squareup.picasso.Picasso;
+
+import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Mike on 1/19/2015.
@@ -25,14 +33,16 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
     private String mNavTitles[];
     private int mIcons[];
     private int mSelectedPosition;
+    User me;
     private String myName;
     private String myEmail;
     private String myFbUid;
+    private String coverPhotoSource;
 
-
-    public DrawerAdapter(String Titles[], int Icons[], String Name, String Email, String fbUid, Context c) {
+    public DrawerAdapter(String Titles[], int Icons[], User user, String Name, String Email, String fbUid, Context c) {
         mNavTitles = Titles;
         mIcons = Icons;
+        me = user;
         myName = Name;
         myEmail = Email;
         myFbUid = fbUid;
@@ -56,15 +66,34 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         return null;
     }
 
-    public void onBindViewHolder(DrawerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final DrawerAdapter.ViewHolder holder, int position) {
         if (holder.holderId == 1) {
             holder.textView.setText(mNavTitles[position - 1]);
             holder.imageView.setImageResource(mIcons[position - 1]);
         } else {
-            Picasso.with(context).load("https://graph.facebook.com/" + myFbUid + "/picture?type=large").into(holder.pic);
+            // Get cover photo with the jankass Graph API call.
+            RestClient.fbGet(me.getFbUid() + "?fields=cover", null, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+                        coverPhotoSource = response.getJSONObject("cover").getString("source");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Picasso.with(holder.background.getContext())
+                            .load(coverPhotoSource)
+                            .into(holder.background);
+                }
 
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Log.i("ProfileFragment", "Error: " + errorResponse);
+                }
+            });
+            Picasso.with(context).load("https://graph.facebook.com/" + myFbUid + "/picture?type=large").into(holder.pic);
             holder.name.setText((myName));
             holder.email.setText(myEmail);
+
         }
         holder.v.setSelected(mSelectedPosition == position);
     }
@@ -98,6 +127,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
         TextView name;
         TextView email;
         RoundedImageView pic;
+        ImageView background;
 
         View v;
 
@@ -112,6 +142,7 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             } else {
                 name = (TextView) itemView.findViewById(R.id.name);
                 email = (TextView) itemView.findViewById(R.id.email);
+                background = (ImageView)itemView.findViewById(R.id.imageView3);
                 pic = (RoundedImageView) itemView.findViewById(R.id.imageView);
                 pic.setBorderWidth((float)7);
                 pic.setBorderColor(Color.WHITE);

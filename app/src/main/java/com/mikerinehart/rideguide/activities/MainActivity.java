@@ -181,7 +181,7 @@ public class MainActivity extends ActionBarActivity implements
             }
         });
 
-        mAdapter = new DrawerAdapter(TITLES, ICONS, me.getFirstName() + " " + me.getLastName(), me.getEmail(), me.getFbUid(), getBaseContext());
+        mAdapter = new DrawerAdapter(TITLES, ICONS, me, me.getFirstName() + " " + me.getLastName(), me.getEmail(), me.getFbUid(), getBaseContext());
         mRecyclerView.setAdapter(mAdapter);
         Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mDrawerToggle = new ActionBarDrawerToggle(this, Drawer, toolbar, R.string.openDrawer, R.string.closeDrawer) {
