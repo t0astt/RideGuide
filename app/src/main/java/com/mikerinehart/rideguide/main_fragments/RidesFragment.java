@@ -2,7 +2,6 @@ package com.mikerinehart.rideguide.main_fragments;
 
 import android.app.Activity;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,7 +11,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,7 +33,6 @@ import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
-import com.mikerinehart.rideguide.activities.Constants;
 import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.adapters.AvailableDriversAdapter;
 import com.mikerinehart.rideguide.adapters.AvailableRidesTimeSlotsAdapter;
@@ -50,8 +47,6 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import se.walkercrou.places.GooglePlaces;
 import se.walkercrou.places.Place;
@@ -75,7 +70,10 @@ public class RidesFragment extends Fragment {
     private RecyclerView ridesList;
 
     AvailableRidesTimeSlotsAdapter adapter;
-    AutoCompleteTextView originThreaded;
+    AutoCompleteTextView origin;
+    AutoCompleteTextView destination;
+
+    ArrayAdapter<Place> placesAdapter;
     int threadId = 0;
     GooglePlaces client;
 
@@ -198,14 +196,10 @@ public class RidesFragment extends Fragment {
                     np.setMaxValue(r.getShift().getSeats());
                     np.setMinValue(1);
 
-                    final EditText destination = (EditText)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_destination);
-                    final AutoCompleteTextView origin = (AutoCompleteTextView)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_origin);
+                    destination = (AutoCompleteTextView)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_destination);
+                    origin = (AutoCompleteTextView)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_origin);
 
-                    originThreaded = (AutoCompleteTextView)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_origin);
-
-
-
-                            originThreaded.addTextChangedListener(new TextWatcher() {
+                            origin.addTextChangedListener(new TextWatcher() {
                                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                                 }
 
@@ -214,32 +208,21 @@ public class RidesFragment extends Fragment {
 
                                 public void afterTextChanged(final Editable s) {
                                     threadId++;
-                                    Thread thread = new Thread(new PlacesSearchRunnableJob(s.toString()), Integer.toString(threadId));
+                                    Thread thread = new Thread(new PlacesSearchRunnableJob(true, s.toString()), Integer.toString(threadId));
                                     thread.start();
+                                }
+                            });
+                            destination.addTextChangedListener(new TextWatcher() {
+                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                }
 
+                                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                }
 
-//                                    new AsyncTask<Void, Void, Void>() {
-//                                        protected Void doInBackground(Void... params) {
-//                                            final List<Place> places = client.getPlacesByQuery(s.toString(), GooglePlaces.DEFAULT_RESULTS);
-//                                            Log.i(TAG, places.get(0).getName());
-//                                            final ArrayAdapter<Place> originAdapter = new ArrayAdapter<Place>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, places) {
-//                                                @Override
-//                                                public View getView(int position, View convertView, ViewGroup parent) {
-//                                                    View view = super.getView(position, convertView, parent);
-//                                                    TextView text = (TextView)view.findViewById(android.R.id.text1);
-//                                                    text.setText(places.get(position).getName());
-//                                                    return view;
-//                                                }
-//                                            };
-//                                            getActivity().runOnUiThread(new Runnable() {
-//                                                public void run() {
-//                                                    Log.i(TAG, "Thread running");
-//                                                    originAdapter.notifyDataSetChanged();
-//                                                }
-//                                            });
-//                                            return null;
-//                                        }
-//                                    }.execute();
+                                public void afterTextChanged(final Editable s) {
+                                    threadId++;
+                                    Thread thread = new Thread(new PlacesSearchRunnableJob(false, s.toString()), Integer.toString(threadId));
+                                    thread.start();
                                 }
                             });
 
@@ -383,43 +366,64 @@ public class RidesFragment extends Fragment {
 
     class PlacesSearchRunnableJob implements Runnable {
         String search;
+        boolean entryField; // true = origin, false = destination
 
-        public PlacesSearchRunnableJob(String s) {
+        public PlacesSearchRunnableJob(boolean field, String s) {
+
             search = s;
+            entryField = field;
         }
 
         public void run() {
             Thread t = Thread.currentThread();
             try {
-                t.sleep(800);
+                t.sleep(400);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             if (t.getName().equals(Integer.toString(threadId)) && !search.isEmpty()) {
                 Log.i(TAG, "Timer expired, searching!");
-                final List<Place> places = client.getPlacesByQuery(search, GooglePlaces.DEFAULT_RESULTS);
-                Log.i(TAG, places.get(0).getName() + " " + places.get(0).getAddress());
-                final ArrayAdapter<Place> originAdapter = new ArrayAdapter<Place>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, places) {
-                    @Override
-                    public View getView(int position, View convertView, ViewGroup parent) {
-                        View view = super.getView(position, convertView, parent);
-                        TextView text = (TextView) view.findViewById(android.R.id.text1);
-                        text.setText(places.get(position).getName());
-                        return view;
-                    }
-                };
-                getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        originThreaded.setAdapter(originAdapter);
-                        originAdapter.notifyDataSetChanged();
-                        originThreaded.setOnItemClickListener( new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                originThreaded.setText(originAdapter.getItem(position).getName());
+                final List<Place> places;
+                try {
+                    places = client.getPlacesByQuery(search, GooglePlaces.DEFAULT_RESULTS);
+                    placesAdapter = new ArrayAdapter<Place>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, places) {
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            View view = super.getView(position, convertView, parent);
+                            TextView name = (TextView) view.findViewById(android.R.id.text1);
+                            name.setText(places.get(position).getName() + "\n" + places.get(position).getAddress());
+                            return view;
+                        }
+                    };
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            if (entryField) {
+                                placesAdapter.notifyDataSetChanged();
+                                origin.setAdapter(placesAdapter);
+                                placesAdapter.notifyDataSetChanged();
+                                origin.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        origin.setText(placesAdapter.getItem(position).getName());
+                                    }
+                                });
+                            } else {
+                                destination.setAdapter(placesAdapter);
+                                placesAdapter.notifyDataSetChanged();
+                                destination.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        destination.setText(placesAdapter.getItem(position).getName());
+                                    }
+                                });
                             }
-                        });
-                    }
-                });
+
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
 
         }
