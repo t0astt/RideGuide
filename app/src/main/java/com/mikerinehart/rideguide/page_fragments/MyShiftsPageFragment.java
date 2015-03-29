@@ -160,7 +160,7 @@ public class MyShiftsPageFragment extends Fragment {
                 } else {
                     shiftShame.setVisibility(TextView.GONE);
                     shiftList.setVisibility(RecyclerView.VISIBLE);
-                    MyShiftsAdapter shiftsAdapter = new MyShiftsAdapter(result);
+                    MyShiftsAdapter shiftsAdapter = new MyShiftsAdapter(result, me);
 
                     shiftList.addItemDecoration(new SimpleDividerItemDecoration(shiftList.getContext()));
 

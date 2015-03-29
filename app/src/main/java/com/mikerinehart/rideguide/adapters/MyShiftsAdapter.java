@@ -1,11 +1,9 @@
 package com.mikerinehart.rideguide.adapters;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,15 +12,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gc.materialdesign.views.ButtonRectangle;
-import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
-import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
@@ -32,7 +27,6 @@ import com.mikerinehart.rideguide.main_fragments.ProfileFragment;
 import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
-import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
 import com.squareup.picasso.Picasso;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
@@ -49,12 +43,14 @@ import java.util.List;
 public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShiftsViewHolder> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
 
     private List<Shift> shiftList;
+    private User me;
     private Context c;
 
     private final String TAG = "MyShiftsAdapter";
 
-    public MyShiftsAdapter(List<Shift> shiftList) {
+    public MyShiftsAdapter(List<Shift> shiftList, User user) {
         this.shiftList = shiftList;
+        this.me = user;
     }
 
     @Override
@@ -268,7 +264,7 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                             userActionsDialog.dismiss();
                             ((FragmentActivity)c).getSupportFragmentManager()
                                     .beginTransaction()
-                                    .replace(R.id.container, ProfileFragment.newInstance(u, null)) // TODO: move all this shit to a fragment
+                                    .replace(R.id.container, ProfileFragment.newInstance(u, me)) // TODO: move all this shit to a fragment
                                     .addToBackStack("MyShifts")
                                     .commit();
                         }

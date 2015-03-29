@@ -12,10 +12,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -48,6 +50,8 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import se.walkercrou.places.GooglePlaces;
 import se.walkercrou.places.Place;
@@ -71,6 +75,10 @@ public class RidesFragment extends Fragment {
     private RecyclerView ridesList;
 
     AvailableRidesTimeSlotsAdapter adapter;
+    AutoCompleteTextView originThreaded;
+    int threadId = 0;
+    GooglePlaces client;
+
     private String TAG = "AvailableRidesPageFragment";
 
     public RidesFragment() {
@@ -99,6 +107,7 @@ public class RidesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         MainActivity.toolbar.setTitle("Available Rides");
+        client = new GooglePlaces("AIzaSyCfg_jCCi8boOcSSzMuPY0TAVhHKn7W2X4");
 
         final View v = inflater.inflate(R.layout.fragment_rides_available_page, container, false);
 
@@ -192,8 +201,9 @@ public class RidesFragment extends Fragment {
                     final EditText destination = (EditText)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_destination);
                     final AutoCompleteTextView origin = (AutoCompleteTextView)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_origin);
 
-                            final AutoCompleteTextView originThreaded = (AutoCompleteTextView)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_origin);
-                            final GooglePlaces client = new GooglePlaces("AIzaSyCfg_jCCi8boOcSSzMuPY0TAVhHKn7W2X4");
+                    originThreaded = (AutoCompleteTextView)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_origin);
+
+
 
                             originThreaded.addTextChangedListener(new TextWatcher() {
                                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -203,29 +213,33 @@ public class RidesFragment extends Fragment {
                                 }
 
                                 public void afterTextChanged(final Editable s) {
+                                    threadId++;
+                                    Thread thread = new Thread(new PlacesSearchRunnableJob(s.toString()), Integer.toString(threadId));
+                                    thread.start();
 
-                                    new AsyncTask<Void, Void, Void>() {
-                                        protected Void doInBackground(Void... params) {
-                                            final List<Place> places = client.getPlacesByQuery(s.toString(), GooglePlaces.DEFAULT_RESULTS);
-                                            Log.i(TAG, places.get(0).getName());
-                                            final ArrayAdapter<Place> originAdapter = new ArrayAdapter<Place>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, places) {
-                                                @Override
-                                                public View getView(int position, View convertView, ViewGroup parent) {
-                                                    View view = super.getView(position, convertView, parent);
-                                                    TextView text = (TextView)view.findViewById(android.R.id.text1);
-                                                    text.setText(places.get(position).getName());
-                                                    return view;
-                                                }
-                                            };
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                public void run() {
-                                                    Log.i(TAG, "Thread running");
-                                                    originAdapter.notifyDataSetChanged();
-                                                }
-                                            });
-                                            return null;
-                                        }
-                                    }.execute();
+
+//                                    new AsyncTask<Void, Void, Void>() {
+//                                        protected Void doInBackground(Void... params) {
+//                                            final List<Place> places = client.getPlacesByQuery(s.toString(), GooglePlaces.DEFAULT_RESULTS);
+//                                            Log.i(TAG, places.get(0).getName());
+//                                            final ArrayAdapter<Place> originAdapter = new ArrayAdapter<Place>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, places) {
+//                                                @Override
+//                                                public View getView(int position, View convertView, ViewGroup parent) {
+//                                                    View view = super.getView(position, convertView, parent);
+//                                                    TextView text = (TextView)view.findViewById(android.R.id.text1);
+//                                                    text.setText(places.get(position).getName());
+//                                                    return view;
+//                                                }
+//                                            };
+//                                            getActivity().runOnUiThread(new Runnable() {
+//                                                public void run() {
+//                                                    Log.i(TAG, "Thread running");
+//                                                    originAdapter.notifyDataSetChanged();
+//                                                }
+//                                            });
+//                                            return null;
+//                                        }
+//                                    }.execute();
                                 }
                             });
 
@@ -365,6 +379,50 @@ public class RidesFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    class PlacesSearchRunnableJob implements Runnable {
+        String search;
+
+        public PlacesSearchRunnableJob(String s) {
+            search = s;
+        }
+
+        public void run() {
+            Thread t = Thread.currentThread();
+            try {
+                t.sleep(800);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (t.getName().equals(Integer.toString(threadId)) && !search.isEmpty()) {
+                Log.i(TAG, "Timer expired, searching!");
+                final List<Place> places = client.getPlacesByQuery(search, GooglePlaces.DEFAULT_RESULTS);
+                Log.i(TAG, places.get(0).getName() + " " + places.get(0).getAddress());
+                final ArrayAdapter<Place> originAdapter = new ArrayAdapter<Place>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, places) {
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        View view = super.getView(position, convertView, parent);
+                        TextView text = (TextView) view.findViewById(android.R.id.text1);
+                        text.setText(places.get(position).getName());
+                        return view;
+                    }
+                };
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        originThreaded.setAdapter(originAdapter);
+                        originAdapter.notifyDataSetChanged();
+                        originThreaded.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                originThreaded.setText(originAdapter.getItem(position).getName());
+                            }
+                        });
+                    }
+                });
+            }
+
+        }
     }
 
 }
