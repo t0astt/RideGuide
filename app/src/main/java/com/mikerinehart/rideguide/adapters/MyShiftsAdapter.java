@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -192,6 +193,8 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                     TextView pickupDestination = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_destination);
                     TextView pickupTime = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_pickup_time);
                     com.gc.materialdesign.views.ButtonRectangle callUserButton = (ButtonRectangle)dialogLayout.findViewById(R.id.user_actions_dialog_call_user_button);
+                    com.gc.materialdesign.views.ButtonRectangle navButton = (ButtonRectangle)dialogLayout.findViewById(R.id.user_actions_dialog_donate_nav_button);
+                    navButton.setText("NAVIGATE");
 
 
                     Picasso.with(userPic.getContext())
@@ -212,6 +215,27 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                             Intent intent = new Intent(Intent.ACTION_CALL);
                             intent.setData(Uri.parse("tel:" + u.getPhone()));
                             c.startActivity(intent); // MAY BORK SHIT
+                        }
+                    });
+                    navButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String[] locations = {"Pickup: "+r.getOrigin(), "Destination: "+r.getDestination()};
+                            MaterialDialog navDialog = new MaterialDialog.Builder(c)
+                                    .title("Navigate To...")
+                                    .items(locations)
+                                    .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallback() {
+                                        @Override
+                                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                            Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + (which==0 ? r.getOrigin() : r.getDestination()));
+                                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                                            mapIntent.setPackage("com.google.android.apps.maps");
+                                            c.startActivity(mapIntent);
+                                        }
+                                    })
+                                    .positiveText("OK")
+                                    .build();
+                                    navDialog.show();
                         }
                     });
 

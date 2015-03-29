@@ -137,7 +137,8 @@ public class ReservationsHistoryPageFragment extends Fragment {
                     TextView pickupDestination = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_destination);
                     TextView pickupTime = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_pickup_time);
                     com.gc.materialdesign.views.ButtonRectangle callUserButton = (ButtonRectangle)dialogLayout.findViewById(R.id.user_actions_dialog_call_user_button);
-                    com.gc.materialdesign.views.ButtonRectangle donateButton = (ButtonRectangle)dialogLayout.findViewById(R.id.user_actions_dialog_donate_button);
+                    com.gc.materialdesign.views.ButtonRectangle donateButton = (ButtonRectangle)dialogLayout.findViewById(R.id.user_actions_dialog_donate_nav_button);
+                    donateButton.setText("DONATE");
 
 
                     Picasso.with(userPic.getContext())
