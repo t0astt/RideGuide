@@ -48,6 +48,8 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
     private List<Shift> shiftList;
     private User me;
     private Context c;
+    MaterialDialog userActionsDialog;
+    MaterialDialog navDialog;
 
     private final String TAG = "MyShiftsAdapter";
 
@@ -212,51 +214,7 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                     callUserButton.setRippleSpeed(9001); // IT'S OVER 9000!!!
                     navButton.setRippleSpeed(9001);
 
-                    callUserButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(Intent.ACTION_CALL);
-                            intent.setData(Uri.parse("tel:" + u.getPhone()));
-                            c.startActivity(intent); // MAY BORK SHIT
-                        }
-                    });
-                    navButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            List<ApplicationInfo> packages;
-                            PackageManager pm = c.getPackageManager();
-                            packages = pm.getInstalledApplications(0);
-                            boolean mapsPresent = false;
-                            for (ApplicationInfo packageInfo : packages)
-                            {
-                                if (packageInfo.packageName.equals("com.google.android.apps.maps")) mapsPresent = true;
-                            }
-                            if (mapsPresent) {
-
-                                String[] locations = {"Pickup: "+r.getOrigin(), "Destination: "+r.getDestination()};
-                                MaterialDialog navDialog = new MaterialDialog.Builder(c)
-                                        .title("Navigate To...")
-                                        .items(locations)
-                                        .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallback() {
-                                            @Override
-                                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                                Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + (which==0 ? r.getOrigin() : r.getDestination()));
-                                                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                                                mapIntent.setPackage("com.google.android.apps.maps");
-                                                c.startActivity(mapIntent);
-                                            }
-                                        })
-                                        .positiveText("OK")
-                                        .negativeText("CANCEL")
-                                        .build();
-                                navDialog.show();
-                            } else {
-                                Toast.makeText(c, "Navigation requires the Google Maps app", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-
-                    final MaterialDialog userActionsDialog = new MaterialDialog.Builder((FragmentActivity)c)
+                    userActionsDialog = new MaterialDialog.Builder((FragmentActivity)c)
                             .customView(dialogLayout, false)
                             .neutralText("Delete Reservation")
                             .neutralColor(c.getResources().getColor(R.color.ColorNegative))
@@ -310,6 +268,52 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                                     .commit();
                         }
                     });
+                    callUserButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(Intent.ACTION_CALL);
+                            intent.setData(Uri.parse("tel:" + u.getPhone()));
+                            c.startActivity(intent); // MAY BORK SHIT
+                        }
+                    });
+                    navButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            List<ApplicationInfo> packages;
+                            PackageManager pm = c.getPackageManager();
+                            packages = pm.getInstalledApplications(0);
+                            boolean mapsPresent = false;
+                            for (ApplicationInfo packageInfo : packages)
+                            {
+                                if (packageInfo.packageName.equals("com.google.android.apps.maps")) mapsPresent = true;
+                            }
+                            if (mapsPresent) {
+
+                                String[] locations = {"Pickup: "+r.getOrigin(), "Destination: "+r.getDestination()};
+                                navDialog = new MaterialDialog.Builder(c)
+                                        .title("Navigate To...")
+                                        .items(locations)
+                                        .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallback() {
+                                            @Override
+                                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + (which==0 ? r.getOrigin() : r.getDestination()));
+                                                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                                                mapIntent.setPackage("com.google.android.apps.maps");
+                                                navDialog.dismiss();
+                                                userActionsDialog.dismiss();
+                                                c.startActivity(mapIntent);
+                                            }
+                                        })
+                                        .positiveText("OK")
+                                        .negativeText("CANCEL")
+                                        .build();
+                                navDialog.show();
+                            } else {
+                                Toast.makeText(c, "Navigation requires the Google Maps app", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
                 }
                 return false;
             }

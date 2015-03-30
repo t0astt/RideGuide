@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -20,10 +21,12 @@ import com.facebook.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
+import com.mikerinehart.rideguide.main_fragments.RidesFragment;
 import com.mikerinehart.rideguide.models.User;
 
 import org.apache.http.Header;
@@ -142,6 +145,37 @@ public class DecisionActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         checkPlayServices();
+        Log.i(TAG, "APP IS RESUMING FROM DECISIONACTIVITY!");
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String jsonMe = sharedPref.getString("CURRENT_USER", "not_found");
+        int currentFragment = sharedPref.getInt("CURRENT_FRAGMENT", 0);
+        if (jsonMe.equalsIgnoreCase("not_found")) {
+            Log.i(TAG, "User wasn't stored");
+            Log.i(TAG, "currentFragment from onResume is: " + currentFragment);
+        } else {
+            me = gson.fromJson(jsonMe, User.class);
+            Log.i(TAG, "currentFragment from onResume is: " + currentFragment);
+            if (currentFragment == 1) {
+                android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+                fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance(me, "RidesFragment"))
+                        .addToBackStack("Rides")
+                        .commit();
+            }
+        }
+
+    }
+
+    protected void onPause() {
+        super.onPause();
+        Context c = this.getBaseContext();
+        SharedPreferences sharedPref = c.getSharedPreferences("com.mikerinehart.rideguide.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        Gson gson = new Gson();
+        String jsonMe = gson.toJson(me);
+        editor.putString("CURRENT_USER", jsonMe);
+        editor.putInt("CURRENT_FRAGMENT", 1);
+        editor.commit();
     }
 
     @Override

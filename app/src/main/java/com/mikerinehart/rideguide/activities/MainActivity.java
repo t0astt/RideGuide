@@ -1,8 +1,10 @@
 package com.mikerinehart.rideguide.activities;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.google.gson.Gson;
 import com.mikerinehart.rideguide.VenmoLibrary;
 import com.mikerinehart.rideguide.main_fragments.AboutFragment;
 import com.mikerinehart.rideguide.adapters.DrawerAdapter;
@@ -224,6 +227,19 @@ public class MainActivity extends ActionBarActivity implements
                 }
             }
         }
+    }
+
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "Pausing from MainActivity");
+        Context c = this.getBaseContext();
+        SharedPreferences sharedPref = c.getSharedPreferences("com.mikerinehart.rideguide.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        Gson gson = new Gson();
+        String jsonMe = gson.toJson(me);
+        editor.putString("CURRENT_USER", jsonMe);
+        editor.putInt("CURRENT_FRAGMENT", 1);
+        editor.commit();
     }
 
     @Override
