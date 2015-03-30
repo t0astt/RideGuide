@@ -2,6 +2,8 @@ package com.mikerinehart.rideguide.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -208,6 +210,7 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                     pickupTime.setText(df.format(r.getPickup_time()));
                     callUserButton.setText("CALL " + u.getFirstName().toUpperCase());
                     callUserButton.setRippleSpeed(9001); // IT'S OVER 9000!!!
+                    navButton.setRippleSpeed(9001);
 
                     callUserButton.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -220,22 +223,36 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                     navButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            String[] locations = {"Pickup: "+r.getOrigin(), "Destination: "+r.getDestination()};
-                            MaterialDialog navDialog = new MaterialDialog.Builder(c)
-                                    .title("Navigate To...")
-                                    .items(locations)
-                                    .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallback() {
-                                        @Override
-                                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                            Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + (which==0 ? r.getOrigin() : r.getDestination()));
-                                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                                            mapIntent.setPackage("com.google.android.apps.maps");
-                                            c.startActivity(mapIntent);
-                                        }
-                                    })
-                                    .positiveText("OK")
-                                    .build();
-                                    navDialog.show();
+                            List<ApplicationInfo> packages;
+                            PackageManager pm = c.getPackageManager();
+                            packages = pm.getInstalledApplications(0);
+                            boolean mapsPresent = false;
+                            for (ApplicationInfo packageInfo : packages)
+                            {
+                                if (packageInfo.packageName.equals("com.google.android.apps.maps")) mapsPresent = true;
+                            }
+                            if (mapsPresent) {
+
+                                String[] locations = {"Pickup: "+r.getOrigin(), "Destination: "+r.getDestination()};
+                                MaterialDialog navDialog = new MaterialDialog.Builder(c)
+                                        .title("Navigate To...")
+                                        .items(locations)
+                                        .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallback() {
+                                            @Override
+                                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                                Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + (which==0 ? r.getOrigin() : r.getDestination()));
+                                                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                                                mapIntent.setPackage("com.google.android.apps.maps");
+                                                c.startActivity(mapIntent);
+                                            }
+                                        })
+                                        .positiveText("OK")
+                                        .negativeText("CANCEL")
+                                        .build();
+                                navDialog.show();
+                            } else {
+                                Toast.makeText(c, "Navigation requires the Google Maps app", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
 
