@@ -74,6 +74,7 @@ public class MainActivity extends ActionBarActivity implements
             R.drawable.ic_exit_gray};
 
     public User me;
+    private int currentFragment;
 
     String TAG = "MainActivity";
     public static Toolbar toolbar;
@@ -92,6 +93,7 @@ public class MainActivity extends ActionBarActivity implements
         TITLES = getResources().getStringArray(R.array.nav_drawer_items);
 
         me = getIntent().getExtras().getParcelable("me");
+        currentFragment = getIntent().getExtras().getInt("CURRENT_FRAGMENT");
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
@@ -202,6 +204,14 @@ public class MainActivity extends ActionBarActivity implements
         };
         Drawer.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
+
+        if (currentFragment == 1) {
+            Log.i(TAG, "currentFragment is 1, starting RidesFragment");
+            toolbar.setTitle("Find a Ride");
+            fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance(me, "RidesFragment"))
+                    .addToBackStack("Rides")
+                    .commit();
+        }
     }
 
     @Override
@@ -233,13 +243,16 @@ public class MainActivity extends ActionBarActivity implements
         super.onPause();
         Log.i(TAG, "Pausing from MainActivity");
         Context c = this.getBaseContext();
-        SharedPreferences sharedPref = c.getSharedPreferences("com.mikerinehart.rideguide.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
+        SharedPreferences userPref = c.getSharedPreferences("CURRENT_USER", Context.MODE_PRIVATE);
+        SharedPreferences fragPref = c.getSharedPreferences("CURRENT_FRAGMENT", Context.MODE_PRIVATE);
+        SharedPreferences.Editor userEditor = userPref.edit();
+        SharedPreferences.Editor fragEditor = fragPref.edit();
         Gson gson = new Gson();
         String jsonMe = gson.toJson(me);
-        editor.putString("CURRENT_USER", jsonMe);
-        editor.putInt("CURRENT_FRAGMENT", 1);
-        editor.commit();
+        userEditor.putString("CURRENT_USER", jsonMe);
+        fragEditor.putInt("CURRENT_FRAGMENT", 1);
+        userEditor.commit();
+        fragEditor.commit();
     }
 
     @Override

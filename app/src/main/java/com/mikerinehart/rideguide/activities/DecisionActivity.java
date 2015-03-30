@@ -136,6 +136,15 @@ public class DecisionActivity extends ActionBarActivity {
         finish();
     }
 
+    private void launchMainActivity(User me, int currentFragment) {
+        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        intent.putExtra("me", me);
+        intent.putExtra("CURRENT_FRAGMENT", currentFragment);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
+        finish();
+    }
+
     private void launchLoginActivity() {
         Intent intent = new Intent(DecisionActivity.this, LoginActivity.class);
         startActivity(intent);
@@ -146,22 +155,18 @@ public class DecisionActivity extends ActionBarActivity {
         super.onResume();
         checkPlayServices();
         Log.i(TAG, "APP IS RESUMING FROM DECISIONACTIVITY!");
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences userPref = this.getSharedPreferences("CURRENT_USER", Context.MODE_PRIVATE);
+        SharedPreferences fragPref = this.getSharedPreferences("CURRENT_FRAGMENT", Context.MODE_PRIVATE);
         Gson gson = new Gson();
-        String jsonMe = sharedPref.getString("CURRENT_USER", "not_found");
-        int currentFragment = sharedPref.getInt("CURRENT_FRAGMENT", 0);
+        String jsonMe = userPref.getString("CURRENT_USER", "not_found");
+        int currentFragment = fragPref.getInt("CURRENT_FRAGMENT", 0);
         if (jsonMe.equalsIgnoreCase("not_found")) {
             Log.i(TAG, "User wasn't stored");
             Log.i(TAG, "currentFragment from onResume is: " + currentFragment);
         } else {
             me = gson.fromJson(jsonMe, User.class);
             Log.i(TAG, "currentFragment from onResume is: " + currentFragment);
-            if (currentFragment == 1) {
-                android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-                fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance(me, "RidesFragment"))
-                        .addToBackStack("Rides")
-                        .commit();
-            }
+            launchMainActivity(me, currentFragment);
         }
 
     }
