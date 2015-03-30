@@ -1,13 +1,10 @@
 package com.mikerinehart.rideguide.page_fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,16 +29,9 @@ import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.RoundedTransformation;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
-import com.mikerinehart.rideguide.activities.MainActivity;
-import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
 import com.mikerinehart.rideguide.adapters.ReservationAdapter;
-import com.mikerinehart.rideguide.main_fragments.AboutFragment;
-import com.mikerinehart.rideguide.main_fragments.HomeFragment;
 import com.mikerinehart.rideguide.main_fragments.ProfileFragment;
-import com.mikerinehart.rideguide.main_fragments.RidesFragment;
-import com.mikerinehart.rideguide.main_fragments.SettingsFragment;
 import com.mikerinehart.rideguide.models.Reservation;
-import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 import com.squareup.picasso.Picasso;
 

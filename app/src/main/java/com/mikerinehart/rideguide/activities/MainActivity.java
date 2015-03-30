@@ -21,7 +21,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.facebook.Session;
@@ -30,7 +29,6 @@ import com.google.gson.Gson;
 import com.mikerinehart.rideguide.VenmoLibrary;
 import com.mikerinehart.rideguide.main_fragments.AboutFragment;
 import com.mikerinehart.rideguide.adapters.DrawerAdapter;
-import com.mikerinehart.rideguide.main_fragments.HomeFragment;
 import com.mikerinehart.rideguide.main_fragments.MyHistoryFragment;
 import com.mikerinehart.rideguide.main_fragments.MyReservationsFragment;
 import com.mikerinehart.rideguide.page_fragments.HomePageFragment;
@@ -46,7 +44,6 @@ import com.mikerinehart.rideguide.page_fragments.ShiftsHistoryPageFragment;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 public class MainActivity extends ActionBarActivity implements
-        HomeFragment.OnFragmentInteractionListener,
         HomePageFragment.OnFragmentInteractionListener,
         MyReservationsPageFragment.OnFragmentInteractionListener,
         MyShiftsPageFragment.OnFragmentInteractionListener,
@@ -74,7 +71,6 @@ public class MainActivity extends ActionBarActivity implements
             R.drawable.ic_exit_gray};
 
     public User me;
-    private int currentFragment;
 
     String TAG = "MainActivity";
     public static Toolbar toolbar;
@@ -93,7 +89,6 @@ public class MainActivity extends ActionBarActivity implements
         TITLES = getResources().getStringArray(R.array.nav_drawer_items);
 
         me = getIntent().getExtras().getParcelable("me");
-        currentFragment = getIntent().getExtras().getInt("CURRENT_FRAGMENT");
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
@@ -204,14 +199,6 @@ public class MainActivity extends ActionBarActivity implements
         };
         Drawer.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
-
-        if (currentFragment == 1) {
-            Log.i(TAG, "currentFragment is 1, starting RidesFragment");
-            toolbar.setTitle("Find a Ride");
-            fm.beginTransaction().replace(R.id.container, RidesFragment.newInstance(me, "RidesFragment"))
-                    .addToBackStack("Rides")
-                    .commit();
-        }
     }
 
     @Override
@@ -244,15 +231,11 @@ public class MainActivity extends ActionBarActivity implements
         Log.i(TAG, "Pausing from MainActivity");
         Context c = this.getBaseContext();
         SharedPreferences userPref = c.getSharedPreferences("CURRENT_USER", Context.MODE_PRIVATE);
-        SharedPreferences fragPref = c.getSharedPreferences("CURRENT_FRAGMENT", Context.MODE_PRIVATE);
         SharedPreferences.Editor userEditor = userPref.edit();
-        SharedPreferences.Editor fragEditor = fragPref.edit();
         Gson gson = new Gson();
         String jsonMe = gson.toJson(me);
         userEditor.putString("CURRENT_USER", jsonMe);
-        fragEditor.putInt("CURRENT_FRAGMENT", 1);
         userEditor.commit();
-        fragEditor.commit();
     }
 
     @Override

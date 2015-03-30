@@ -1,11 +1,14 @@
 package com.mikerinehart.rideguide.page_fragments;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,12 +109,14 @@ public class HomePageFragment extends Fragment {
 
         return result;
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i("HomePageFragment", "HomePageFragment OnDestroy");
+        SharedPreferences fragPref = getActivity().getApplicationContext().getSharedPreferences("CURRENT_FRAGMENT", Context.MODE_PRIVATE);
+        SharedPreferences.Editor fragEditor = fragPref.edit();
+        fragEditor.putInt("CURRENT_FRAGMENT", 1);
+        fragEditor.commit();
     }
 
     @Override

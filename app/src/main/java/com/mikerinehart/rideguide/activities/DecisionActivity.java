@@ -17,7 +17,6 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
-import com.facebook.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -26,7 +25,6 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
-import com.mikerinehart.rideguide.main_fragments.RidesFragment;
 import com.mikerinehart.rideguide.models.User;
 
 import org.apache.http.Header;
@@ -48,6 +46,21 @@ public class DecisionActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "DecisionActivity OnCreate");
+
+        SharedPreferences userPref = this.getSharedPreferences("CURRENT_USER", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String jsonMe = userPref.getString("CURRENT_USER", "not_found");
+        if (jsonMe.equalsIgnoreCase("not_found")) {
+            Log.i(TAG, "User wasn't stored");
+        } else {
+            me = gson.fromJson(jsonMe, User.class);
+            launchMainActivity(me);
+            finish();
+            return;
+        }
+
+
         setContentView(R.layout.activity_decision);
 
         if (checkPlayServices() == true) {
@@ -134,15 +147,7 @@ public class DecisionActivity extends ActionBarActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
         finish();
-    }
-
-    private void launchMainActivity(User me, int currentFragment) {
-        Intent intent = new Intent(getBaseContext(), MainActivity.class);
-        intent.putExtra("me", me);
-        intent.putExtra("CURRENT_FRAGMENT", currentFragment);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
-        finish();
+        return;
     }
 
     private void launchLoginActivity() {
@@ -151,27 +156,11 @@ public class DecisionActivity extends ActionBarActivity {
         finish();
     }
 
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-        checkPlayServices();
-        Log.i(TAG, "APP IS RESUMING FROM DECISIONACTIVITY!");
-        SharedPreferences userPref = this.getSharedPreferences("CURRENT_USER", Context.MODE_PRIVATE);
-        SharedPreferences fragPref = this.getSharedPreferences("CURRENT_FRAGMENT", Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        String jsonMe = userPref.getString("CURRENT_USER", "not_found");
-        int currentFragment = fragPref.getInt("CURRENT_FRAGMENT", 0);
-        if (jsonMe.equalsIgnoreCase("not_found")) {
-            Log.i(TAG, "User wasn't stored");
-            Log.i(TAG, "currentFragment from onResume is: " + currentFragment);
-        } else {
-            me = gson.fromJson(jsonMe, User.class);
-            Log.i(TAG, "currentFragment from onResume is: " + currentFragment);
-            launchMainActivity(me, currentFragment);
-        }
-
     }
 
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         Context c = this.getBaseContext();
         SharedPreferences sharedPref = c.getSharedPreferences("com.mikerinehart.rideguide.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
@@ -179,8 +168,13 @@ public class DecisionActivity extends ActionBarActivity {
         Gson gson = new Gson();
         String jsonMe = gson.toJson(me);
         editor.putString("CURRENT_USER", jsonMe);
-        editor.putInt("CURRENT_FRAGMENT", 1);
         editor.commit();
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        finish();
+        return;
     }
 
     @Override
@@ -188,21 +182,6 @@ public class DecisionActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_decision, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
