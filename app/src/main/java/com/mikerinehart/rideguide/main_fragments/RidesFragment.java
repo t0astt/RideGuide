@@ -24,7 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.appyvet.rangebar.RangeBar;
 import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
+import com.gc.materialdesign.views.Slider;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -95,6 +97,7 @@ public class RidesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainActivity.drawerAdapter.selectPosition(2);
         if (getArguments() != null) {
             me = getArguments().getParcelable("USER");
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -192,9 +195,22 @@ public class RidesFragment extends Fragment {
                     int itemClicked = recyclerView.getChildPosition(child);
                     final Reservation r = adapter.getReservation(itemClicked);
                     final View dialogLayout = inflater.inflate(R.layout.rides_available_make_reservation_dialog, null);
-                    final NumberPicker np = (NumberPicker)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_passengers);
-                    np.setMaxValue(r.getShift().getSeats());
-                    np.setMinValue(1);
+                    final RangeBar np = (RangeBar)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_number_slider);
+                    final EditText numPassengers = (EditText)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_numpassengers);
+                    numPassengers.setText("1");
+
+                    np.setTickStart(1);
+                    np.setTickEnd(r.getShift().getSeats());
+                    np.setTickInterval(1);
+                    np.setRangePinsByIndices(0, 0);
+                    np.setConnectingLineWeight(7);
+
+                    np.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+                        @Override
+                        public void onRangeChangeListener(RangeBar rangebar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
+                            numPassengers.setText(rightPinValue);
+                        }
+                    });
 
                     destination = (AutoCompleteTextView)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_destination);
                     origin = (AutoCompleteTextView)dialogLayout.findViewById(R.id.rides_available_make_reservation_dialog_origin);
@@ -238,7 +254,7 @@ public class RidesFragment extends Fragment {
                                     params.put("reservation_id", r.getId());
                                     params.put("origin", origin.getText());
                                     params.put("destination", destination.getText());
-                                    params.put("passengers", np.getValue());
+                                    params.put("passengers", numPassengers.getText().toString());
                                     RestClient.post("reservations/makeReservation", params, new JsonHttpResponseHandler() {
                                         @Override
                                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

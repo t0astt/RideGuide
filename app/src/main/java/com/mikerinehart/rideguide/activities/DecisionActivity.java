@@ -158,6 +158,7 @@ public class DecisionActivity extends ActionBarActivity {
 
     public void onResume() {
         super.onResume();
+        Log.i(TAG, "DecisionActivity was resumed!");
     }
 
     public void onPause() {

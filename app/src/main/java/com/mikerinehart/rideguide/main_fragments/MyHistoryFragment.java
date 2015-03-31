@@ -14,9 +14,6 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.models.User;
-import com.mikerinehart.rideguide.page_fragments.HomePageFragment;
-import com.mikerinehart.rideguide.page_fragments.MyReservationsPageFragment;
-import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
 import com.mikerinehart.rideguide.page_fragments.ReservationsHistoryPageFragment;
 import com.mikerinehart.rideguide.page_fragments.ShiftsHistoryPageFragment;
 
@@ -49,6 +46,8 @@ public class MyHistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainActivity.toolbar.setTitle("My History");
+        MainActivity.drawerAdapter.selectPosition(5);
         if (getArguments() != null) {
             me = getArguments().getParcelable("USER");
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -58,7 +57,7 @@ public class MyHistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        MainActivity.toolbar.setTitle("My History");
+
         View v = inflater.inflate(R.layout.fragment_my_history, container, false);
 
         ViewPager pager = (ViewPager) v.findViewById(R.id.home_pager);

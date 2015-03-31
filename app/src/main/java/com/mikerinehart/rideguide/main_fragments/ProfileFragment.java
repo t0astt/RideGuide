@@ -102,6 +102,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainActivity.drawerAdapter.selectPosition(0);
 
         if (getArguments() != null) {
             user = getArguments().getParcelable("USER");

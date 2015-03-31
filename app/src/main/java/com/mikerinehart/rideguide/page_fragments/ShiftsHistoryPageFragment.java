@@ -51,7 +51,7 @@ public class ShiftsHistoryPageFragment extends Fragment {
     SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView shiftList;
 
-    private String TAG = "MyShiftsPageFragment";
+    private String TAG = "MyShiftsFragment";
 
     public static ShiftsHistoryPageFragment newInstance(User param1, String param2) {
         ShiftsHistoryPageFragment fragment = new ShiftsHistoryPageFragment();

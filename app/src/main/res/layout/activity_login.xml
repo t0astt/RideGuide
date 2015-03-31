@@ -8,20 +8,20 @@
     android:background="@drawable/bg_grad">
 
     <FrameLayout
-    android:layout_width="fill_parent"
-    android:layout_height="350dp"
-    android:layout_alignParentBottom="true"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
-    android:id="@+id/fb_container"
+        android:layout_width="fill_parent"
+        android:layout_height="350dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/fb_container"
         android:visibility="visible">
 
-    <com.facebook.widget.LoginButton
-        android:id="@+id/fb_login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:visibility="visible"
-        android:layout_gravity="bottom|center_horizontal" />
+        <com.facebook.widget.LoginButton
+            android:id="@+id/fb_login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:visibility="visible"
+            android:layout_gravity="bottom|center_horizontal" />
 
     </FrameLayout>
 
@@ -68,7 +68,8 @@
             android:textColor="#00E5FF"
             android:labelFor="@id/email_field"
             android:paddingTop="20dp"
-            android:focusable="true" />
+            android:focusable="true"
+            />
 
         <Button
             android:layout_width="wrap_content"

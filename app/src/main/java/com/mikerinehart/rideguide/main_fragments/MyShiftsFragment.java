@@ -1,4 +1,4 @@
-package com.mikerinehart.rideguide.page_fragments;
+package com.mikerinehart.rideguide.main_fragments;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -31,7 +30,6 @@ import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
 import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
-import com.mikerinehart.rideguide.main_fragments.ProfileFragment;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
@@ -42,13 +40,14 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-public class MyShiftsPageFragment extends Fragment {
+public class MyShiftsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static User ARG_PARAM1;
@@ -67,12 +66,12 @@ public class MyShiftsPageFragment extends Fragment {
     SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView shiftList;
 
-    private String TAG = "MyShiftsPageFragment";
+    private String TAG = "MyShiftsFragment";
 
 
     // TODO: Rename and change types and number of parameters
-    public static MyShiftsPageFragment newInstance(User param1, String param2) {
-        MyShiftsPageFragment fragment = new MyShiftsPageFragment();
+    public static MyShiftsFragment newInstance(User param1, String param2) {
+        MyShiftsFragment fragment = new MyShiftsFragment();
         Bundle args = new Bundle();
         args.putParcelable("USER", param1);
         args.putString(ARG_PARAM2, param2);
@@ -80,14 +79,15 @@ public class MyShiftsPageFragment extends Fragment {
         return fragment;
     }
 
-    public MyShiftsPageFragment() {
+    public MyShiftsFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "In OnCreate");
         super.onCreate(savedInstanceState);
+        MainActivity.toolbar.setTitle("My Shifts");
+        MainActivity.drawerAdapter.selectPosition(4);
         if (getArguments() != null) {
             me = getArguments().getParcelable("USER");
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -97,7 +97,7 @@ public class MyShiftsPageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        MainActivity.toolbar.setTitle("My Shifts");
+
         final View v = inflater.inflate(R.layout.fragment_my_shifts_page, container, false);
         shiftShame = (TextView)v.findViewById(R.id.myshifts_shift_shame);
         loadingIcon = (ProgressBarCircularIndeterminate)v.findViewById(R.id.myshifts_circular_loading);
@@ -119,7 +119,7 @@ public class MyShiftsPageFragment extends Fragment {
                 //refreshContent();
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.container, MyShiftsPageFragment.newInstance(me, "ProfileFragment"))
+                        .replace(R.id.container, MyShiftsFragment.newInstance(me, "ProfileFragment"))
                         .commit();
             }
         });
@@ -196,8 +196,8 @@ public class MyShiftsPageFragment extends Fragment {
         endTime = (EditText)dialogLayout.findViewById(R.id.myshifts_new_shift_dialog_end_time);
         seats = (EditText)dialogLayout.findViewById(R.id.myshifts_new_shift_dialog_num_seats);
 
-        dialog = new MaterialDialog.Builder(MyShiftsPageFragment.this.getActivity())
-                .title("Create new Shift")
+        dialog = new MaterialDialog.Builder(MyShiftsFragment.this.getActivity())
+                .title("Create Shift")
                 .customView(dialogLayout)
                 .positiveText("Create")
                 .negativeText("Cancel")
@@ -215,7 +215,7 @@ public class MyShiftsPageFragment extends Fragment {
                                 //refreshContent();
                                 getActivity().getSupportFragmentManager()
                                         .beginTransaction()
-                                        .replace(R.id.container, MyShiftsPageFragment.newInstance(me, "RidesFragment"))
+                                        .replace(R.id.container, MyShiftsFragment.newInstance(me, "RidesFragment"))
                                         .commit();
                                 Toast.makeText(getActivity().getApplicationContext(), "Shift created!", Toast.LENGTH_LONG).show();
                             }
@@ -265,17 +265,17 @@ public class MyShiftsPageFragment extends Fragment {
         endTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date d = new Date();
-                GregorianCalendar calendar = new GregorianCalendar();
-                calendar.setTime(d);
-                calendar.add(Calendar.DATE, 7);
-                new SlideDateTimePicker.Builder(getFragmentManager())
-                        .setListener(endListener)
-                        .setInitialDate(d)
-                        .setMinDate(d)
-                        .setMaxDate(calendar.getTime())
-                        .build()
-                        .show();
+                    Date d = new Date();
+                    GregorianCalendar calendar = new GregorianCalendar();
+                    calendar.setTime(d);
+                    calendar.add(Calendar.DATE, 7);
+                    new SlideDateTimePicker.Builder(getFragmentManager())
+                            .setListener(endListener)
+                            .setInitialDate(d)
+                                    .setMinDate(d)
+                                    .setMaxDate(calendar.getTime())
+                                    .build()
+                                    .show();
             }
         });
 

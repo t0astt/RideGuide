@@ -1,4 +1,4 @@
-package com.mikerinehart.rideguide.page_fragments;
+package com.mikerinehart.rideguide.main_fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -73,6 +73,7 @@ public class HomePageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainActivity.drawerAdapter.selectPosition(1);
         if (getArguments() != null) {
             me = getArguments().getParcelable("USER");
             mParam2 = getArguments().getString(ARG_PARAM2);

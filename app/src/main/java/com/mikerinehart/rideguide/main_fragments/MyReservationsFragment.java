@@ -104,6 +104,7 @@ public class MyReservationsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         MainActivity.toolbar.setTitle("My Reservations");
+        MainActivity.drawerAdapter.selectPosition(3);
         final View v = inflater.inflate(R.layout.fragment_reservations_page, container, false);
         loadingIcon = (ProgressBarCircularIndeterminate)v.findViewById(R.id.reservation_circular_loading);
 

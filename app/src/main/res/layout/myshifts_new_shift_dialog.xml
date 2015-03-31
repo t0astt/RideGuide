@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent" android:layout_height="fill_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Start Time"
-        android:id="@+id/myshifts_new_shift_dialog_start_time_label"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/myshifts_new_shift_dialog_start_time"
-        android:layout_alignStart="@+id/myshifts_new_shift_dialog_start_time" />
-
-    <EditText
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="date"
@@ -27,14 +17,15 @@
         android:textColorHint="#ffb4b4b4"
         android:textIsSelectable="false"
         android:theme="@style/Base.Widget.AppCompat.EditText"
-        android:layout_below="@+id/myshifts_new_shift_dialog_start_time_label"
         android:layout_marginTop="11dp"
         android:layout_centerHorizontal="true"
         android:enabled="true"
         android:focusable="false"
-        android:focusableInTouchMode="false" />
+        android:focusableInTouchMode="false"
+        app:met_floatingLabel="highlight"
+        android:editable="true" />
 
-    <EditText
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="date"
@@ -49,22 +40,13 @@
         android:textColorHint="#ffb4b4b4"
         android:enabled="true"
         android:focusable="false"
-        android:focusableInTouchMode="false" />
+        android:focusableInTouchMode="false"
+        app:met_floatingLabel="highlight"
+        android:editable="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="End Time"
-        android:id="@+id/myshifts_new_shift_dialog_end_time_label"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:layout_marginTop="36dp"
-        android:layout_below="@+id/myshifts_new_shift_dialog_start_time"
-        android:layout_alignLeft="@+id/myshifts_new_shift_dialog_end_time"
-        android:layout_alignStart="@+id/myshifts_new_shift_dialog_end_time" />
 
-    <EditText
+
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="number"
@@ -76,19 +58,20 @@
         android:layout_below="@+id/myshifts_new_shift_dialog_end_time"
         android:layout_alignLeft="@+id/myshifts_new_shift_dialog_end_time"
         android:layout_alignStart="@+id/myshifts_new_shift_dialog_end_time"
-        android:textColorHint="#ffb4b4b4" />
+        android:textColorHint="#ffb4b4b4"
+        app:met_floatingLabel="highlight"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Seats"
-        android:id="@+id/rides_available_make_reservation_dialog_passengers_label"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_below="@+id/myshifts_new_shift_dialog_end_time"
+        android:text="Only create a designated driver shift if you will be available during your selected times!"
+        android:id="@+id/myshifts_new_shift_dialog_notice"
+        android:layout_below="@+id/myshifts_new_shift_dialog_num_seats"
         android:layout_alignLeft="@+id/myshifts_new_shift_dialog_num_seats"
         android:layout_alignStart="@+id/myshifts_new_shift_dialog_num_seats"
-        android:layout_marginTop="45dp" />
+        android:layout_alignRight="@+id/myshifts_new_shift_dialog_num_seats"
+        android:layout_alignEnd="@+id/myshifts_new_shift_dialog_num_seats"
+        android:gravity="center_horizontal" />
 
 </RelativeLayout>

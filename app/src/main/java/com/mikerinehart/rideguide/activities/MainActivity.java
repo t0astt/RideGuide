@@ -31,22 +31,20 @@ import com.mikerinehart.rideguide.main_fragments.AboutFragment;
 import com.mikerinehart.rideguide.adapters.DrawerAdapter;
 import com.mikerinehart.rideguide.main_fragments.MyHistoryFragment;
 import com.mikerinehart.rideguide.main_fragments.MyReservationsFragment;
-import com.mikerinehart.rideguide.page_fragments.HomePageFragment;
+import com.mikerinehart.rideguide.main_fragments.HomePageFragment;
+import com.mikerinehart.rideguide.main_fragments.MyShiftsFragment;
 import com.mikerinehart.rideguide.main_fragments.ProfileFragment;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.main_fragments.RidesFragment;
 import com.mikerinehart.rideguide.main_fragments.SettingsFragment;
 import com.mikerinehart.rideguide.models.User;
-import com.mikerinehart.rideguide.page_fragments.MyReservationsPageFragment;
-import com.mikerinehart.rideguide.page_fragments.MyShiftsPageFragment;
 import com.mikerinehart.rideguide.page_fragments.ReservationsHistoryPageFragment;
 import com.mikerinehart.rideguide.page_fragments.ShiftsHistoryPageFragment;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 public class MainActivity extends ActionBarActivity implements
         HomePageFragment.OnFragmentInteractionListener,
-        MyReservationsPageFragment.OnFragmentInteractionListener,
-        MyShiftsPageFragment.OnFragmentInteractionListener,
+        MyShiftsFragment.OnFragmentInteractionListener,
         ProfileFragment.OnFragmentInteractionListener,
         RidesFragment.OnFragmentInteractionListener,
         MyReservationsFragment.OnFragmentInteractionListener,
@@ -57,7 +55,7 @@ public class MainActivity extends ActionBarActivity implements
         ReservationsHistoryPageFragment.OnFragmentInteractionListener {
 
     RecyclerView mRecyclerView;
-    DrawerAdapter mAdapter;
+    public static DrawerAdapter drawerAdapter;
     RecyclerView.LayoutManager mLayoutManager;
     DrawerLayout Drawer;
     ActionBarDrawerToggle mDrawerToggle;
@@ -118,7 +116,7 @@ public class MainActivity extends ActionBarActivity implements
                     android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
 
                     int itemClicked = recyclerView.getChildPosition(child);
-                    mAdapter.selectPosition(itemClicked);
+                    //drawerAdapter.selectPosition(itemClicked);
 
                     if (itemClicked == 0) {
                         fm.beginTransaction()
@@ -143,7 +141,7 @@ public class MainActivity extends ActionBarActivity implements
                                 .commit();
                     } else if (itemClicked == 4) {
                         toolbar.setTitle("My Shifts");
-                        fm.beginTransaction().replace(R.id.container, MyShiftsPageFragment.newInstance(me, "MyShiftsPageFragment"))
+                        fm.beginTransaction().replace(R.id.container, MyShiftsFragment.newInstance(me, "MyShiftsFragment"))
                                 .addToBackStack("MyShifts")
                                 .commit();
                     } else if (itemClicked == 5) {
@@ -181,8 +179,8 @@ public class MainActivity extends ActionBarActivity implements
             }
         });
 
-        mAdapter = new DrawerAdapter(TITLES, ICONS, me, me.getFirstName() + " " + me.getLastName(), me.getEmail(), me.getFbUid(), getBaseContext());
-        mRecyclerView.setAdapter(mAdapter);
+        drawerAdapter = new DrawerAdapter(TITLES, ICONS, me, me.getFirstName() + " " + me.getLastName(), me.getEmail(), me.getFbUid(), getBaseContext());
+        mRecyclerView.setAdapter(drawerAdapter);
         Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mDrawerToggle = new ActionBarDrawerToggle(this, Drawer, toolbar, R.string.openDrawer, R.string.closeDrawer) {
             @Override

@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent" android:layout_height="fill_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:materialdesign="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Starting Location"
-        android:id="@+id/rides_available_make_reservation_dialog_origin_label"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/rides_available_make_reservation_dialog_origin"
-        android:layout_alignStart="@+id/rides_available_make_reservation_dialog_origin" />
+    <com.appyvet.rangebar.RangeBar
+        xmlns:custom="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/rides_available_make_reservation_dialog_number_slider"
+        android:layout_width="300dp"
+        android:layout_height="125dp"
+        custom:rangeBar="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/rides_available_make_reservation_dialog_destination"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
-    <AutoCompleteTextView
+    <com.rengwuxian.materialedittext.MaterialAutoCompleteTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -22,20 +26,23 @@
         android:hint="Starting Location"
         android:elegantTextHeight="false"
         android:gravity="center_horizontal"
-        android:textColor="@android:color/black"
-        android:textColorHint="#ffb4b4b4"
         android:theme="@style/Base.Widget.AppCompat.EditText"
-        android:layout_below="@+id/rides_available_make_reservation_dialog_origin_label"
         android:layout_marginTop="11dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        app:met_floatingLabel="highlight"
+        android:enabled="true"
+        android:editable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:inputType="text" />
 
-    <AutoCompleteTextView
+    <com.rengwuxian.materialedittext.MaterialAutoCompleteTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
         android:ems="10"
         android:id="@+id/rides_available_make_reservation_dialog_destination"
-        android:layout_marginTop="66dp"
+        android:layout_marginTop="30dp"
         android:hint="Destination"
         android:gravity="center_horizontal"
         android:layout_below="@+id/rides_available_make_reservation_dialog_origin"
@@ -44,41 +51,24 @@
         android:editable="true"
         android:clickable="true"
         android:enabled="true"
-        android:focusable="true" />
+        android:focusable="true"
+        app:met_floatingLabel="highlight"
+        android:focusableInTouchMode="true" />
 
-    <TextView
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Destination"
-        android:id="@+id/rides_available_make_reservation_dialog_destination_label"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:layout_marginTop="36dp"
-        android:layout_below="@+id/rides_available_make_reservation_dialog_origin"
-        android:layout_alignLeft="@+id/rides_available_make_reservation_dialog_destination"
-        android:layout_alignStart="@+id/rides_available_make_reservation_dialog_destination" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Passengers"
-        android:id="@+id/rides_available_make_reservation_dialog_passengers_label"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginTop="31dp"
-        android:layout_below="@+id/rides_available_make_reservation_dialog_destination"
-        android:layout_toRightOf="@+id/rides_available_make_reservation_dialog_destination_label"
-        android:layout_toEndOf="@+id/rides_available_make_reservation_dialog_destination_label" />
-
-    <NumberPicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/rides_available_make_reservation_dialog_passengers"
-        android:showDividers="middle|beginning|end"
-        android:layout_below="@+id/rides_available_make_reservation_dialog_passengers_label"
-        android:layout_alignLeft="@+id/rides_available_make_reservation_dialog_passengers_label"
-        android:layout_alignStart="@+id/rides_available_make_reservation_dialog_passengers_label" />
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/rides_available_make_reservation_dialog_numpassengers"
+        android:hint="Passenger(s)"
+        app:met_floatingLabel="highlight"
+        android:layout_alignTop="@+id/rides_available_make_reservation_dialog_number_slider"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:enabled="true"
+        android:editable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
 </RelativeLayout>

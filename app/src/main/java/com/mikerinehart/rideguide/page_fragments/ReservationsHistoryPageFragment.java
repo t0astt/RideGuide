@@ -140,7 +140,6 @@ public class ReservationsHistoryPageFragment extends Fragment {
                     com.gc.materialdesign.views.ButtonRectangle donateButton = (ButtonRectangle)dialogLayout.findViewById(R.id.user_actions_dialog_donate_nav_button);
                     donateButton.setText("DONATE");
 
-
                     Picasso.with(userPic.getContext())
                             .load("https://graph.facebook.com/" + u.getFbUid() + "/picture?height=1000&type=large&width=1000")
                             .transform(new RoundedTransformation(600, 5))
