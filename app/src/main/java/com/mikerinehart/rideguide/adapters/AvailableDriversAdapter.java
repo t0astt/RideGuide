@@ -54,6 +54,12 @@ public class AvailableDriversAdapter extends RecyclerView.Adapter<AvailableDrive
                 .load("https://graph.facebook.com/" + r.getShift().getUser().getFbUid() + "/picture?type=large")
                 .transform(new RoundedTransformation(100, 5))
                 .into(vh.userPic);
+        vh.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Adapter", "Click");
+            }
+        });
     }
 
     public Reservation getReservation(int i) {

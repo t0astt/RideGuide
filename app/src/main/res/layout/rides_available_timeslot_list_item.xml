@@ -5,7 +5,7 @@
     android:layout_height="70dp"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
-    android:background="@drawable/drawer_item_background"
+    android:background="@drawable/recyclerview_on_press"
     android:showDividers="end"
     android:gravity="center_vertical">
 

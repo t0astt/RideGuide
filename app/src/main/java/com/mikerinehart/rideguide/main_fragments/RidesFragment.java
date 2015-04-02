@@ -1,5 +1,6 @@
 package com.mikerinehart.rideguide.main_fragments;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
@@ -132,13 +133,13 @@ public class RidesFragment extends Fragment {
 
         refreshContent();
 
-
         final GestureDetector mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
                 return true;
             }
         });
+
         ridesList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {

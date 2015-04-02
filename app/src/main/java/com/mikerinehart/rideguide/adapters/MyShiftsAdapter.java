@@ -77,6 +77,12 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
         myShiftsViewHolder.endTime.setText(df.format(s.getEnd()));
         myShiftsViewHolder.reservations.setText(Integer.toString(s.getReservationCount()));
         myShiftsViewHolder.seats.setText(Integer.toString(s.getSeats()));
+        myShiftsViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Adapter", "Click");
+            }
+        });
 
         myShiftsViewHolder.startTime.setOnClickListener(new View.OnClickListener() {
             @Override

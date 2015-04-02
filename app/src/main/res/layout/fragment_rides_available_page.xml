@@ -44,7 +44,10 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="false"
             android:visibility="gone"
-            android:layout_below="@+id/rides_available_none" />
+            android:layout_below="@+id/rides_available_none"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/recyclerview_on_press" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

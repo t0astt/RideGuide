@@ -38,7 +38,9 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true" />
 
     <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
         android:id="@+id/reservation_circular_loading"

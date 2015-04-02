@@ -52,6 +52,12 @@ public class MyShiftReservationsAdapter extends RecyclerView.Adapter<MyShiftRese
                 .load("https://graph.facebook.com/" + r.getUser().getFbUid() + "/picture?type=large")
                 .transform(new RoundedTransformation(100, 5))
                 .into(reservationViewHolder.userPic);
+        reservationViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Adapter", "Click");
+            }
+        });
     }
 
     public User getUserFromList(int i) {

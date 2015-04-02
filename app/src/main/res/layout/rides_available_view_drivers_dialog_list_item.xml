@@ -6,7 +6,8 @@
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
     android:showDividers="end"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:background="@drawable/recyclerview_on_press">
 
     <TextView
         android:layout_width="wrap_content"

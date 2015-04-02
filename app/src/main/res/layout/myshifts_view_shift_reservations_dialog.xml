@@ -9,6 +9,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="false"
-        android:minHeight="300dp" />
+        android:minHeight="300dp"
+        android:clickable="true"
+        android:focusable="true" />
 
 </RelativeLayout>

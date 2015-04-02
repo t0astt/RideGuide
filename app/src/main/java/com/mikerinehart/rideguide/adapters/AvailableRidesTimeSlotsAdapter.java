@@ -2,10 +2,12 @@ package com.mikerinehart.rideguide.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.models.Reservation;
@@ -20,7 +22,7 @@ public class AvailableRidesTimeSlotsAdapter extends RecyclerView.Adapter<Availab
         implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
 
     private List<List<Reservation>> ridesList;
-    private Context c;
+    private static Context c;
 
     private final String TAG = "AvailableRidesTimeSlotsAdapter";
 
@@ -45,6 +47,12 @@ public class AvailableRidesTimeSlotsAdapter extends RecyclerView.Adapter<Availab
         final List<Reservation> r = ridesList.get(i);
         vh.pickupTime.setText(df.format(r.get(0).getPickup_time()));
         vh.numRides.setText(Integer.toString(r.size()));
+        vh.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Adapter", "Click");
+            }
+        });
     }
 
     public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
@@ -89,7 +97,6 @@ public class AvailableRidesTimeSlotsAdapter extends RecyclerView.Adapter<Availab
             super(v);
             pickupTime = (TextView) v.findViewById(R.id.rides_available_timeslot_pickup_time);
             numRides = (TextView) v.findViewById(R.id.rides_available_timeslot_num_rides);
-
         }
     }
 

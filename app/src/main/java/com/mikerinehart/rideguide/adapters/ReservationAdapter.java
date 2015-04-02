@@ -52,6 +52,12 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
                 .load("https://graph.facebook.com/" + r.getShift().getUser().getFbUid() + "/picture?type=large")
                 .transform(new RoundedTransformation(100, 5))
                 .into(reservationViewHolder.userPic);
+        reservationViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Adapter", "Click");
+            }
+        });
     }
 
     @Override
