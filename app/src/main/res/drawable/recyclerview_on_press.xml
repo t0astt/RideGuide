@@ -4,6 +4,9 @@
         android:drawable="@color/DrawerSelected"
         android:state_pressed="true" />
     <item
+        android:drawable="@color/DrawerSelected"
+        android:state_selected="true" />
+    <item
         android:drawable="@android:color/transparent"/>
 
 </selector>

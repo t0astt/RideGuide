@@ -95,6 +95,12 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
             holder.email.setText(myEmail);
 
         }
+        holder.v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Adapter", "Click");
+            }
+        });
         holder.v.setSelected(mSelectedPosition == position);
     }
 

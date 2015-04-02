@@ -5,7 +5,7 @@
     android:layout_height="50dp"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
-    android:background="@drawable/drawer_item_background">
+    android:background="@drawable/recyclerview_on_press">
 
     <ImageView
         android:layout_width="wrap_content"
