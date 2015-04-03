@@ -84,34 +84,6 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
             }
         });
 
-        myShiftsViewHolder.startTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("Adapter", "Edit Shift");
-            }
-        });
-
-        myShiftsViewHolder.endTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("Adapter", "Edit Shift");
-            }
-        });
-
-        myShiftsViewHolder.seats.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("Adapter", "Edit Shift");
-            }
-        });
-
-        myShiftsViewHolder.numSeatsLabel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("Adapter", "Edit Shift");
-            }
-        });
-
         myShiftsViewHolder.reservations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -331,6 +303,10 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
         });
 
         dialog.show();
+    }
+
+    public Shift getShift(int position) {
+        return shiftList.get(position);
     }
 
     public static class MyShiftsViewHolder extends RecyclerView.ViewHolder {

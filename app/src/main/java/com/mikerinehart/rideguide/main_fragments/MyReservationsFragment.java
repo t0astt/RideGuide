@@ -217,6 +217,7 @@ public class MyReservationsFragment extends Fragment {
                                     .replace(R.id.container, ProfileFragment.newInstance(u, me))
                                     .addToBackStack("MyShifts")
                                     .commit();
+
                         }
                     });
 

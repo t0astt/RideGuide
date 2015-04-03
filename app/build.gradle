@@ -59,6 +59,7 @@ dependencies {
     compile 'com.makeramen:roundedimageview:2.0.1'
     compile 'com.rengwuxian.materialedittext:library:2.0.3'
     compile 'com.appyvet:materialrangebar:1.0'
+    compile 'com.malinskiy:superrecyclerview:1.1.0'
 
     compile project(':slideDateTimePicker')
 }
