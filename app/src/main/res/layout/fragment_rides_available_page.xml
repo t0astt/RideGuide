@@ -43,11 +43,11 @@
             android:layout_height="fill_parent"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="false"
-            android:visibility="gone"
             android:layout_below="@+id/rides_available_none"
             android:clickable="true"
             android:focusable="true"
-            android:background="@drawable/recyclerview_on_press" />
+            android:background="@drawable/recyclerview_on_press"
+            android:visibility="visible" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

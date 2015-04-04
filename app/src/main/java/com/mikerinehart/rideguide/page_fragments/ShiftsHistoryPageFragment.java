@@ -122,7 +122,6 @@ public class ShiftsHistoryPageFragment extends Fragment {
                 // check whether or not to shame the user hehe
                 if (result.size() == 0) {
                     shiftShame.setVisibility(TextView.VISIBLE);
-                    shiftList.setVisibility(RecyclerView.GONE);
                 } else {
                     shiftShame.setVisibility(TextView.GONE);
                     shiftList.setVisibility(RecyclerView.VISIBLE);

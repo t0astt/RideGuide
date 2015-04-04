@@ -31,8 +31,8 @@
             android:layout_height="fill_parent"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="false"
-            android:visibility="gone"
-            android:layout_below="@+id/myshifts_history_shift_shame" />
+            android:layout_below="@+id/myshifts_history_shift_shame"
+            android:visibility="visible" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <com.gc.materialdesign.views.ProgressBarCircularIndeterminate

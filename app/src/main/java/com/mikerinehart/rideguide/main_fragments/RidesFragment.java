@@ -304,7 +304,6 @@ public class RidesFragment extends Fragment {
                 // check whether or not any rides even exist
                 if (result.size() == 0) {
                     noRides.setVisibility(TextView.VISIBLE);
-                    ridesList.setVisibility(RecyclerView.GONE);
                     loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
                 } else {
                     noRides.setVisibility(TextView.GONE);

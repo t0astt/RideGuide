@@ -79,6 +79,7 @@ public class MyShiftsFragment extends Fragment {
     SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView shiftList;
     private MyShiftsAdapter shiftsAdapter;
+    private View v;
 
     private String TAG = "MyShiftsFragment";
 
@@ -106,13 +107,15 @@ public class MyShiftsFragment extends Fragment {
             me = getArguments().getParcelable("USER");
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        v = inflater.inflate(R.layout.fragment_my_shifts_page, container, false);
 
-        final View v = inflater.inflate(R.layout.fragment_my_shifts_page, container, false);
         shiftShame = (TextView)v.findViewById(R.id.myshifts_shift_shame);
         loadingIcon = (ProgressBarCircularIndeterminate)v.findViewById(R.id.myshifts_circular_loading);
 
@@ -126,50 +129,20 @@ public class MyShiftsFragment extends Fragment {
             }
         });
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.myshifts_swipe_refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //refreshContent();
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, MyShiftsFragment.newInstance(me, "ProfileFragment"))
-                        .commit();
-            }
-        });
-
         shiftList = (RecyclerView) v.findViewById(R.id.myshifts_my_shifts_list);
         shiftList.setHasFixedSize(true);
+        shiftList.setAdapter(new MyShiftsAdapter());
         LinearLayoutManager llm = new LinearLayoutManager(shiftList.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         shiftList.setLayoutManager(llm);
-
+        refreshContent();
 
         final GestureDetector mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
                 return true;
             }
-
-            @Override
-            public void onLongPress(MotionEvent e) {
-//                ViewGroup child = (ViewGroup) recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-//                MaterialDialog shiftOptionsDialog = new MaterialDialog.Builder(getActivity().getApplicationContext())
-//                        .title("Shift Options")
-//                        .items(dialogOptions)
-//                        .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallback() {
-//                            @Override
-//                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-//                                shiftsAdapter.createReservationsDialog(s);
-//                            }
-//                        })
-//                        .positiveText("OK")
-//                        .negativeText("CANCEL")
-//                        .show();
-            }
         });
-
-        refreshContent();
 
         shiftList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
@@ -203,10 +176,10 @@ public class MyShiftsFragment extends Fragment {
                                                             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                                                 try {
                                                                     if (response.getString("status").equalsIgnoreCase("success")) {
-                                                                        Toast.makeText(MyShiftsFragment.this.getActivity(), "Shift Removed!", Toast.LENGTH_SHORT);
+                                                                        Toast.makeText(MyShiftsFragment.this.getActivity(), "Shift Removed!", Toast.LENGTH_SHORT).show();
                                                                         refreshContent();
                                                                     } else {
-                                                                        Toast.makeText(MyShiftsFragment.this.getActivity(), "Error, please try again!", Toast.LENGTH_SHORT);
+                                                                        Toast.makeText(MyShiftsFragment.this.getActivity(), "Error, please try again!", Toast.LENGTH_SHORT).show();
                                                                         refreshContent();
                                                                     }
                                                                 } catch (JSONException e) {
@@ -265,8 +238,10 @@ public class MyShiftsFragment extends Fragment {
 
                 // check whether or not to shame the user hehe
                 if (result.size() == 0) {
+                    shiftsAdapter = new MyShiftsAdapter(result, me);
+                    shiftList.setAdapter(shiftsAdapter);
                     shiftShame.setVisibility(TextView.VISIBLE);
-                    shiftList.setVisibility(RecyclerView.GONE);
+                    //shiftList.setVisibility(RecyclerView.GONE);
                     loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
                 } else {
                     shiftShame.setVisibility(TextView.GONE);
@@ -280,6 +255,17 @@ public class MyShiftsFragment extends Fragment {
                     StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(shiftsAdapter);
                     shiftList.addItemDecoration(headersDecor);
                 }
+                mSwipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.myshifts_swipe_refresh_layout);
+                mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        //refreshContent();
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.container, MyShiftsFragment.newInstance(me, "ProfileFragment"))
+                                .commit();
+                    }
+                });
                 mSwipeRefreshLayout.setRefreshing(false);
             }
 

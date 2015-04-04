@@ -31,10 +31,11 @@
             android:layout_height="fill_parent"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="false"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_below="@+id/myshifts_shift_shame"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            android:touchscreenBlocksFocus="true" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <com.gc.materialdesign.views.ProgressBarCircularIndeterminate

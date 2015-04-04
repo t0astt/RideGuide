@@ -53,6 +53,8 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
 
     private final String TAG = "MyShiftsAdapter";
 
+    public MyShiftsAdapter(){}
+
     public MyShiftsAdapter(List<Shift> shiftList, User user) {
         this.shiftList = shiftList;
         this.me = user;
