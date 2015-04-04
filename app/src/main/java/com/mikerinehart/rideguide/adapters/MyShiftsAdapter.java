@@ -80,22 +80,6 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
         myShiftsViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("Adapter", "Click");
-            }
-        });
-
-        myShiftsViewHolder.reservations.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createReservationsDialog(s.getReservations());
-
-            }
-        });
-
-        myShiftsViewHolder.reservationsLabel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createReservationsDialog(s.getReservations());
             }
         });
     }

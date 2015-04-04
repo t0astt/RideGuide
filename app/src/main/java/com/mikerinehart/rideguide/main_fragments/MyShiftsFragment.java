@@ -198,11 +198,11 @@ public class MyShiftsFragment extends Fragment {
                                                     @Override
                                                     public void onPositive(MaterialDialog dialog) {
                                                         RequestParams params = new RequestParams("shift_id", shiftsAdapter.getShift(itemClicked).getId());
-                                                        RestClient.post("shifts/myShifts", params, new JsonHttpResponseHandler() {
+                                                        RestClient.post("shifts/deleteShift", params, new JsonHttpResponseHandler() {
                                                             @Override
-                                                            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                                                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                                                 try {
-                                                                    if (response.toJSONObject(response).getString("status").equalsIgnoreCase("success")) {
+                                                                    if (response.getString("status").equalsIgnoreCase("success")) {
                                                                         Toast.makeText(MyShiftsFragment.this.getActivity(), "Shift Removed!", Toast.LENGTH_SHORT);
                                                                         refreshContent();
                                                                     } else {
