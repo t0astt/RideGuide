@@ -76,7 +76,7 @@ public class MyShiftsFragment extends Fragment {
     private TextView shiftShame;
     private ProgressBarCircularIndeterminate loadingIcon;
     private ButtonFloat createShiftButton;
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView shiftList;
     private MyShiftsAdapter shiftsAdapter;
     private View v;

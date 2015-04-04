@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -101,7 +102,6 @@ public class ReservationsHistoryPageFragment extends Fragment {
         reservationFrowny = (TextView)v.findViewById(R.id.reservation_history_frowny);
 
         reservationList = (RecyclerView) v.findViewById(R.id.reservation_history_list);
-//        reservationList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(reservationList.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         reservationList.setLayoutManager(llm);

@@ -20,11 +20,6 @@
         android:gravity="center_horizontal"
         android:visibility="gone" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/myshifts_history_swipe_refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/myshifts_history_my_shifts_list"
             android:layout_width="match_parent"
@@ -33,7 +28,6 @@
             android:layout_alignParentStart="false"
             android:layout_below="@+id/myshifts_history_shift_shame"
             android:visibility="visible" />
-    </android.support.v4.widget.SwipeRefreshLayout>
 
     <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
         android:id="@+id/myshifts_history_circular_loading"

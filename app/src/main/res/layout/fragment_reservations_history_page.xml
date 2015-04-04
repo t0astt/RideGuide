@@ -33,12 +33,12 @@
         android:layout_alignParentBottom="false"
         android:visibility="gone" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/reservation_history_list"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:visibility="gone" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/reservation_history_list"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone" />
 
     <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
         android:id="@+id/reservation_history_circular_loading"

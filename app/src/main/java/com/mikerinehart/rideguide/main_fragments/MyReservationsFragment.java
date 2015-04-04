@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -75,6 +76,7 @@ public class MyReservationsFragment extends Fragment {
     private TextView reservationNoneFound;
     private RecyclerView reservationList;
     private ReservationAdapter reservationAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private String TAG = "MyReservationsPageFragment";
 
@@ -116,6 +118,18 @@ public class MyReservationsFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(reservationList.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         reservationList.setLayoutManager(llm);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.reservation_swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //refreshContent();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, MyReservationsFragment.newInstance(me, "ReservationFragment"))
+                        .commit();
+            }
+        });
 
         refreshContent();
 
@@ -294,7 +308,6 @@ public class MyReservationsFragment extends Fragment {
                 if (result == null || result.size() == 0) {
                     reservationNoneFound.setVisibility(TextView.VISIBLE);
                     reservationFrowny.setVisibility(TextView.VISIBLE);
-                    reservationList.setVisibility(RecyclerView.GONE);
                 } else {
                     reservationList.setVisibility(RecyclerView.VISIBLE);
 
@@ -305,6 +318,7 @@ public class MyReservationsFragment extends Fragment {
                     StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(reservationAdapter);
                     reservationList.addItemDecoration(headersDecor);
                 }
+                mSwipeRefreshLayout.setRefreshing(false);
             }
 
             @Override

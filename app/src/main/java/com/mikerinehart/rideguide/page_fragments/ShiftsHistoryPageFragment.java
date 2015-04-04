@@ -82,15 +82,6 @@ public class ShiftsHistoryPageFragment extends Fragment {
         shiftShame = (TextView)v.findViewById(R.id.myshifts_history_shift_shame);
         loadingIcon = (ProgressBarCircularIndeterminate)v.findViewById(R.id.myshifts_history_circular_loading);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.myshifts_history_swipe_refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mSwipeRefreshLayout.setRefreshing(false);
-                //refreshContent();
-            }
-        });
-
         shiftList = (RecyclerView) v.findViewById(R.id.myshifts_history_my_shifts_list);
         shiftList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(shiftList.getContext());
@@ -133,7 +124,6 @@ public class ShiftsHistoryPageFragment extends Fragment {
                     StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(shiftsAdapter);
                     shiftList.addItemDecoration(headersDecor);
                 }
-                mSwipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
