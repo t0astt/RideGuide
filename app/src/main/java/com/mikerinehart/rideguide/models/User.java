@@ -3,6 +3,8 @@ package com.mikerinehart.rideguide.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 /**
  * Created by Mike on 2/4/2015.
  */
@@ -25,8 +27,10 @@ public class User implements Parcelable {
     protected String phone;
     protected boolean email_confirmed;
     protected boolean phone_confirmed;
+    protected List<Review> positive_reviews;
+    protected List<Review> negative_reviews;
 
-    public User(int id, String fb_uid, String email, String first_name, String last_name, String phone, boolean email_confirmed, boolean phone_confirmed) {
+    public User(int id, String fb_uid, String email, String first_name, String last_name, String phone, boolean email_confirmed, boolean phone_confirmed, List<Review> positive_reviews, List<Review> negative_reviews) {
         this.id = id;
         this.fb_uid = fb_uid;
         this.email = email;
@@ -35,7 +39,8 @@ public class User implements Parcelable {
         this.phone = phone;
         this.email_confirmed = email_confirmed;
         this.phone_confirmed = phone_confirmed;
-
+        this.positive_reviews = positive_reviews;
+        this.negative_reviews = negative_reviews;
     }
 
     User(Parcel in) {
@@ -98,5 +103,21 @@ public class User implements Parcelable {
 
     public boolean getPhoneConfirmationStatus() {
         return phone_confirmed;
+    }
+
+    public List<Review> getPositive_reviews() {
+        return positive_reviews;
+    }
+
+    public void setPositive_reviews(List<Review> positive_reviews) {
+        this.positive_reviews = positive_reviews;
+    }
+
+    public List<Review> getNegative_reviews() {
+        return negative_reviews;
+    }
+
+    public void setNegative_reviews(List<Review> negative_reviews) {
+        this.negative_reviews = negative_reviews;
     }
 }
