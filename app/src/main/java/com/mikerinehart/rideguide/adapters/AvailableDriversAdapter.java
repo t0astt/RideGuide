@@ -50,6 +50,8 @@ public class AvailableDriversAdapter extends RecyclerView.Adapter<AvailableDrive
         Reservation r = reservationList.get(i);
         vh.name.setText(r.getShift().getUser().getFullName());
         vh.numSeats.setText(Integer.toString(r.getShift().getSeats()));
+        vh.thumbUpCount.setText(Integer.toString(r.getShift().getUser().getPositiveReviewCount()));
+        vh.thumbDownCount.setText(Integer.toString(r.getShift().getUser().getNegativeReviewCount()));
         Picasso.with(vh.userPic.getContext())
                 .load("https://graph.facebook.com/" + r.getShift().getUser().getFbUid() + "/picture?type=large")
                 .transform(new RoundedTransformation(100, 5))
