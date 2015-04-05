@@ -80,12 +80,16 @@ public class AvailableDriversAdapter extends RecyclerView.Adapter<AvailableDrive
         protected TextView name;
         protected TextView numSeats;
         protected ImageView userPic;
+        protected TextView thumbUpCount;
+        protected TextView thumbDownCount;
 
         public AvailableDriversAdapterViewHolder(View v) {
             super(v);
             name = (TextView) v.findViewById(R.id.rides_available_view_drivers_dialog_user_name);
             numSeats = (TextView)v.findViewById(R.id.rides_available_view_drivers_dialog_num_seats);
             userPic = (ImageView) v.findViewById(R.id.rides_available_view_drivers_dialog_user_pic);
+            thumbUpCount = (TextView)v.findViewById(R.id.rides_available_view_drivers_dialog_thumbup_count);
+            thumbDownCount = (TextView)v.findViewById(R.id.rides_available_view_drivers_dialog_thumbdown_count);
         }
 
     }

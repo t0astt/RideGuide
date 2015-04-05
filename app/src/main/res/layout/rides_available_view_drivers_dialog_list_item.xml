@@ -18,10 +18,10 @@
         android:visibility="visible"
         android:textColor="#000000"
         android:textStyle="bold"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/rides_available_view_drivers_dialog_user_pic"
-        android:layout_toEndOf="@+id/rides_available_view_drivers_dialog_user_pic"
-        android:paddingLeft="11dp" />
+        android:layout_alignTop="@+id/rides_available_view_drivers_dialog_user_pic"
+        android:layout_alignLeft="@+id/rides_available_view_drivers_dialog_thumbup_icon"
+        android:layout_alignStart="@+id/rides_available_view_drivers_dialog_thumbup_icon"
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -52,6 +52,54 @@
         android:textColor="#000000"
         android:layout_above="@+id/rides_available_view_drivers_dialog_num_seats_label"
         android:layout_alignLeft="@+id/rides_available_view_drivers_dialog_num_seats_label"
-        android:layout_alignStart="@+id/rides_available_view_drivers_dialog_num_seats_label" />
+        android:layout_alignStart="@+id/rides_available_view_drivers_dialog_num_seats_label"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center_horizontal" />
+
+    <ImageView
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:id="@+id/rides_available_view_drivers_dialog_thumbup_icon"
+        android:layout_alignTop="@+id/rides_available_view_drivers_dialog_num_seats_label"
+        android:layout_toRightOf="@+id/rides_available_view_drivers_dialog_user_pic"
+        android:layout_toEndOf="@+id/rides_available_view_drivers_dialog_user_pic"
+        android:src="@drawable/ic_thumb_up_blue"
+        android:layout_marginLeft="11dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="0"
+        android:id="@+id/rides_available_view_drivers_dialog_thumbup_count"
+        android:layout_toRightOf="@+id/rides_available_view_drivers_dialog_thumbup_icon"
+        android:layout_toEndOf="@+id/rides_available_view_drivers_dialog_thumbup_icon"
+        android:layout_alignTop="@+id/rides_available_view_drivers_dialog_thumbup_icon"
+        android:layout_alignBottom="@+id/rides_available_view_drivers_dialog_thumbup_icon"
+        android:layout_marginLeft="2dp"
+        android:textColor="@color/ColorPrimary" />
+
+    <ImageView
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:id="@+id/rides_available_view_drivers_dialog_thumbdown_icon"
+        android:src="@drawable/ic_thumb_down_blue"
+        android:layout_below="@+id/rides_available_view_drivers_dialog_user_name"
+        android:layout_toRightOf="@+id/rides_available_view_drivers_dialog_thumbup_count"
+        android:layout_toEndOf="@+id/rides_available_view_drivers_dialog_thumbup_count"
+        android:layout_marginLeft="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="0"
+        android:id="@+id/rides_available_view_drivers_dialog_thumbdown_count"
+        android:textColor="@color/ColorPrimary"
+        android:layout_alignTop="@+id/rides_available_view_drivers_dialog_thumbdown_icon"
+        android:layout_toRightOf="@+id/rides_available_view_drivers_dialog_thumbdown_icon"
+        android:layout_toEndOf="@+id/rides_available_view_drivers_dialog_thumbdown_icon"
+        android:layout_marginLeft="2dp" />
 
 </RelativeLayout>

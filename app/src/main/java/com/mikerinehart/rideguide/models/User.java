@@ -27,10 +27,21 @@ public class User implements Parcelable {
     protected String phone;
     protected boolean email_confirmed;
     protected boolean phone_confirmed;
-    protected List<Review> positive_reviews;
-    protected List<Review> negative_reviews;
+    protected Review[] positive_reviews;
+    protected Review[] negative_reviews;
 
-    public User(int id, String fb_uid, String email, String first_name, String last_name, String phone, boolean email_confirmed, boolean phone_confirmed, List<Review> positive_reviews, List<Review> negative_reviews) {
+    public User(int id, String fb_uid, String email, String first_name, String last_name, String phone, boolean email_confirmed, boolean phone_confirmed) {
+        this.id = id;
+        this.fb_uid = fb_uid;
+        this.email = email;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.phone = phone;
+        this.email_confirmed = email_confirmed;
+        this.phone_confirmed = phone_confirmed;
+    }
+
+    public User(int id, String fb_uid, String email, String first_name, String last_name, String phone, boolean email_confirmed, boolean phone_confirmed, Review[] positive_reviews, Review[] negative_reviews) {
         this.id = id;
         this.fb_uid = fb_uid;
         this.email = email;
@@ -105,19 +116,29 @@ public class User implements Parcelable {
         return phone_confirmed;
     }
 
-    public List<Review> getPositive_reviews() {
-        return positive_reviews;
-    }
-
-    public void setPositive_reviews(List<Review> positive_reviews) {
-        this.positive_reviews = positive_reviews;
-    }
-
-    public List<Review> getNegative_reviews() {
+    public Review[] getNegative_reviews() {
         return negative_reviews;
     }
 
-    public void setNegative_reviews(List<Review> negative_reviews) {
+    public void setNegative_reviews(Review[] negative_reviews) {
         this.negative_reviews = negative_reviews;
+    }
+
+    public Review[] getPositive_reviews() {
+        return positive_reviews;
+    }
+
+    public void setPositive_reviews(Review[] positive_reviews) {
+        this.positive_reviews = positive_reviews;
+    }
+
+    public int getPositiveReviewCount()
+    {
+        return this.positive_reviews.length;
+    }
+
+    public int getNegativeReviewCount()
+    {
+        return this.negative_reviews.length;
     }
 }
