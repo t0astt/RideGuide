@@ -7,7 +7,8 @@
     android:paddingBottom="8dp"
     android:background="@drawable/recyclerview_on_press"
     android:showDividers="end"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:id="@+id/rides_available_timeslot_layout">
 
     <TextView
         android:layout_width="wrap_content"

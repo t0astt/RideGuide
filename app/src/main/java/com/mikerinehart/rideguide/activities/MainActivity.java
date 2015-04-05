@@ -1,5 +1,6 @@
 package com.mikerinehart.rideguide.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,6 +26,8 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.gson.Gson;
 import com.mikerinehart.rideguide.VenmoLibrary;
 import com.mikerinehart.rideguide.main_fragments.AboutFragment;
@@ -68,6 +71,11 @@ public class MainActivity extends ActionBarActivity implements
             R.drawable.ic_settings_gray,
             R.drawable.ic_exit_gray};
 
+    Activity mainActivity;
+    SharedPreferences sp;
+
+    private boolean showDrawerShowcase;
+
     public User me;
 
     String TAG = "MainActivity";
@@ -77,7 +85,11 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mainActivity = this;
         setContentView(R.layout.activity_main);
+
+        sp = getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
+        showDrawerShowcase = sp.getBoolean(Constants.SHOWDRAWERSHOWCASE, true); // True if need to show
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
@@ -186,7 +198,13 @@ public class MainActivity extends ActionBarActivity implements
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                // Execute code here when drawer opened
+                if (showDrawerShowcase) {
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putBoolean(Constants.SHOWDRAWERSHOWCASE, false);
+                    editor.commit();
+                    showDrawerShowcase = false;
+                    showcase();
+                }
             }
 
             @Override
@@ -197,6 +215,18 @@ public class MainActivity extends ActionBarActivity implements
         };
         Drawer.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
+
+    }
+
+    private void showcase() {
+        ViewTarget target = new ViewTarget(R.id.imageView, mainActivity);
+        new ShowcaseView.Builder(mainActivity, true)
+                .setTarget(target)
+                .setContentTitle("Profile")
+                .setContentText("Clicking your profile icon will open your RideGuide profile")
+                .hideOnTouchOutside()
+                .setStyle(R.style.CustomShowcaseTheme2)
+                .build();
     }
 
     @Override

@@ -30,6 +30,8 @@ public class User implements Parcelable {
     protected Review[] positive_reviews;
     protected Review[] negative_reviews;
 
+    public User(){}
+
     public User(int id, String fb_uid, String email, String first_name, String last_name, String phone, boolean email_confirmed, boolean phone_confirmed) {
         this.id = id;
         this.fb_uid = fb_uid;

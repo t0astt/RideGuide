@@ -2,6 +2,9 @@ package com.mikerinehart.rideguide.main_fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +31,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.appyvet.rangebar.RangeBar;
 import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 import com.gc.materialdesign.views.Slider;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -36,10 +42,12 @@ import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
+import com.mikerinehart.rideguide.activities.Constants;
 import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.adapters.AvailableDriversAdapter;
 import com.mikerinehart.rideguide.adapters.AvailableRidesTimeSlotsAdapter;
 import com.mikerinehart.rideguide.models.Reservation;
+import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
@@ -49,6 +57,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import se.walkercrou.places.GooglePlaces;
@@ -80,6 +89,9 @@ public class RidesFragment extends Fragment {
     int threadId = 0;
     GooglePlaces client;
 
+    SharedPreferences sp;
+    private boolean showRidesShowcase;
+
     private String TAG = "AvailableRidesPageFragment";
 
     public RidesFragment() {
@@ -103,6 +115,8 @@ public class RidesFragment extends Fragment {
             me = getArguments().getParcelable("USER");
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        sp = getActivity().getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
+        showRidesShowcase = sp.getBoolean(Constants.SHOWRIDESSHOWCASE, true); // True if need to show
     }
 
     @Override
@@ -290,72 +304,158 @@ public class RidesFragment extends Fragment {
     }
 
     private void refreshContent() {
+        if (!showRidesShowcase) {
+            RestClient.post("reservations/freeReservations", null, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    List<Reservation> result;
+                    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+                    Type listType = new TypeToken<List<Reservation>>() {
+                    }.getType();
 
-        RestClient.post("reservations/freeReservations", null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                List<Reservation> result;
-                Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-                Type listType = new TypeToken<List<Reservation>>() {
-                }.getType();
+                    result = (List<Reservation>) gson.fromJson(response.toString(), listType);
 
-                result = (List<Reservation>)gson.fromJson(response.toString(), listType);
+                    // check whether or not any rides even exist
+                    if (result.size() == 0) {
+                        noRides.setVisibility(TextView.VISIBLE);
+                        loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
+                    } else {
+                        noRides.setVisibility(TextView.GONE);
+                        ridesList.setVisibility(RecyclerView.VISIBLE);
 
-                // check whether or not any rides even exist
-                if (result.size() == 0) {
-                    noRides.setVisibility(TextView.VISIBLE);
-                    loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
-                } else {
-                    noRides.setVisibility(TextView.GONE);
-                    ridesList.setVisibility(RecyclerView.VISIBLE);
-
-                    List<List<Reservation>> mainList = new ArrayList<List<Reservation>>();
-                    for (int i = 0; i < result.size(); i++)
-                    {
-                        if (mainList.isEmpty())
-                        {
-                            List<Reservation> newList = new ArrayList<Reservation>();
-                            newList.add(result.get(i));
-                            mainList.add(newList);
-                        } else {
-                            boolean added = false;
-
-                            for (List<Reservation> x : mainList)
-                            {
-                                if (x.get(0).getPickup_time().compareTo(result.get(i).getPickup_time()) == 0)
-                                {
-                                    x.add(result.get(i));
-                                    added = true;
-                                    break;
-                                }
-                            }
-                            if (!added)
-                            {
+                        List<List<Reservation>> mainList = new ArrayList<List<Reservation>>();
+                        for (int i = 0; i < result.size(); i++) {
+                            if (mainList.isEmpty()) {
                                 List<Reservation> newList = new ArrayList<Reservation>();
                                 newList.add(result.get(i));
                                 mainList.add(newList);
+                            } else {
+                                boolean added = false;
+
+                                for (List<Reservation> x : mainList) {
+                                    if (x.get(0).getPickup_time().compareTo(result.get(i).getPickup_time()) == 0) {
+                                        x.add(result.get(i));
+                                        added = true;
+                                        break;
+                                    }
+                                }
+                                if (!added) {
+                                    List<Reservation> newList = new ArrayList<Reservation>();
+                                    newList.add(result.get(i));
+                                    mainList.add(newList);
+                                }
                             }
                         }
+
+                        adapter = new AvailableRidesTimeSlotsAdapter(mainList);
+
+                        ridesList.addItemDecoration(new SimpleDividerItemDecoration(ridesList.getContext()));
+
+                        loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
+                        ridesList.setAdapter(adapter);
+                        StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(adapter);
+                        ridesList.addItemDecoration(headersDecor);
                     }
-
-                    adapter = new AvailableRidesTimeSlotsAdapter(mainList);
-
-                    ridesList.addItemDecoration(new SimpleDividerItemDecoration(ridesList.getContext()));
-
-                    loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
-                    ridesList.setAdapter(adapter);
-                    StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(adapter);
-                    ridesList.addItemDecoration(headersDecor);
+                    mSwipeRefreshLayout.setRefreshing(false);
                 }
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.i(TAG, "Error: " + errorResponse);
-                mSwipeRefreshLayout.setRefreshing(false);
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Log.i(TAG, "Error: " + errorResponse);
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            });
+        }
+    }
+
+    private void showcase() {
+        noRides.setVisibility(TextView.GONE);
+        loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
+        List<Reservation> result = new ArrayList<>();
+        result.add(new Reservation(1, 0, 0, 2, "Test", "Test", new Date(), new User(), new Shift()));
+        List<List<Reservation>> mainList = new ArrayList<List<Reservation>>();
+        for (int i = 0; i < result.size(); i++)
+        {
+            if (mainList.isEmpty())
+            {
+                List<Reservation> newList = new ArrayList<Reservation>();
+                newList.add(result.get(i));
+                mainList.add(newList);
+            } else {
+                boolean added = false;
+
+                for (List<Reservation> x : mainList)
+                {
+                    if (x.get(0).getPickup_time().compareTo(result.get(i).getPickup_time()) == 0)
+                    {
+                        x.add(result.get(i));
+                        added = true;
+                        break;
+                    }
+                }
+                if (!added)
+                {
+                    List<Reservation> newList = new ArrayList<Reservation>();
+                    newList.add(result.get(i));
+                    mainList.add(newList);
+                }
             }
-        });
+        }
+        AvailableRidesTimeSlotsAdapter showcaseAdapter = new AvailableRidesTimeSlotsAdapter(mainList);
+        ridesList.setAdapter(showcaseAdapter);
+        RidesFragment.ViewTarget target = new RidesFragment.ViewTarget(1, ridesList);
+
+        ShowcaseView sv = new ShowcaseView.Builder(getActivity(), true)
+                .setTarget(target)
+                .setContentTitle("Rides")
+                .setContentText("Designated drivers with open timeslots will show up here with times available for you to be picked up." +
+                        " Clicking a timeslot will show available drivers.")
+                .hideOnTouchOutside()
+                .setStyle(R.style.CustomShowcaseTheme2)
+                .build();
+
+
+
+
+
+    }
+
+    public class ViewTarget implements Target {
+
+        private final View mView;
+
+        public ViewTarget(View view) {
+            mView = view;
+        }
+
+        public ViewTarget(int viewId, Activity activity) {
+            mView = activity.findViewById(viewId);
+        }
+
+        public ViewTarget(int position, RecyclerView recyclerView) {
+                mView = recyclerView.getChildAt(position).findViewById(R.id.rides_available_timeslot_pickup_time);
+        }
+
+        @Override
+        public Point getPoint() {
+            int[] location = new int[2];
+            mView.getLocationInWindow(location);
+            int x = location[0] + mView.getWidth() / 2;
+            int y = location[1] + mView.getHeight() / 2;
+            return new Point(x, y);
+        }
+    }
+
+    public void onResume() {
+        super.onResume();
+//        if (showRidesShowcase) {
+//            SharedPreferences.Editor editor = sp.edit();
+//            editor.putBoolean(Constants.SHOWRIDESSHOWCASE, false);
+//            editor.commit();
+//            showRidesShowcase = false;
+            showcase();
+//        }
+
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.mikerinehart.rideguide.main_fragments;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -28,7 +32,7 @@ import com.loopj.android.http.RequestParams;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
-import com.mikerinehart.rideguide.RoundedTransformation;
+import com.mikerinehart.rideguide.activities.Constants;
 import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.adapters.ProfileCommentListAdapter;
 import com.mikerinehart.rideguide.models.Review;
@@ -75,6 +79,9 @@ public class ProfileFragment extends Fragment {
 
     private Gson gson;
 
+    SharedPreferences sp;
+    private boolean showProfileShowcase;
+
     private OnFragmentInteractionListener mListener;
 
     public ProfileFragment() {
@@ -109,6 +116,8 @@ public class ProfileFragment extends Fragment {
             me = getArguments().getParcelable("ME");
         }
         gson = new Gson();
+        sp = getActivity().getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
+        showProfileShowcase = sp.getBoolean(Constants.SHOWPROFILESHOWCASE, true); // True if need to show
     }
 
     @Override
@@ -165,10 +174,19 @@ public class ProfileFragment extends Fragment {
 //                .transform(new RoundedTransformation(600, 5))
                 .into(profilePicture);
 
-
-
-
         return v;
+    }
+
+    private void showcase() {
+        ViewTarget target = new ViewTarget(R.id.profile_thumb_up_button, getActivity());
+        new ShowcaseView.Builder(getActivity(), true)
+                .setTarget(target)
+                .setContentTitle("Reviews")
+                .setContentText("Did this person drive safe? Speed? Annoying passenger? " +
+                        "Leave them a review to let others know by clicking either the thumbs up or down button!")
+                .hideOnTouchOutside()
+                .setStyle(R.style.CustomShowcaseTheme2)
+                .build();
     }
 
     private void refreshContent() {
@@ -445,10 +463,14 @@ public class ProfileFragment extends Fragment {
         thumbUpDialog.show();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    public void onResume() {
+        super.onResume();
+        if (showProfileShowcase) {
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean(Constants.SHOWPROFILESHOWCASE, false);
+            editor.commit();
+            showProfileShowcase = false;
+            showcase();
         }
     }
 

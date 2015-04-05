@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Booo! :&apos;( \nYou don&apos;t have any designated driver shifts.\n\nWhy not create one?"
+        android:text="You don&apos;t have any designated driver shifts.\n\nWhy not create one?"
         android:id="@+id/myshifts_shift_shame"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"

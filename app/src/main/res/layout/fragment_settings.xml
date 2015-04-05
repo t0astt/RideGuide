@@ -5,6 +5,15 @@
 
     <!-- TODO: Update blank fragment ride_info_list_item -->
     <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="Settings Fragment" />
+        android:text="Settings Fragment"
+        android:id="@+id/settings_textview" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/setting_large_text"
+        android:layout_gravity="right|bottom" />
 
 </FrameLayout>

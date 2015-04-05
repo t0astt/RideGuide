@@ -1,7 +1,8 @@
 package com.mikerinehart.rideguide.main_fragments;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,14 +16,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gc.materialdesign.views.ButtonFloat;
-import com.gc.materialdesign.views.ButtonRectangle;
 import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.google.gson.Gson;
@@ -30,20 +32,14 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.malinskiy.superrecyclerview.SuperRecyclerView;
-import com.malinskiy.superrecyclerview.swipe.SwipeDismissRecyclerViewTouchListener;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
-import com.mikerinehart.rideguide.RoundedTransformation;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
-import com.mikerinehart.rideguide.VenmoLibrary;
 import com.mikerinehart.rideguide.activities.Constants;
 import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
-import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
-import com.squareup.picasso.Picasso;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.apache.http.Header;
@@ -53,7 +49,6 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -81,6 +76,9 @@ public class MyShiftsFragment extends Fragment {
     private MyShiftsAdapter shiftsAdapter;
     private View v;
 
+    SharedPreferences sp;
+    private boolean showShiftsShowcase;
+
     private String TAG = "MyShiftsFragment";
 
 
@@ -107,6 +105,8 @@ public class MyShiftsFragment extends Fragment {
             me = getArguments().getParcelable("USER");
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        sp = getActivity().getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
+        showShiftsShowcase = sp.getBoolean(Constants.SHOWSHIFTSSHOWCASE, true); // True if need to show
 
 
     }
@@ -215,6 +215,8 @@ public class MyShiftsFragment extends Fragment {
                 Log.i(TAG, "TouchEvent");
             }
         });
+
+
 
 
         return v;
@@ -378,10 +380,32 @@ public class MyShiftsFragment extends Fragment {
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private void showcase() {
+        ViewTarget target = new ViewTarget(R.id.myshifts_new_shift_fab, getActivity());
+        ShowcaseView sv = new ShowcaseView.Builder(getActivity(), true)
+                .setTarget(target)
+                .setContentTitle("My Shifts")
+                .setContentText("Want to be a designated driver? Click this button to create a shift, letting people know" +
+                        " you're available to drive!")
+                .hideOnTouchOutside()
+                .setStyle(R.style.CustomShowcaseTheme2)
+                .build();
+        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        lps.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
+        lps.setMargins(margin, margin, margin, margin);
+        sv.setButtonPosition(lps);
+    }
+
+    public void onResume() {
+        super.onResume();
+        if (showShiftsShowcase) {
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean(Constants.SHOWSHIFTSSHOWCASE, false);
+            editor.commit();
+            showShiftsShowcase = false;
+            showcase();
         }
     }
 
