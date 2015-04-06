@@ -22,6 +22,7 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import de.psdev.licensesdialog.LicensesDialog;
 import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20;
+import de.psdev.licensesdialog.licenses.License;
 import de.psdev.licensesdialog.licenses.MITLicense;
 import de.psdev.licensesdialog.model.Notice;
 import de.psdev.licensesdialog.model.Notices;
@@ -109,20 +110,20 @@ public class SettingActivity extends ActionBarActivity {
                     final Notices notices = new Notices();
 
                     notices.addNotice(new Notice("Android Async HTTP", "http://loopj.com/android-async-http/", "James Smith", new ApacheSoftwareLicense20()));
-                    notices.addNotice(new Notice("Picasso", "http://square.github.io/picasso/", "Square, Inc.", new ApacheSoftwareLicense20()));
+                    notices.addNotice(new Notice("Android-MaterialPreference", "https://github.com/jenzz/Android-MaterialPreference", "Jens Driller", new MITLicense()));
                     notices.addNotice(new Notice("Gson", "https://code.google.com/p/google-gson/", null, new ApacheSoftwareLicense20()));
-                    notices.addNotice(new Notice("Parceler", "https://github.com/johncarl81/parceler", "John Ericksen", new ApacheSoftwareLicense20()));
-                    notices.addNotice(new Notice("Snackbar", "https://github.com/nispok/snackbar", null, new MITLicense()));
-                    notices.addNotice(new Notice("PagerSlidingTabStrip", "https://github.com/jpardogo/PagerSlidingTabStrip", "Andreas Stuetz", new ApacheSoftwareLicense20()));
-                    notices.addNotice(new Notice("Material Design Library", "https://github.com/navasmdc/MaterialDesignLibrary", null, new ApacheSoftwareLicense20()));
-                    notices.addNotice(new Notice("Material Dialogs", "https://github.com/afollestad/material-dialogs", "Aiden Follestad", new MITLicense()));
-                    notices.addNotice(new Notice("SystemBarTint", "https://github.com/jgilfelt/SystemBarTint", "Jeff Gilfelt", new ApacheSoftwareLicense20()));
-                    notices.addNotice(new Notice("Sticky Headers Recyclerview", "https://github.com/timehop/sticky-headers-recyclerview", "Timehop", new ApacheSoftwareLicense20()));
                     notices.addNotice(new Notice("MaterialEditText", "https://github.com/rengwuxian/MaterialEditText", "rengwuxian", new ApacheSoftwareLicense20()));
                     notices.addNotice(new Notice("Material Range Bar", "https://github.com/oli107/material-range-bar", "AppyVet, Inc.", new ApacheSoftwareLicense20()));
+                    notices.addNotice(new Notice("Material Dialogs", "https://github.com/afollestad/material-dialogs", "Aiden Follestad", new MITLicense()));
+                    notices.addNotice(new Notice("Material Design Library", "https://github.com/navasmdc/MaterialDesignLibrary", null, new ApacheSoftwareLicense20()));
+                    notices.addNotice(new Notice("PagerSlidingTabStrip", "https://github.com/jpardogo/PagerSlidingTabStrip", "Andreas Stuetz", new ApacheSoftwareLicense20()));
+                    notices.addNotice(new Notice("Parceler", "https://github.com/johncarl81/parceler", "John Ericksen", new ApacheSoftwareLicense20()));
+                    notices.addNotice(new Notice("Picasso", "http://square.github.io/picasso/", "Square, Inc.", new ApacheSoftwareLicense20()));
                     notices.addNotice(new Notice("ShowcaseView", "https://github.com/amlcurran/ShowcaseView", "Alex Curran", new ApacheSoftwareLicense20()));
-                    notices.addNotice(new Notice("Android-MaterialPreference", "https://github.com/jenzz/Android-MaterialPreference", "Jens Driller", new MITLicense()));
                     notices.addNotice(new Notice("SlideDateTimePicker", "https://github.com/jjobes/SlideDateTimePicker", null, new ApacheSoftwareLicense20()));
+                    notices.addNotice(new Notice("Snackbar", "https://github.com/nispok/snackbar", null, new MITLicense()));
+                    notices.addNotice(new Notice("Sticky Headers Recyclerview", "https://github.com/timehop/sticky-headers-recyclerview", "Timehop", new ApacheSoftwareLicense20()));
+                    notices.addNotice(new Notice("SystemBarTint", "https://github.com/jgilfelt/SystemBarTint", "Jeff Gilfelt", new ApacheSoftwareLicense20()));
 
                     new LicensesDialog.Builder(c).setNotices(notices).setIncludeOwnLicense(true).build().show();
 
@@ -130,6 +131,26 @@ public class SettingActivity extends ActionBarActivity {
                     return false;
                 }
             });
+
+//            aboutApp.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//                @Override
+//                public boolean onPreferenceClick(Preference preference) {
+//                    final String name = "RideGuide";
+//                    final String url = "http://mikerinehart.com";
+//                    final String copyright = "Copyright 2015 Mike Rinehart <mrrineh@ilstu.edu>";
+////                    final License license = "RideGuide is an Android application created for the" +
+////                                            " 2015 Mobile Application Development (MAD) Contest, sponsored by State Farm. RideGuide " +
+////                            " is an application designed to help students find designated drivers on their campus.\n\n" +
+////                            "By your use of this application you assume all liabilities associated with the use/misuse of this application.\n" +
+////                            "Payment for a non-licensed taxi service (designated driving) is illegal. Under no circumstances are you (as a passenger) obligated to pay" +
+////                            " for services provided by either this app or your driver.\n\nUse of Venmo(c) services included within this application may not be used for" +
+////                            " selling a service/good. Use of Venmo services may be used strictly for donation to drivers.";
+////                    final Notice notice = new Notice(name, url, copyright, license);
+//                    new LicensesDialog.Builder(c).setNotices(R.raw.notices).setIncludeOwnLicense(true).build().show();
+//
+//                    return false;
+//                }
+//            });
         }
     }
 }
