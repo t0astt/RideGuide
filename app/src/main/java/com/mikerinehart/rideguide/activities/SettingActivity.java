@@ -115,6 +115,7 @@ public class SettingActivity extends ActionBarActivity {
                     notices.addNotice(new Notice("Snackbar", "https://github.com/nispok/snackbar", null, new MITLicense()));
                     notices.addNotice(new Notice("PagerSlidingTabStrip", "https://github.com/jpardogo/PagerSlidingTabStrip", "Andreas Stuetz", new ApacheSoftwareLicense20()));
                     notices.addNotice(new Notice("Material Design Library", "https://github.com/navasmdc/MaterialDesignLibrary", null, new ApacheSoftwareLicense20()));
+                    notices.addNotice(new Notice("Material Dialogs", "https://github.com/afollestad/material-dialogs", "Aiden Follestad", new MITLicense()));
                     notices.addNotice(new Notice("SystemBarTint", "https://github.com/jgilfelt/SystemBarTint", "Jeff Gilfelt", new ApacheSoftwareLicense20()));
                     notices.addNotice(new Notice("Sticky Headers Recyclerview", "https://github.com/timehop/sticky-headers-recyclerview", "Timehop", new ApacheSoftwareLicense20()));
                     notices.addNotice(new Notice("MaterialEditText", "https://github.com/rengwuxian/MaterialEditText", "rengwuxian", new ApacheSoftwareLicense20()));
@@ -122,7 +123,7 @@ public class SettingActivity extends ActionBarActivity {
                     notices.addNotice(new Notice("ShowcaseView", "https://github.com/amlcurran/ShowcaseView", "Alex Curran", new ApacheSoftwareLicense20()));
                     notices.addNotice(new Notice("Android-MaterialPreference", "https://github.com/jenzz/Android-MaterialPreference", "Jens Driller", new MITLicense()));
                     notices.addNotice(new Notice("SlideDateTimePicker", "https://github.com/jjobes/SlideDateTimePicker", null, new ApacheSoftwareLicense20()));
-                    
+
                     new LicensesDialog.Builder(c).setNotices(notices).setIncludeOwnLicense(true).build().show();
 
 
