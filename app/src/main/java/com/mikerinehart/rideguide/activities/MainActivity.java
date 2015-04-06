@@ -74,7 +74,7 @@ public class MainActivity extends ActionBarActivity implements
     Activity mainActivity;
     SharedPreferences sp;
 
-    private boolean showDrawerShowcase;
+    public static boolean showDrawerShowcase;
 
     public User me;
 
@@ -162,7 +162,6 @@ public class MainActivity extends ActionBarActivity implements
                                 .addToBackStack("MyHistory")
                                 .commit();
                     } else if (itemClicked == 6) {
-                            toolbar.setTitle("Settings");
                             Intent settingIntent = new Intent(getApplicationContext(), SettingActivity.class);
                             startActivity(settingIntent);
 

@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <com.jenzz.materialpreference.PreferenceCategory android:title="Test">
-        <com.jenzz.materialpreference.Preference android:title="Test"/>
+    <com.jenzz.materialpreference.PreferenceCategory android:title="General">
         <com.jenzz.materialpreference.Preference
-            android:title="Test"
-            android:summary="Test"
+            android:key="resetTutorialScreens"
+            android:title="Reset Tutorial Screens"
+            android:summary="Clicking this option will show all tutorial screens again"
+            />
+    </com.jenzz.materialpreference.PreferenceCategory>
+
+    <com.jenzz.materialpreference.PreferenceCategory android:title="Information">
+        <com.jenzz.materialpreference.Preference
+            android:key="ossLicense"
+            android:title="Open Source Software Licenses"
+            android:summary="Details about open source software used in this app"
+            />
+        <com.jenzz.materialpreference.Preference
+            android:key="aboutApp"
+            android:title="About This App"
             />
     </com.jenzz.materialpreference.PreferenceCategory>
 </PreferenceScreen>
