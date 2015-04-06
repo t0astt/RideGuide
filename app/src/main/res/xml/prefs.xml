@@ -6,6 +6,11 @@
             android:title="Reset Tutorial Screens"
             android:summary="Clicking this option will show all tutorial screens again"
             />
+        <com.jenzz.materialpreference.Preference
+            android:key="clearNotifications"
+            android:title="Clear Notifications"
+            android:summary="Clicking this option will clear your notifications"
+            />
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory android:title="Information">

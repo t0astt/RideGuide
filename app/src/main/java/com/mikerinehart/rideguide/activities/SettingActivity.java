@@ -74,7 +74,9 @@ public class SettingActivity extends ActionBarActivity {
     public static class SettingsFragment2 extends PreferenceFragment {
 
         SharedPreferences sp;
+        SharedPreferences notifications;
         SharedPreferences.Editor editor;
+        SharedPreferences.Editor notificationsEditor;
         Context c;
 
         @Override
@@ -82,11 +84,15 @@ public class SettingActivity extends ActionBarActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.prefs);
             sp = getActivity().getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
+            notifications = getActivity().getSharedPreferences(Constants.NOTIFICATIONS, Context.MODE_PRIVATE);
             editor = sp.edit();
+            notificationsEditor = notifications.edit();
 
             c = getActivity();
 
             com.jenzz.materialpreference.Preference resetTutorialScreens = (com.jenzz.materialpreference.Preference)findPreference("resetTutorialScreens");
+            com.jenzz.materialpreference.Preference clearNotifications = (com.jenzz.materialpreference.Preference)findPreference("clearNotifications");
+
             com.jenzz.materialpreference.Preference ossLicense = (com.jenzz.materialpreference.Preference)findPreference("ossLicense");
             com.jenzz.materialpreference.Preference aboutApp = (com.jenzz.materialpreference.Preference)findPreference("aboutApp");
 
@@ -104,6 +110,16 @@ public class SettingActivity extends ActionBarActivity {
 
                     editor.commit();
                     Toast.makeText(getActivity().getBaseContext(), "Tutorial screens reset!", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
+
+            clearNotifications.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    notificationsEditor.clear();
+                    notificationsEditor.commit();
+                    Toast.makeText(getActivity().getBaseContext(), "Notifications cleared!", Toast.LENGTH_SHORT).show();
                     return false;
                 }
             });

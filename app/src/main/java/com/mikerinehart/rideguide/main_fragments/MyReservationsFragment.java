@@ -209,7 +209,11 @@ public class MyReservationsFragment extends Fragment {
                                                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                                             try {
                                                                 if (response.getString("status").equalsIgnoreCase("success")) {
-                                                                    refreshContent();
+                                                                    //refreshContent();
+                                                                    getActivity().getSupportFragmentManager()
+                                                                            .beginTransaction()
+                                                                            .replace(R.id.container, MyReservationsFragment.newInstance(me, "ReservationFragment"))
+                                                                            .commit();
                                                                     Toast.makeText(getActivity().getBaseContext(), "Reservation deleted!", Toast.LENGTH_LONG).show();
                                                                 }
                                                             } catch (JSONException e) {

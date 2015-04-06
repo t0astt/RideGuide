@@ -79,6 +79,7 @@ public class MainActivity extends ActionBarActivity implements
     Activity mainActivity;
     SharedPreferences sp;
 
+    ShowcaseView s;
     public static boolean showDrawerShowcase;
     public static boolean showDrawerHandleShowcase;
 
@@ -231,7 +232,7 @@ public class MainActivity extends ActionBarActivity implements
                 new ShowcaseView.Builder(mainActivity, true)
                         .setTarget(target)
                         .setContentTitle("Profile")
-                        .setContentText("Clicking your profile icon will open your RideGuide profile")
+                        .setContentText("Clicking your profile icon will open your RideGuide profile.")
                         .hideOnTouchOutside()
                         .setStyle(R.style.CustomShowcaseTheme2)
                         .build();
@@ -244,18 +245,22 @@ public class MainActivity extends ActionBarActivity implements
                 }
 
                 ViewTarget target2 = new ViewTarget(drawerToggleIcon);
-                new ShowcaseView.Builder(mainActivity, true)
+                s = new ShowcaseView.Builder(mainActivity, true)
                         .setTarget(target2)
                         .setContentTitle("Welcome!")
                         .setContentText("Welcome to RideGuide! To get started, click the button highlighted or swipe from the left of the screen.")
                         .hideOnTouchOutside()
                         .setStyle(R.style.CustomShowcaseTheme2)
+                        .setOnClickListener(new ShowcaseView.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                s.hide();
+                                HomePageFragment.showcase(mainActivity);
+                            }
+                        })
                         .build();
                 break;
         }
-
-
-
     }
 
     @Override

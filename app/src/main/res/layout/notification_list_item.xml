@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:id="@+id/notification_list_item_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:background="@drawable/drawer_item_background"
+    android:showDividers="end"
+    android:visibility="visible">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Content"
+        android:id="@+id/notification_list_item_message"
+        android:paddingTop="11dp"
+        android:layout_marginLeft="11dp"
+        android:paddingBottom="11dp"
+        android:layout_marginRight="11dp"
+        android:textSize="15sp" />
+
+</RelativeLayout>

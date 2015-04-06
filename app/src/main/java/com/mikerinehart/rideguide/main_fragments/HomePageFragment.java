@@ -12,20 +12,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
+import com.mikerinehart.rideguide.activities.Constants;
 import com.mikerinehart.rideguide.activities.MainActivity;
-import com.mikerinehart.rideguide.adapters.UpcomingReservationsAdapter;
+import com.mikerinehart.rideguide.adapters.NotificationsAdapter;
+import com.mikerinehart.rideguide.models.Notification;
 import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.Ride;
 import com.mikerinehart.rideguide.models.User;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -45,6 +52,13 @@ public class HomePageFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    SharedPreferences sp;
+    private boolean showNotificationShowcase;
+    SharedPreferences notificationSP;
+
+    RecyclerView notificationList;
+    TextView noNotifications;
+
     public HomePageFragment() {
         // Required empty public constructor
     }
@@ -62,19 +76,63 @@ public class HomePageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MainActivity.drawerAdapter.selectPosition(1);
+        MainActivity.toolbar.setTitle("Home");
         if (getArguments() != null) {
             me = getArguments().getParcelable("USER");
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        sp = getActivity().getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        MainActivity.toolbar.setTitle("Home");
         View v = inflater.inflate(R.layout.fragment_home_page, container, false);
+        notificationList = (RecyclerView)v.findViewById(R.id.home_page_notification_list);
+        noNotifications = (TextView)v.findViewById(R.id.home_page_no_notifications);
+        notificationList.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(notificationList.getContext());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        notificationList.setLayoutManager(llm);
 
         return v;
+    }
+
+    private void refreshContent() {
+        Log.i("HomePage", "refresh");
+        notificationSP = getActivity().getSharedPreferences(Constants.NOTIFICATIONS, Context.MODE_PRIVATE);
+        ArrayList<Notification> notificationMessageList = new ArrayList<Notification>();
+        Map<String, ?> map = notificationSP.getAll();
+        for (Map.Entry<String, ?> entry : map.entrySet()) {
+            notificationMessageList.add(new Notification(entry.getValue().toString()));
+        }
+        if (notificationMessageList != null && notificationMessageList.size() > 0) {
+            noNotifications.setVisibility(TextView.GONE);
+            NotificationsAdapter na = new NotificationsAdapter(notificationMessageList);
+            notificationList.setAdapter(na);
+            notificationList.addItemDecoration(new SimpleDividerItemDecoration(notificationList.getContext()));
+        } else {
+            notificationList.setAdapter(null);
+            noNotifications.setVisibility(TextView.VISIBLE);
+        }
+    }
+
+    public void onResume() {
+        super.onResume();
+        Log.i("HomePage", "onresume");
+        refreshContent();
+    }
+
+    public static void showcase(Activity a) {
+        ViewTarget target = new ViewTarget(R.id.home_page_notification_list, a);
+        ShowcaseView s = new ShowcaseView.Builder(a, true)
+                .setTarget(target)
+                .setContentTitle("Notifications")
+                .setContentText("Any notifications you receive will show up on the homescreen.\n\n" +
+                        "Notifications can be cleared in the Settings menu.")
+                .hideOnTouchOutside()
+                .setStyle(R.style.CustomShowcaseTheme2)
+                .build();
     }
 
     private List<Reservation> createReservationList() {
