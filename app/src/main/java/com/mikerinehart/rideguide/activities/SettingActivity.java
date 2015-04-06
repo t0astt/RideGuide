@@ -2,27 +2,28 @@ package com.mikerinehart.rideguide.activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
+
 import android.os.Handler;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.support.v4.app.FragmentActivity;
+
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikerinehart.rideguide.R;
-import com.mikerinehart.rideguide.main_fragments.SettingsFragment;
+
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import de.psdev.licensesdialog.LicensesDialog;
 import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20;
-import de.psdev.licensesdialog.licenses.License;
+
 import de.psdev.licensesdialog.licenses.MITLicense;
 import de.psdev.licensesdialog.model.Notice;
 import de.psdev.licensesdialog.model.Notices;
@@ -132,25 +133,27 @@ public class SettingActivity extends ActionBarActivity {
                 }
             });
 
-//            aboutApp.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-//                @Override
-//                public boolean onPreferenceClick(Preference preference) {
-//                    final String name = "RideGuide";
-//                    final String url = "http://mikerinehart.com";
-//                    final String copyright = "Copyright 2015 Mike Rinehart <mrrineh@ilstu.edu>";
-////                    final License license = "RideGuide is an Android application created for the" +
-////                                            " 2015 Mobile Application Development (MAD) Contest, sponsored by State Farm. RideGuide " +
-////                            " is an application designed to help students find designated drivers on their campus.\n\n" +
-////                            "By your use of this application you assume all liabilities associated with the use/misuse of this application.\n" +
-////                            "Payment for a non-licensed taxi service (designated driving) is illegal. Under no circumstances are you (as a passenger) obligated to pay" +
-////                            " for services provided by either this app or your driver.\n\nUse of Venmo(c) services included within this application may not be used for" +
-////                            " selling a service/good. Use of Venmo services may be used strictly for donation to drivers.";
-////                    final Notice notice = new Notice(name, url, copyright, license);
-//                    new LicensesDialog.Builder(c).setNotices(R.raw.notices).setIncludeOwnLicense(true).build().show();
-//
-//                    return false;
-//                }
-//            });
+            aboutApp.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    final String license = "RideGuide is an Android application created by Mike Rinehart for the" +
+                                            " 2015 Mobile Application Development (MAD) Contest, sponsored by State Farm. RideGuide " +
+                            " is an application designed to help students find designated drivers on their campus.\n\n" +
+                            "By using this application you assume all liabilities associated with the use/misuse of this application.\n" +
+                            "Payment for a non-licensed taxi service (designated driving) is illegal. Under no circumstances are you (as a passenger) obligated to pay" +
+                            " for services provided by either this app or your driver.\n\nUse of Venmo\u00a9 services included within this application may not be used for" +
+                            " selling a service/good. Use of Venmo\u00a9 services may be used strictly for donation purposes only.";
+
+                    new MaterialDialog.Builder(c)
+                            .title("RideGuide")
+                            .titleGravity(GravityEnum.CENTER)
+                            .content(license)
+                            .positiveText("OK")
+                            .build().show();
+
+                    return false;
+                }
+            });
         }
     }
 }
