@@ -1,7 +1,9 @@
 package com.mikerinehart.rideguide.main_fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
+import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -78,6 +81,9 @@ public class MyReservationsFragment extends Fragment {
     private ReservationAdapter reservationAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    SharedPreferences sp;
+    private boolean showReservationsShowcase;
+
     private String TAG = "MyReservationsPageFragment";
 
     public static MyReservationsFragment newInstance(User param1, String param2) {
@@ -100,6 +106,8 @@ public class MyReservationsFragment extends Fragment {
             me = getArguments().getParcelable("USER");
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        sp = getActivity().getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
+        showReservationsShowcase = sp.getBoolean(Constants.SHOWRESERVATIONSSHOWCASE, true); // True if need to show
     }
 
     @Override
@@ -328,10 +336,25 @@ public class MyReservationsFragment extends Fragment {
         });
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private void showcase() {
+        ShowcaseView sv = new ShowcaseView.Builder(getActivity(), true)
+                .setContentTitle("My Reservations")
+                .setContentText("Whenever you make a reservation with a \ndesignated driver to be picked up, \nthat reservation will appear here.\n" +
+                        "Clicking the reservation will allow you to \ncall, donate, and view the drivers profile.\n\n\n" +
+                        "Reservations 15 minutes past their pickup \ntime will be moved to My History.")
+                .hideOnTouchOutside()
+                .setStyle(R.style.CustomShowcaseTheme2)
+                .build();
+    }
+
+    public void onResume() {
+        super.onResume();
+        if (showReservationsShowcase) {
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean(Constants.SHOWRESERVATIONSSHOWCASE, false);
+            editor.commit();
+            showReservationsShowcase = false;
+            showcase();
         }
     }
 

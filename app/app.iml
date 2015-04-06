@@ -113,6 +113,7 @@
     <orderEntry type="library" exported="" name="android-async-http-1.4.6" level="project" />
     <orderEntry type="library" exported="" name="junit-4.11" level="project" />
     <orderEntry type="library" exported="" name="play-services-3.1.59" level="project" />
+    <orderEntry type="library" exported="" name="materialpreference-1.2.1" level="project" />
     <orderEntry type="library" exported="" name="MaterialDesign-1.4" level="project" />
     <orderEntry type="library" exported="" name="superrecyclerview-1.1.0" level="project" />
     <orderEntry type="module" module-name="slideDateTimePicker" exported="" />

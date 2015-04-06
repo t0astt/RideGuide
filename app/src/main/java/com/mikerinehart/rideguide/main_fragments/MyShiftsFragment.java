@@ -160,7 +160,7 @@ public class MyShiftsFragment extends Fragment {
                                 @Override
                                 public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                                     if (which == 0) {
-                                        shiftsAdapter.createReservationsDialog(shiftsAdapter.getShift(itemClicked).getReservations());
+                                        shiftsAdapter.createReservationsDialog(shiftsAdapter.getShift(itemClicked).getReservations(), false);
                                     } else if (which == 1) {
                                         new MaterialDialog.Builder(MyShiftsFragment.this.getActivity())
                                                 .title("Confirm Shift Delete")
@@ -215,9 +215,6 @@ public class MyShiftsFragment extends Fragment {
                 Log.i(TAG, "TouchEvent");
             }
         });
-
-
-
 
         return v;
     }
@@ -386,7 +383,8 @@ public class MyShiftsFragment extends Fragment {
                 .setTarget(target)
                 .setContentTitle("My Shifts")
                 .setContentText("Want to be a designated driver? Click this button to create a shift, letting people know" +
-                        " you're available to drive!")
+                        " you're available to drive!\n\n\n" +
+                        "After your shift is over it will be moved to My History.")
                 .hideOnTouchOutside()
                 .setStyle(R.style.CustomShowcaseTheme2)
                 .build();

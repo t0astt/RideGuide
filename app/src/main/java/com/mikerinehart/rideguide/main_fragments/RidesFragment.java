@@ -304,7 +304,6 @@ public class RidesFragment extends Fragment {
     }
 
     private void refreshContent() {
-        if (!showRidesShowcase) {
             RestClient.post("reservations/freeReservations", null, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -365,97 +364,27 @@ public class RidesFragment extends Fragment {
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
             });
-        }
     }
 
     private void showcase() {
-        noRides.setVisibility(TextView.GONE);
-        loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
-        List<Reservation> result = new ArrayList<>();
-        result.add(new Reservation(1, 0, 0, 2, "Test", "Test", new Date(), new User(), new Shift()));
-        List<List<Reservation>> mainList = new ArrayList<List<Reservation>>();
-        for (int i = 0; i < result.size(); i++)
-        {
-            if (mainList.isEmpty())
-            {
-                List<Reservation> newList = new ArrayList<Reservation>();
-                newList.add(result.get(i));
-                mainList.add(newList);
-            } else {
-                boolean added = false;
-
-                for (List<Reservation> x : mainList)
-                {
-                    if (x.get(0).getPickup_time().compareTo(result.get(i).getPickup_time()) == 0)
-                    {
-                        x.add(result.get(i));
-                        added = true;
-                        break;
-                    }
-                }
-                if (!added)
-                {
-                    List<Reservation> newList = new ArrayList<Reservation>();
-                    newList.add(result.get(i));
-                    mainList.add(newList);
-                }
-            }
-        }
-        AvailableRidesTimeSlotsAdapter showcaseAdapter = new AvailableRidesTimeSlotsAdapter(mainList);
-        ridesList.setAdapter(showcaseAdapter);
-        RidesFragment.ViewTarget target = new RidesFragment.ViewTarget(1, ridesList);
-
         ShowcaseView sv = new ShowcaseView.Builder(getActivity(), true)
-                .setTarget(target)
-                .setContentTitle("Rides")
-                .setContentText("Designated drivers with open timeslots will show up here with times available for you to be picked up." +
-                        " Clicking a timeslot will show available drivers.")
+                .setContentTitle("Find a Ride")
+                .setContentText("Designated drivers with open timeslots will \nshow up here with times available for you\n to be picked up." +
+                        " Clicking a timeslot\n will show available drivers.")
                 .hideOnTouchOutside()
                 .setStyle(R.style.CustomShowcaseTheme2)
                 .build();
-
-
-
-
-
-    }
-
-    public class ViewTarget implements Target {
-
-        private final View mView;
-
-        public ViewTarget(View view) {
-            mView = view;
-        }
-
-        public ViewTarget(int viewId, Activity activity) {
-            mView = activity.findViewById(viewId);
-        }
-
-        public ViewTarget(int position, RecyclerView recyclerView) {
-                mView = recyclerView.getChildAt(position).findViewById(R.id.rides_available_timeslot_pickup_time);
-        }
-
-        @Override
-        public Point getPoint() {
-            int[] location = new int[2];
-            mView.getLocationInWindow(location);
-            int x = location[0] + mView.getWidth() / 2;
-            int y = location[1] + mView.getHeight() / 2;
-            return new Point(x, y);
-        }
     }
 
     public void onResume() {
         super.onResume();
-//        if (showRidesShowcase) {
-//            SharedPreferences.Editor editor = sp.edit();
-//            editor.putBoolean(Constants.SHOWRIDESSHOWCASE, false);
-//            editor.commit();
-//            showRidesShowcase = false;
+        if (showRidesShowcase) {
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean(Constants.SHOWRIDESSHOWCASE, false);
+            editor.commit();
+            showRidesShowcase = false;
             showcase();
-//        }
-
+        }
     }
 
     @Override

@@ -15,6 +15,7 @@ public class Constants {
     public static final String SHOWPROFILESHOWCASE = "profileShowcase";
     public static final String SHOWSHIFTSSHOWCASE = "shiftsShowcase";
     public static final String SHOWRIDESSHOWCASE = "ridesShowcase";
+    public static final String SHOWRESERVATIONSSHOWCASE = "reservationsShowcase";
 
     static String getGoogleApiProjectNumber() {
         return googleApiProjectNumber;

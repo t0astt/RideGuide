@@ -163,9 +163,10 @@ public class MainActivity extends ActionBarActivity implements
                                 .commit();
                     } else if (itemClicked == 6) {
                             toolbar.setTitle("Settings");
-                            fm.beginTransaction().replace(R.id.container, SettingsFragment.newInstance("Test", "SettingsFragment"))
-                                    .addToBackStack("Settings")
-                                    .commit();
+                            //fm.beginTransaction().replace(R.id.container, SettingsFragment.newInstance("Test", "SettingsFragment"))
+                                    //.addToBackStack("Settings")
+                                    //.commit();
+                        getFragmentManager().beginTransaction().replace(R.id.container, new SettingsFragment()).commit();
                     } else if (itemClicked == 7) {
                         new AlertDialog.Builder(MainActivity.this)
                                 .setTitle("Confirm Logout")

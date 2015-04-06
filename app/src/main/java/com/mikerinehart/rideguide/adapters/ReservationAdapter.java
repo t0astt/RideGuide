@@ -47,6 +47,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
         Reservation r = reservationList.get(i);
         reservationViewHolder.name.setText(r.getShift().getUser().getFullName());
         reservationViewHolder.numPassengers.setText(Integer.toString(r.getPassengers()));
+        if (r.getPassengers() == 1) reservationViewHolder.passengersLabel.setText("Passenger");
         reservationViewHolder.pickupTime.setText(df.format(r.getPickup_time()));
         Picasso.with(reservationViewHolder.userPic.getContext())
                 .load("https://graph.facebook.com/" + r.getShift().getUser().getFbUid() + "/picture?type=large")
@@ -106,6 +107,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
         protected TextView numPassengers;
         protected TextView pickupTime;
         protected ImageView userPic;
+        protected TextView passengersLabel;
 
         public ReservationViewHolder(View v) {
             super(v);
@@ -113,6 +115,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
             numPassengers = (TextView) v.findViewById(R.id.reservation_num_passengers);
             pickupTime = (TextView) v.findViewById(R.id.reservation_pickup_time);
             userPic = (ImageView) v.findViewById(R.id.reservation_user_pic);
+            passengersLabel = (TextView) v.findViewById(R.id.reservation_passengers_label);
         }
 
     }

@@ -61,6 +61,7 @@ dependencies {
     compile 'com.appyvet:materialrangebar:1.0'
     compile 'com.malinskiy:superrecyclerview:1.1.0'
     compile 'com.github.amlcurran.showcaseview:library:5.0.0'
+    compile 'com.jenzz:materialpreference:1.2.1'
 
     compile project(':slideDateTimePicker')
 }

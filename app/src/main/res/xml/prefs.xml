@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.jenzz.materialpreference.PreferenceCategory android:title="Test">
+        <com.jenzz.materialpreference.Preference android:title="Test"/>
+        <com.jenzz.materialpreference.Preference
+            android:title="Test"
+            android:summary="Test"
+            />
+    </com.jenzz.materialpreference.PreferenceCategory>
+</PreferenceScreen>

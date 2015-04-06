@@ -8,11 +8,15 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,12 +27,14 @@ import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
 import com.mikerinehart.rideguide.adapters.MyShiftsAdapter;
+import com.mikerinehart.rideguide.main_fragments.MyShiftsFragment;
 import com.mikerinehart.rideguide.models.Shift;
 import com.mikerinehart.rideguide.models.User;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
@@ -50,6 +56,7 @@ public class ShiftsHistoryPageFragment extends Fragment {
     private ProgressBarCircularIndeterminate loadingIcon;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView shiftList;
+    private MyShiftsAdapter shiftsAdapter;
 
     private String TAG = "MyShiftsFragment";
 
@@ -91,6 +98,85 @@ public class ShiftsHistoryPageFragment extends Fragment {
         refreshContent();
         loadingIcon.setVisibility(ProgressBarCircularIndeterminate.GONE);
 
+        final GestureDetector mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+        });
+
+        shiftList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView recyclerView, final MotionEvent motionEvent) {
+                ViewGroup child = (ViewGroup) recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+
+                if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
+                    final int itemClicked = recyclerView.getChildPosition(child);
+
+                    final String[] dialogOptions = {"View Reservations", "Delete Shift"};
+                    MaterialDialog shiftDialog = new MaterialDialog.Builder(ShiftsHistoryPageFragment.this.getActivity())
+                            .title("Shift Options")
+                            .items(dialogOptions)
+                            .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallback() {
+                                @Override
+                                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                    if (which == 0) {
+                                        shiftsAdapter.createReservationsDialog(shiftsAdapter.getShift(itemClicked).getReservations(), true);
+                                    } else if (which == 1) {
+                                        new MaterialDialog.Builder(ShiftsHistoryPageFragment.this.getActivity())
+                                                .title("Confirm Shift Delete")
+                                                .content("Are you sure you want to delete this shift? All reservations made after the current time will be deleted!")
+                                                .positiveText("YES")
+                                                .negativeText("NO")
+                                                .callback(new MaterialDialog.ButtonCallback() {
+                                                    @Override
+                                                    public void onPositive(MaterialDialog dialog) {
+                                                        RequestParams params = new RequestParams("shift_id", shiftsAdapter.getShift(itemClicked).getId());
+                                                        RestClient.post("shifts/deleteShift", params, new JsonHttpResponseHandler() {
+                                                            @Override
+                                                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                                                try {
+                                                                    if (response.getString("status").equalsIgnoreCase("success")) {
+                                                                        Toast.makeText(ShiftsHistoryPageFragment.this.getActivity(), "Shift Removed!", Toast.LENGTH_SHORT).show();
+                                                                        refreshContent();
+                                                                    } else {
+                                                                        Toast.makeText(ShiftsHistoryPageFragment.this.getActivity(), "Error, please try again!", Toast.LENGTH_SHORT).show();
+                                                                        refreshContent();
+                                                                    }
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                                                Log.i(TAG, "Error: " + errorResponse);
+                                                                mSwipeRefreshLayout.setRefreshing(false);
+                                                            }
+                                                        });
+                                                    }
+                                                })
+                                                .build()
+                                                .show();
+
+                                    }
+                                }
+                            })
+                            .positiveText("OK")
+                            .negativeText("CANCEL")
+                            .build();
+                    shiftDialog.show();
+
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+                Log.i(TAG, "TouchEvent");
+            }
+        });
+
         return v;
     }
 
@@ -116,7 +202,7 @@ public class ShiftsHistoryPageFragment extends Fragment {
                 } else {
                     shiftShame.setVisibility(TextView.GONE);
                     shiftList.setVisibility(RecyclerView.VISIBLE);
-                    MyShiftsAdapter shiftsAdapter = new MyShiftsAdapter(result, me);
+                    shiftsAdapter = new MyShiftsAdapter(result, me);
 
                     shiftList.addItemDecoration(new SimpleDividerItemDecoration(shiftList.getContext()));
 

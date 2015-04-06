@@ -78,6 +78,7 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
         myShiftsViewHolder.startTime.setText(df.format(s.getStart()));
         myShiftsViewHolder.endTime.setText(df.format(s.getEnd()));
         myShiftsViewHolder.reservations.setText(Integer.toString(s.getReservationCount()));
+        if (s.getReservationCount() == 1) myShiftsViewHolder.reservationsLabel.setText("Reservation");
         myShiftsViewHolder.seats.setText(Integer.toString(s.getSeats()));
         myShiftsViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +114,7 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
         return l;
     }
 
-    public void createReservationsDialog(Reservation[] reservations) {
+    public void createReservationsDialog(Reservation[] reservations, final boolean history) {
         LayoutInflater inflater = LayoutInflater.from(c);
         View dialogLayout = inflater.inflate(R.layout.myshifts_view_shift_reservations_dialog, null);
         final MaterialDialog dialog = new MaterialDialog.Builder(c)
@@ -159,7 +160,7 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                     TextView lastName = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_last_name);
                     TextView pickupOrigin = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_pickup_origin);
                     TextView pickupDestination = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_destination);
-                    TextView pickupTime = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_pickup_time);
+                    final TextView pickupTime = (TextView)dialogLayout.findViewById(R.id.user_actions_dialog_pickup_time);
                     com.gc.materialdesign.views.ButtonRectangle callUserButton = (ButtonRectangle)dialogLayout.findViewById(R.id.user_actions_dialog_call_user_button);
                     com.gc.materialdesign.views.ButtonRectangle navButton = (ButtonRectangle)dialogLayout.findViewById(R.id.user_actions_dialog_donate_nav_button);
                     navButton.setText("NAVIGATE");
@@ -178,48 +179,94 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                     callUserButton.setRippleSpeed(9001); // IT'S OVER 9000!!!
                     navButton.setRippleSpeed(9001);
 
-                    userActionsDialog = new MaterialDialog.Builder((FragmentActivity)c)
-                            .customView(dialogLayout, false)
-                            .neutralText("Delete Reservation")
-                            .neutralColor(c.getResources().getColor(R.color.ColorNegative))
-                            .positiveText("Ok")
-                            .callback(new MaterialDialog.ButtonCallback() {
+                    //Check whether or not we need to show a history version of the dialog
+                    if (!history) {
+                        userActionsDialog = new MaterialDialog.Builder((FragmentActivity)c)
+                                .customView(dialogLayout, false)
+                                .neutralText("Delete Reservation")
+                                .neutralColor(c.getResources().getColor(R.color.ColorNegative))
+                                .positiveText("Ok")
+                                .callback(new MaterialDialog.ButtonCallback() {
 
-                                @Override
-                                public void onNeutral(MaterialDialog dialog) {
-                                    MaterialDialog confirmDeleteDialog = new MaterialDialog.Builder((FragmentActivity)c)
-                                            .title("Confirm Reservation Deletion")
-                                            .content("Are you sure you want to delete " + u.getFirstName() + "'s reservation?")
-                                            .positiveText("Yes")
-                                            .negativeText("Cancel")
-                                            .callback(new MaterialDialog.ButtonCallback() {
-                                                public void onPositive(MaterialDialog materialDialog) {
+                                    @Override
+                                    public void onNeutral(MaterialDialog dialog) {
+                                        MaterialDialog confirmDeleteDialog = new MaterialDialog.Builder((FragmentActivity)c)
+                                                .title("Confirm Reservation Deletion")
+                                                .content("Are you sure you want to delete " + u.getFirstName() + "'s reservation?")
+                                                .positiveText("Yes")
+                                                .negativeText("Cancel")
+                                                .callback(new MaterialDialog.ButtonCallback() {
+                                                    public void onPositive(MaterialDialog materialDialog) {
 
-                                                    RequestParams params = new RequestParams("reservation_id", r.getId());
-                                                    RestClient.post("reservations/cancelUserReservation", params, new JsonHttpResponseHandler() {
-                                                        @Override
-                                                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                                            try {
-                                                                if (response.getString("status").equalsIgnoreCase("success")) {
-                                                                    Toast.makeText(((FragmentActivity)c), "Reservation deleted!", Toast.LENGTH_LONG).show();
+                                                        RequestParams params = new RequestParams("reservation_id", r.getId());
+                                                        RestClient.post("reservations/cancelUserReservation", params, new JsonHttpResponseHandler() {
+                                                            @Override
+                                                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                                                try {
+                                                                    if (response.getString("status").equalsIgnoreCase("success")) {
+                                                                        Toast.makeText(((FragmentActivity)c), "Reservation deleted!", Toast.LENGTH_LONG).show();
+                                                                    }
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
                                                                 }
-                                                            } catch (JSONException e) {
-                                                                e.printStackTrace();
                                                             }
-                                                        }
 
-                                                        @Override
-                                                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                                            //Toast.makeText(getActivity().getBaseContext(), "Network error, please try again", Toast.LENGTH_LONG);
-                                                        }
-                                                    });
-                                                }
-                                            })
-                                            .build();
-                                    confirmDeleteDialog.show();
-                                }
-                            })
-                            .build();
+                                                            @Override
+                                                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                                                Toast.makeText(pickupTime.getContext(), "Network error, please try again", Toast.LENGTH_LONG).show();
+                                                            }
+                                                        });
+                                                    }
+                                                })
+                                                .build();
+                                        confirmDeleteDialog.show();
+                                    }
+                                })
+                                .build();
+                    } else {
+                        userActionsDialog = new MaterialDialog.Builder((FragmentActivity)c)
+                                .customView(dialogLayout, false)
+                                .positiveText("Ok")
+                                .callback(new MaterialDialog.ButtonCallback() {
+
+                                    @Override
+                                    public void onNeutral(MaterialDialog dialog) {
+                                        MaterialDialog confirmDeleteDialog = new MaterialDialog.Builder((FragmentActivity)c)
+                                                .title("Confirm Reservation Deletion")
+                                                .content("Are you sure you want to delete " + u.getFirstName() + "'s reservation?")
+                                                .positiveText("Yes")
+                                                .negativeText("Cancel")
+                                                .callback(new MaterialDialog.ButtonCallback() {
+                                                    public void onPositive(MaterialDialog materialDialog) {
+
+                                                        RequestParams params = new RequestParams("reservation_id", r.getId());
+                                                        RestClient.post("reservations/cancelUserReservation", params, new JsonHttpResponseHandler() {
+                                                            @Override
+                                                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                                                try {
+                                                                    if (response.getString("status").equalsIgnoreCase("success")) {
+                                                                        Toast.makeText(((FragmentActivity)c), "Reservation deleted!", Toast.LENGTH_LONG).show();
+                                                                    }
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                                                Toast.makeText(pickupTime.getContext(), "Network error, please try again", Toast.LENGTH_LONG).show();
+                                                            }
+                                                        });
+                                                    }
+                                                })
+                                                .build();
+                                        confirmDeleteDialog.show();
+                                    }
+                                })
+                                .build();
+                    }
+
+
                     userActionsDialog.show();
                     userPic.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -227,7 +274,7 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                             userActionsDialog.dismiss();
                             ((FragmentActivity)c).getSupportFragmentManager()
                                     .beginTransaction()
-                                    .replace(R.id.container, ProfileFragment.newInstance(u, me)) // TODO: move all this shit to a fragment
+                                    .replace(R.id.container, ProfileFragment.newInstance(u, me))
                                     .addToBackStack("MyShifts")
                                     .commit();
                         }
