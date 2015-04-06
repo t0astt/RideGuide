@@ -145,5 +145,17 @@
         android:layout_alignRight="@+id/profile_thumb_down_button"
         android:layout_alignEnd="@+id/profile_thumb_down_button" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="This user has no reviews!"
+        android:id="@+id/profile_no_reviews_textview"
+        android:layout_below="@+id/profile_reviews_label"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="107dp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
 
 </RelativeLayout>

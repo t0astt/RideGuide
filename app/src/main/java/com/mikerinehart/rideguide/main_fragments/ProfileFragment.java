@@ -75,6 +75,7 @@ public class ProfileFragment extends Fragment {
     private TextView thumbsDownButtonCount;
     RecyclerView commentList;
     private String coverPhotoSource;
+    private TextView noReviewsTextView;
     private final String TAG = "ProfileFragment";
 
     private Gson gson;
@@ -144,6 +145,7 @@ public class ProfileFragment extends Fragment {
         thumbDownButton = (ImageView)v.findViewById(R.id.profile_thumb_down_button);
         thumbsUpButtonCount = (TextView)v.findViewById(R.id.profile_thumb_up_count);
         thumbsDownButtonCount = (TextView)v.findViewById(R.id.profile_thumb_down_count);
+        noReviewsTextView = (TextView)v.findViewById(R.id.profile_no_reviews_textview);
 
         refreshContent();
 
@@ -201,6 +203,11 @@ public class ProfileFragment extends Fragment {
                 }.getType();
 
                 result = (List<Review>)gson.fromJson(response.toString(), listType);
+                if (result.size() == 0) {
+                    noReviewsTextView.setVisibility(TextView.VISIBLE);
+                } else {
+                    noReviewsTextView.setVisibility(TextView.GONE);
+                }
                 int thumbsUpCount = 0;
                 int thumbsDownCount = 0;
 

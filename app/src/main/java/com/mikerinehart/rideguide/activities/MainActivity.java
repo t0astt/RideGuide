@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -22,11 +23,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.gson.Gson;
 import com.mikerinehart.rideguide.VenmoLibrary;
@@ -75,6 +80,7 @@ public class MainActivity extends ActionBarActivity implements
     SharedPreferences sp;
 
     public static boolean showDrawerShowcase;
+    public static boolean showDrawerHandleShowcase;
 
     public User me;
 
@@ -90,6 +96,7 @@ public class MainActivity extends ActionBarActivity implements
 
         sp = getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
         showDrawerShowcase = sp.getBoolean(Constants.SHOWDRAWERSHOWCASE, true); // True if need to show
+        showDrawerHandleShowcase = sp.getBoolean(Constants.SHOWDRAWERHANDLESHOWCASE, true);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
@@ -202,7 +209,7 @@ public class MainActivity extends ActionBarActivity implements
                     editor.putBoolean(Constants.SHOWDRAWERSHOWCASE, false);
                     editor.commit();
                     showDrawerShowcase = false;
-                    showcase();
+                    showcase(0);
                 }
             }
 
@@ -217,15 +224,38 @@ public class MainActivity extends ActionBarActivity implements
 
     }
 
-    private void showcase() {
-        ViewTarget target = new ViewTarget(R.id.imageView, mainActivity);
-        new ShowcaseView.Builder(mainActivity, true)
-                .setTarget(target)
-                .setContentTitle("Profile")
-                .setContentText("Clicking your profile icon will open your RideGuide profile")
-                .hideOnTouchOutside()
-                .setStyle(R.style.CustomShowcaseTheme2)
-                .build();
+    private void showcase(int which) {
+        switch(which) {
+            case(0):
+                ViewTarget target = new ViewTarget(R.id.imageView, mainActivity);
+                new ShowcaseView.Builder(mainActivity, true)
+                        .setTarget(target)
+                        .setContentTitle("Profile")
+                        .setContentText("Clicking your profile icon will open your RideGuide profile")
+                        .hideOnTouchOutside()
+                        .setStyle(R.style.CustomShowcaseTheme2)
+                        .build();
+                break;
+            case(1):
+                ImageButton drawerToggleIcon = null;
+
+                for (int i=0; i < toolbar.getChildCount(); i++) {
+                    if (toolbar.getChildAt(i) instanceof ImageButton) drawerToggleIcon = (ImageButton)toolbar.getChildAt(i);
+                }
+
+                ViewTarget target2 = new ViewTarget(drawerToggleIcon);
+                new ShowcaseView.Builder(mainActivity, true)
+                        .setTarget(target2)
+                        .setContentTitle("Welcome!")
+                        .setContentText("Welcome to RideGuide! To get started, click the button highlighted or swipe from the left of the screen.")
+                        .hideOnTouchOutside()
+                        .setStyle(R.style.CustomShowcaseTheme2)
+                        .build();
+                break;
+        }
+
+
+
     }
 
     @Override
@@ -240,16 +270,28 @@ public class MainActivity extends ActionBarActivity implements
                             //Payment was successful
                             String note = response.getNote();
                             String amount = response.getAmount();
-                            Toast.makeText(this.getApplicationContext(), "Donation of $" + amount + " successful", Toast.LENGTH_LONG);
+                            Toast.makeText(this.getApplicationContext(), "Donation of $" + amount + " successful", Toast.LENGTH_LONG).show();
                         }
                     } else {
                         String error_message = data.getStringExtra("error_message");
-                        Toast.makeText(this.getApplicationContext(), "Error in donation process", Toast.LENGTH_LONG);
+                        Toast.makeText(this.getApplicationContext(), "Error in donation process", Toast.LENGTH_LONG).show();
                     }
                 } else if (resultCode == RESULT_CANCELED) {
-                    Toast.makeText(this.getApplicationContext(), "Donation canceled", Toast.LENGTH_LONG);
+                    Toast.makeText(this.getApplicationContext(), "Donation canceled", Toast.LENGTH_LONG).show();
                 }
             }
+        }
+    }
+
+    public void onResume() {
+        super.onResume();
+
+        if (showDrawerHandleShowcase) {
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean(Constants.SHOWDRAWERHANDLESHOWCASE, false);
+            editor.commit();
+            showDrawerHandleShowcase = false;
+            showcase(1);
         }
     }
 

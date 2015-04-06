@@ -93,12 +93,15 @@ public class SettingActivity extends ActionBarActivity {
             resetTutorialScreens.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    editor.remove("drawerShowcase");
+                    editor.remove(Constants.SHOWDRAWERSHOWCASE);
+                    editor.remove(Constants.SHOWDRAWERHANDLESHOWCASE);
                     MainActivity.showDrawerShowcase = true;
-                    editor.remove("profileShowcase");
-                    editor.remove("shiftsShowcase");
-                    editor.remove("ridesShowcase");
-                    editor.remove("reservationsShowcase");
+                    MainActivity.showDrawerHandleShowcase = true;
+                    editor.remove(Constants.SHOWPROFILESHOWCASE);
+                    editor.remove(Constants.SHOWSHIFTSSHOWCASE);
+                    editor.remove(Constants.SHOWRIDESSHOWCASE);
+                    editor.remove(Constants.SHOWRESERVATIONSSHOWCASE);
+
                     editor.commit();
                     Toast.makeText(getActivity().getBaseContext(), "Tutorial screens reset!", Toast.LENGTH_SHORT).show();
                     return false;
