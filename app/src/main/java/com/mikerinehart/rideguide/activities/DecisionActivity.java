@@ -144,7 +144,7 @@ public class DecisionActivity extends ActionBarActivity {
     private void launchMainActivity(User me) {
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("me", me);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
         finish();
         return;
