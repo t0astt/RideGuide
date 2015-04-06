@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -12,7 +13,11 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.mikerinehart.rideguide.activities.Constants;
 import com.mikerinehart.rideguide.activities.DecisionActivity;
+
+import java.sql.Timestamp;
+import java.util.Date;
 
 public class GcmIntentService extends IntentService {
     // TODO: Rename actions, choose action names that describe tasks that this
@@ -42,7 +47,9 @@ public class GcmIntentService extends IntentService {
             if (!extras.isEmpty())
             {
                 if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
+                    storeNotification(extras.getString("message"));
                     sendNotification(extras.getString("message"));
+
                 }
             }
 
@@ -68,5 +75,16 @@ public class GcmIntentService extends IntentService {
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
         r.play();
+    }
+
+    private void storeNotification(String message) {
+        SharedPreferences sp = GcmIntentService.this.getSharedPreferences(Constants.NOTIFICATIONS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        Date d = new Date();
+        Timestamp t = new Timestamp(d.getTime());
+
+        editor.putString(t.toString(), message);
+        editor.commit();
+
     }
 }

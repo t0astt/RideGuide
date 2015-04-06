@@ -37,12 +37,9 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class HomePageFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private User me;
     private String mParam2;
 
@@ -52,15 +49,6 @@ public class HomePageFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomePageFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static HomePageFragment newInstance(User param1, String param2) {
         HomePageFragment fragment = new HomePageFragment();
         Bundle args = new Bundle();
@@ -86,16 +74,6 @@ public class HomePageFragment extends Fragment {
         MainActivity.toolbar.setTitle("Home");
         View v = inflater.inflate(R.layout.fragment_home_page, container, false);
 
-        RecyclerView reservationList = (RecyclerView) v.findViewById(R.id.upcoming_reservation_list);
-        reservationList.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(reservationList.getContext());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        reservationList.setLayoutManager(llm);
-
-        UpcomingReservationsAdapter ra = new UpcomingReservationsAdapter(createReservationList());
-        reservationList.addItemDecoration(new SimpleDividerItemDecoration(reservationList.getContext()));
-        reservationList.setAdapter(ra);
-
         return v;
     }
 
@@ -110,15 +88,7 @@ public class HomePageFragment extends Fragment {
 
         return result;
     }
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i("HomePageFragment", "HomePageFragment OnDestroy");
-        SharedPreferences fragPref = getActivity().getApplicationContext().getSharedPreferences("CURRENT_FRAGMENT", Context.MODE_PRIVATE);
-        SharedPreferences.Editor fragEditor = fragPref.edit();
-        fragEditor.putInt("CURRENT_FRAGMENT", 1);
-        fragEditor.commit();
-    }
+
 
     @Override
     public void onAttach(Activity activity) {

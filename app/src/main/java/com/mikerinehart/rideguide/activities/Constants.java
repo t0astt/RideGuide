@@ -11,6 +11,7 @@ public class Constants {
     private static String venmoAppName = "RideGuide";
     private static String venmoSecret = "BWxNqRRQ6k8xURUSkfKJVZeCVrFmqdW6";
     public static final String PREFERENCES = "com.mikerinehart.RideGuide.preferences";
+    public static final String NOTIFICATIONS = "com.mikerinehart.RideGuide.notifications";
     public static final String SHOWDRAWERSHOWCASE = "drawerShowcase";
     public static final String SHOWPROFILESHOWCASE = "profileShowcase";
     public static final String SHOWSHIFTSSHOWCASE = "shiftsShowcase";
