@@ -30,7 +30,9 @@ import com.mikerinehart.rideguide.models.Ride;
 import com.mikerinehart.rideguide.models.User;
 
 import java.lang.reflect.Type;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -88,12 +90,6 @@ public class HomePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home_page, container, false);
-        notificationList = (RecyclerView)v.findViewById(R.id.home_page_notification_list);
-        noNotifications = (TextView)v.findViewById(R.id.home_page_no_notifications);
-        notificationList.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(notificationList.getContext());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        notificationList.setLayoutManager(llm);
 
         return v;
     }
@@ -104,7 +100,7 @@ public class HomePageFragment extends Fragment {
         ArrayList<Notification> notificationMessageList = new ArrayList<Notification>();
         Map<String, ?> map = notificationSP.getAll();
         for (Map.Entry<String, ?> entry : map.entrySet()) {
-            notificationMessageList.add(new Notification(entry.getValue().toString()));
+            notificationMessageList.add(new Notification(entry.getValue().toString())); // TODO: Check
         }
         if (notificationMessageList != null && notificationMessageList.size() > 0) {
             noNotifications.setVisibility(TextView.GONE);
@@ -120,32 +116,20 @@ public class HomePageFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.i("HomePage", "onresume");
-        refreshContent();
+        //refreshContent();
     }
 
-    public static void showcase(Activity a) {
-        ViewTarget target = new ViewTarget(R.id.home_page_notification_list, a);
-        ShowcaseView s = new ShowcaseView.Builder(a, true)
-                .setTarget(target)
-                .setContentTitle("Notifications")
-                .setContentText("Any notifications you receive will show up on the homescreen.\n\n" +
-                        "Notifications can be cleared in the Settings menu.")
-                .hideOnTouchOutside()
-                .setStyle(R.style.CustomShowcaseTheme2)
-                .build();
-    }
-
-    private List<Reservation> createReservationList() {
-        List<Reservation> result;
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-        Type listType = new TypeToken<List<Ride>>() {
-        }.getType();
-
-        String testJson = "[{\"id\":\"2\",\"user_id\":\"2\",\"seats\":\"4\",\"start\":\"2015-02-09 18:00:00\",\"end\":\"2015-02-10 02:00:00\",\"user\":{\"id\":\"2\",\"fb_uid\":\"1493344104\",\"first_name\":\"Edward\",\"last_name\":\"Liu\"}},{\"id\":\"3\",\"user_id\":\"4\",\"seats\":\"3\",\"start\":\"2015-02-09 17:00:00\",\"end\":\"2015-02-10 03:00:00\",\"user\":{\"id\":\"4\",\"fb_uid\":\"1302213537\",\"first_name\":\"Cole\",\"last_name\":\"Menzel\"}}]";
-        result = (List<Reservation>) gson.fromJson(testJson, listType);
-
-        return result;
-    }
+//    public static void showcase(Activity a) {
+//        ViewTarget target = new ViewTarget(R.id.home_page_notification_list, a);
+//        ShowcaseView s = new ShowcaseView.Builder(a, true)
+//                .setTarget(target)
+//                .setContentTitle("Notifications")
+//                .setContentText("Any notifications you receive will show up on the homescreen.\n\n" +
+//                        "Notifications can be cleared in the Settings menu.")
+//                .hideOnTouchOutside()
+//                .setStyle(R.style.CustomShowcaseTheme2)
+//                .build();
+//    }
 
 
     @Override

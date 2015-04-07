@@ -15,6 +15,7 @@ import android.support.v4.app.NotificationCompat;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.mikerinehart.rideguide.activities.Constants;
 import com.mikerinehart.rideguide.activities.DecisionActivity;
+import com.mikerinehart.rideguide.activities.NotificationCenterActivity;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -60,7 +61,7 @@ public class GcmIntentService extends IntentService {
     private void sendNotification(String message) {
         mNotificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, DecisionActivity.class), 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, NotificationCenterActivity.class), 0);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher)
