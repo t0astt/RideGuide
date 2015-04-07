@@ -28,6 +28,8 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
 
 public class NotificationCenterActivity extends ActionBarActivity {
@@ -137,6 +139,11 @@ public class NotificationCenterActivity extends ActionBarActivity {
                 notificationMessageList.add(gson.fromJson(entry.getValue().toString(), Notification.class));
             }
             if (notificationMessageList != null && notificationMessageList.size() > 0) {
+                Collections.sort(notificationMessageList, new Comparator<Notification>() {
+                    public int compare(Notification n1, Notification n2) {
+                        return n2.getDate().compareTo(n1.getDate());
+                    }
+                });
                 noNotifications.setVisibility(TextView.GONE);
                 NotificationsAdapter na = new NotificationsAdapter(notificationMessageList);
                 notificationList.setAdapter(na);

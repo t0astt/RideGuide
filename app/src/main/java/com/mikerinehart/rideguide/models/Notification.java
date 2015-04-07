@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Created by Mike on 4/6/2015.
  */
-public class Notification {
+public class Notification implements Comparator<Notification> {
 
     protected String message;
     protected Date date;
@@ -23,6 +23,11 @@ public class Notification {
         this.date = date;
         this.fbUid = fbUid;
         this.type = type;
+    }
+
+    @Override
+    public int compare(Notification n1, Notification n2) {
+        return n1.getDate().compareTo(n2.getDate());
     }
 
     public String getMessage() {
