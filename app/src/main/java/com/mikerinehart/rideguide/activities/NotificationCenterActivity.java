@@ -2,6 +2,7 @@ package com.mikerinehart.rideguide.activities;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -16,8 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.gson.Gson;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
@@ -35,6 +41,13 @@ import java.util.Map;
 public class NotificationCenterActivity extends ActionBarActivity {
 
     public static Toolbar notifications_toolbar;
+
+    SharedPreferences notificationSP;
+    SharedPreferences.Editor editor;
+
+    SharedPreferences sp;
+    private boolean showNotificationShowcase;
+    private Menu toolbarMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,24 +83,59 @@ public class NotificationCenterActivity extends ActionBarActivity {
         });
     }
 
+    private void showcase() {
+        MenuItem clear = toolbarMenu.findItem(R.id.action_clear_notifications);
+        ImageButton b = (ImageButton)findViewById(clear.getItemId());
+
+        Button clearNotificationsIcon = null;
+                for (int i=0; i < notifications_toolbar.getChildCount(); i++) {
+                    if (notifications_toolbar.getChildAt(i) instanceof Button)
+                        clearNotificationsIcon = (Button)notifications_toolbar.getChildAt(i);
+                }
+
+                ViewTarget target2 = new ViewTarget(b);
+                new ShowcaseView.Builder(this, true)
+                        .setTarget(target2)
+                        .setContentTitle("Welcome!")
+                        .setContentText("Welcome to RideGuide! To get started, click the button highlighted or swipe from the left of the screen.")
+                        .hideOnTouchOutside()
+                        .setStyle(R.style.CustomShowcaseTheme2)
+                        .build();
+    }
+
+    public void onResume() {
+        super.onResume();
+        //showcase();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_notification_center, menu);
+        toolbarMenu = menu;
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(item.getItemId()) {
+            case R.id.action_clear_notifications:
+                notificationSP = this.getSharedPreferences(Constants.NOTIFICATIONS, Context.MODE_PRIVATE);
+                editor = notificationSP.edit();
+                editor.clear();
+                editor.commit();
+
+                Toast.makeText(this, "Notifications cleared!", Toast.LENGTH_SHORT).show();
+                new Handler().post(new Runnable() {
+                    @Override public void run() {
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.notifications_container, new NotificationsFragment())
+                                .commit();
+                    }
+                });
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -95,8 +143,6 @@ public class NotificationCenterActivity extends ActionBarActivity {
 
     public static class NotificationsFragment extends Fragment {
 
-        SharedPreferences sp;
-        private boolean showNotificationShowcase;
         SharedPreferences notificationSP;
         SharedPreferences.Editor editor;
 
@@ -144,10 +190,11 @@ public class NotificationCenterActivity extends ActionBarActivity {
                 } else if (!n.isSeen()) {
                     n.setSeen(true);
                 }
+                notificationMessageList.add(n);
+                n.setSeen(true);
                 String jsonNotification = gson.toJson(n);
                 Long timestamp = n.getDate().getTime();
                 editor.putString(timestamp.toString(), jsonNotification);
-                notificationMessageList.add(n);
             }
             editor.commit();
             if (notificationMessageList != null && notificationMessageList.size() > 0) {

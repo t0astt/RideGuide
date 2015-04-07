@@ -10,6 +10,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -17,6 +18,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
 import com.mikerinehart.rideguide.activities.Constants;
 import com.mikerinehart.rideguide.activities.DecisionActivity;
+import com.mikerinehart.rideguide.activities.MainActivity;
 import com.mikerinehart.rideguide.activities.NotificationCenterActivity;
 import com.mikerinehart.rideguide.models.Notification;
 

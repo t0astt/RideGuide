@@ -6,7 +6,7 @@
     <item
         android:id="@+id/action_notifications"
         android:title="Notifications"
-        android:icon="@drawable/ic_actions_notifications"
+        android:icon="@drawable/ic_action_notifications_none"
         android:orderInCategory="100"
         app:showAsAction="ifRoom" />
 

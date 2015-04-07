@@ -45,10 +45,14 @@ import com.mikerinehart.rideguide.main_fragments.ProfileFragment;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.main_fragments.RidesFragment;
 import com.mikerinehart.rideguide.main_fragments.SettingsFragment;
+import com.mikerinehart.rideguide.models.Notification;
 import com.mikerinehart.rideguide.models.User;
 import com.mikerinehart.rideguide.page_fragments.ReservationsHistoryPageFragment;
 import com.mikerinehart.rideguide.page_fragments.ShiftsHistoryPageFragment;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 public class MainActivity extends ActionBarActivity implements
         HomePageFragment.OnFragmentInteractionListener,
@@ -60,7 +64,8 @@ public class MainActivity extends ActionBarActivity implements
         SettingsFragment.OnFragmentInteractionListener,
         AboutFragment.OnFragmentInteractionListener,
         ShiftsHistoryPageFragment.OnFragmentInteractionListener,
-        ReservationsHistoryPageFragment.OnFragmentInteractionListener {
+        ReservationsHistoryPageFragment.OnFragmentInteractionListener,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     RecyclerView mRecyclerView;
     public static DrawerAdapter drawerAdapter;
@@ -76,6 +81,8 @@ public class MainActivity extends ActionBarActivity implements
             R.drawable.ic_settings_gray,
             R.drawable.ic_exit_gray};
 
+    private MenuItem notificationsIcon;
+
     Activity mainActivity;
     SharedPreferences sp;
 
@@ -83,17 +90,44 @@ public class MainActivity extends ActionBarActivity implements
     public static boolean showDrawerShowcase;
     public static boolean showDrawerHandleShowcase;
 
+    SharedPreferences spNotifications;
+
     public User me;
 
     String TAG = "MainActivity";
     public static Toolbar toolbar;
     private GraphUser user;
 
+    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        Log.i(TAG, "Notifications changed");
+
+        boolean newNotifications = false;
+        Gson gson = new Gson();
+        Map<String, ?> map = spNotifications.getAll();
+        for (Map.Entry<String, ?> entry : map.entrySet()) {
+            Notification n = gson.fromJson(entry.getValue().toString(), Notification.class);
+            if (n.isSeen() == null || !n.isSeen()) {
+                newNotifications = true;
+            }
+        }
+        if (newNotifications) {
+            Log.i(TAG, "New notifications");
+            notificationsIcon.setIcon(getResources().getDrawable(R.drawable.ic_actions_notifications));
+        } else {
+            Log.i(TAG, "No new notificastions");
+            notificationsIcon.setIcon(getResources().getDrawable(R.drawable.ic_action_notifications_none));
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainActivity = this;
         setContentView(R.layout.activity_main);
+
+        spNotifications = this.getSharedPreferences(Constants.NOTIFICATIONS, Context.MODE_PRIVATE);
+        spNotifications.registerOnSharedPreferenceChangeListener(this);
 
         sp = getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
         showDrawerShowcase = sp.getBoolean(Constants.SHOWDRAWERSHOWCASE, true); // True if need to show
@@ -290,6 +324,7 @@ public class MainActivity extends ActionBarActivity implements
 
     public void onResume() {
         super.onResume();
+        Log.i(TAG, "OnResume");
 
         if (showDrawerHandleShowcase) {
             SharedPreferences.Editor editor = sp.edit();
@@ -298,6 +333,22 @@ public class MainActivity extends ActionBarActivity implements
             showDrawerHandleShowcase = false;
             showcase(1);
         }
+
+        boolean newNotifications = false;
+        Gson gson = new Gson();
+        Map<String, ?> map = spNotifications.getAll();
+        for (Map.Entry<String, ?> entry : map.entrySet()) {
+            Notification n = gson.fromJson(entry.getValue().toString(), Notification.class);
+            if (n.isSeen() == null || !n.isSeen()) {
+                newNotifications = true;
+            }
+        }
+        if (newNotifications) {
+            if (notificationsIcon != null) notificationsIcon.setIcon(getResources().getDrawable(R.drawable.ic_actions_notifications));
+        } else {
+            if (notificationsIcon != null) notificationsIcon.setIcon(getResources().getDrawable(R.drawable.ic_action_notifications_none));
+        }
+
     }
 
     public void onPause() {
@@ -316,6 +367,7 @@ public class MainActivity extends ActionBarActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        notificationsIcon = menu.getItem(0);
         return true;
     }
 
@@ -324,6 +376,7 @@ public class MainActivity extends ActionBarActivity implements
 
         switch(item.getItemId()) {
             case R.id.action_notifications:
+                item.setIcon(getResources().getDrawable(R.drawable.ic_action_notifications_none));
                 Intent notificationIntent = new Intent(getApplicationContext(), NotificationCenterActivity.class);
                 startActivity(notificationIntent);
                 break;
