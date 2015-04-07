@@ -26,6 +26,8 @@ import com.loopj.android.http.RequestParams;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.RestClient;
 import com.mikerinehart.rideguide.RoundedTransformation;
+import com.mikerinehart.rideguide.main_fragments.MyReservationsFragment;
+import com.mikerinehart.rideguide.main_fragments.MyShiftsFragment;
 import com.mikerinehart.rideguide.main_fragments.ProfileFragment;
 import com.mikerinehart.rideguide.models.Reservation;
 import com.mikerinehart.rideguide.models.Shift;
@@ -204,6 +206,10 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                                                             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                                                 try {
                                                                     if (response.getString("status").equalsIgnoreCase("success")) {
+                                                                        ((FragmentActivity)c).getSupportFragmentManager()
+                                                                                .beginTransaction()
+                                                                                .replace(R.id.container, MyShiftsFragment.newInstance(me, "ReservationFragment"))
+                                                                                .commit();
                                                                         Toast.makeText(((FragmentActivity)c), "Reservation deleted!", Toast.LENGTH_LONG).show();
                                                                     }
                                                                 } catch (JSONException e) {
@@ -245,6 +251,10 @@ public class MyShiftsAdapter extends RecyclerView.Adapter<MyShiftsAdapter.MyShif
                                                             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                                                 try {
                                                                     if (response.getString("status").equalsIgnoreCase("success")) {
+                                                                        ((FragmentActivity)c).getSupportFragmentManager()
+                                                                                .beginTransaction()
+                                                                                .replace(R.id.container, MyShiftsFragment.newInstance(me, "ReservationFragment"))
+                                                                                .commit();
                                                                         Toast.makeText(((FragmentActivity)c), "Reservation deleted!", Toast.LENGTH_LONG).show();
                                                                     }
                                                                 } catch (JSONException e) {
