@@ -13,6 +13,7 @@ public class Notification implements Comparator<Notification> {
     protected Date date;
     protected String fbUid;
     protected String type;
+    protected Boolean seen;
 
     public Notification(String m) {
         this.message = m;
@@ -23,6 +24,14 @@ public class Notification implements Comparator<Notification> {
         this.date = date;
         this.fbUid = fbUid;
         this.type = type;
+    }
+
+    public Notification(String message, Date date, String fbUid, String type, boolean seen) {
+        this.message = message;
+        this.date = date;
+        this.fbUid = fbUid;
+        this.type = type;
+        this.seen = seen;
     }
 
     @Override
@@ -60,5 +69,17 @@ public class Notification implements Comparator<Notification> {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Boolean isSeen() {
+        if (seen == null) {
+            return null;
+        } else {
+            return seen;
+        }
+    }
+
+    public void setSeen(boolean seen) {
+        this.seen = seen;
     }
 }

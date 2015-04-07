@@ -50,6 +50,11 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         Notification n = notificationList.get(i);
         vh.message.setText(n.getMessage());
         vh.date.setText(df.format(n.getDate()));
+
+        if (n.isSeen() != null && n.isSeen()) {
+            vh.seen.setVisibility(TextView.VISIBLE);
+        }
+
         Picasso.with(vh.userPic.getContext())
                 .load("https://graph.facebook.com/" + n.getFbUid() + "/picture?type=large")
                 .transform(new RoundedTransformation(100, 5))
@@ -70,12 +75,14 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         protected TextView message;
         protected TextView date;
         protected ImageView userPic;
+        protected TextView seen;
 
         public NotificationsAdapterViewHolder(View v) {
             super(v);
             message = (TextView) v.findViewById(R.id.notification_list_item_message);
             date = (TextView) v.findViewById(R.id.notification_list_item_date);
             userPic = (ImageView) v.findViewById(R.id.notification_list_item_user_pic);
+            seen = (TextView) v.findViewById(R.id.notification_list_item_seen);
         }
 
     }

@@ -98,6 +98,7 @@ public class NotificationCenterActivity extends ActionBarActivity {
         SharedPreferences sp;
         private boolean showNotificationShowcase;
         SharedPreferences notificationSP;
+        SharedPreferences.Editor editor;
 
         RecyclerView notificationList;
         TextView noNotifications;
@@ -129,15 +130,26 @@ public class NotificationCenterActivity extends ActionBarActivity {
         private void refreshContent() {
             Log.i("HomePage", "refresh");
             notificationSP = getActivity().getSharedPreferences(Constants.NOTIFICATIONS, Context.MODE_PRIVATE);
-
+            editor = notificationSP.edit();
 
             Gson gson = new Gson();
             ArrayList<Notification> notificationMessageList = new ArrayList<Notification>();
             Map<String, ?> map = notificationSP.getAll();
             Log.i("Homepage", "map size is: " + map.size());
+            editor.clear();
             for (Map.Entry<String, ?> entry : map.entrySet()) {
-                notificationMessageList.add(gson.fromJson(entry.getValue().toString(), Notification.class));
+                Notification n = gson.fromJson(entry.getValue().toString(), Notification.class);
+                if (n.isSeen() == null) {
+                    n.setSeen(false);
+                } else if (!n.isSeen()) {
+                    n.setSeen(true);
+                }
+                String jsonNotification = gson.toJson(n);
+                Long timestamp = n.getDate().getTime();
+                editor.putString(timestamp.toString(), jsonNotification);
+                notificationMessageList.add(n);
             }
+            editor.commit();
             if (notificationMessageList != null && notificationMessageList.size() > 0) {
                 Collections.sort(notificationMessageList, new Comparator<Notification>() {
                     public int compare(Notification n1, Notification n2) {
