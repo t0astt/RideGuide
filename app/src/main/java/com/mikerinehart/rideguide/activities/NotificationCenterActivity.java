@@ -191,8 +191,7 @@ public class NotificationCenterActivity extends ActionBarActivity {
                     n.setSeen(true);
                 }
                 notificationMessageList.add(n);
-                n.setSeen(true);
-                String jsonNotification = gson.toJson(n);
+                String jsonNotification = gson.toJson(new Notification(n.getMessage(), n.getDate(), n.getFbUid(), n.getType(), true));
                 Long timestamp = n.getDate().getTime();
                 editor.putString(timestamp.toString(), jsonNotification);
             }

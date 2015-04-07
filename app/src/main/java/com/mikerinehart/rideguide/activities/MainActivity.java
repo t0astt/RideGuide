@@ -334,21 +334,6 @@ public class MainActivity extends ActionBarActivity implements
             showcase(1);
         }
 
-        boolean newNotifications = false;
-        Gson gson = new Gson();
-        Map<String, ?> map = spNotifications.getAll();
-        for (Map.Entry<String, ?> entry : map.entrySet()) {
-            Notification n = gson.fromJson(entry.getValue().toString(), Notification.class);
-            if (n.isSeen() == null || !n.isSeen()) {
-                newNotifications = true;
-            }
-        }
-        if (newNotifications) {
-            if (notificationsIcon != null) notificationsIcon.setIcon(getResources().getDrawable(R.drawable.ic_actions_notifications));
-        } else {
-            if (notificationsIcon != null) notificationsIcon.setIcon(getResources().getDrawable(R.drawable.ic_action_notifications_none));
-        }
-
     }
 
     public void onPause() {
@@ -368,6 +353,22 @@ public class MainActivity extends ActionBarActivity implements
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         notificationsIcon = menu.getItem(0);
+
+        boolean newNotifications = false;
+        Gson gson = new Gson();
+        Map<String, ?> map = spNotifications.getAll();
+        for (Map.Entry<String, ?> entry : map.entrySet()) {
+            Notification n = gson.fromJson(entry.getValue().toString(), Notification.class);
+            if (n.isSeen() == null || !n.isSeen()) {
+                newNotifications = true;
+            }
+        }
+        if (newNotifications) {
+            if (notificationsIcon != null) notificationsIcon.setIcon(getResources().getDrawable(R.drawable.ic_actions_notifications));
+        } else {
+            if (notificationsIcon != null) notificationsIcon.setIcon(getResources().getDrawable(R.drawable.ic_action_notifications_none));
+        }
+
         return true;
     }
 
