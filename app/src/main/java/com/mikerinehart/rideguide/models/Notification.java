@@ -7,25 +7,53 @@ import java.util.Date;
 /**
  * Created by Mike on 4/6/2015.
  */
-public class Notification implements Comparator<Notification> {
+public class Notification {
 
     protected String message;
-//    protected Date timestamp;
+    protected Date date;
+    protected String fbUid;
+    protected String type;
 
     public Notification(String m) {
         this.message = m;
     }
 
-    public String getMessage() {
-        return this.message;
+    public Notification(String message, Date date, String fbUid, String type) {
+        this.message = message;
+        this.date = date;
+        this.fbUid = fbUid;
+        this.type = type;
     }
 
-//    public Date getTimestamp() {
-//        return this.timestamp;
-//    }
+    public String getMessage() {
+        return message;
+    }
 
-    @Override
-    public int compare(Notification n1, Notification n2) {
-        return 1;
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getFbUid() {
+        return fbUid;
+    }
+
+    public void setFbUid(String fbUid) {
+        this.fbUid = fbUid;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

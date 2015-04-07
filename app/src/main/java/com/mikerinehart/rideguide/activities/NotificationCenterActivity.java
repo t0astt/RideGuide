@@ -18,10 +18,12 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.mikerinehart.rideguide.R;
 import com.mikerinehart.rideguide.SimpleDividerItemDecoration;
 import com.mikerinehart.rideguide.adapters.NotificationsAdapter;
 import com.mikerinehart.rideguide.models.Notification;
+import com.mikerinehart.rideguide.models.User;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.sql.Timestamp;
@@ -125,11 +127,14 @@ public class NotificationCenterActivity extends ActionBarActivity {
         private void refreshContent() {
             Log.i("HomePage", "refresh");
             notificationSP = getActivity().getSharedPreferences(Constants.NOTIFICATIONS, Context.MODE_PRIVATE);
+
+
+            Gson gson = new Gson();
             ArrayList<Notification> notificationMessageList = new ArrayList<Notification>();
             Map<String, ?> map = notificationSP.getAll();
+            Log.i("Homepage", "map size is: " + map.size());
             for (Map.Entry<String, ?> entry : map.entrySet()) {
-                notificationMessageList.add(new Notification(entry.getValue().toString())); // TODO: Check
-
+                notificationMessageList.add(gson.fromJson(entry.getValue().toString(), Notification.class));
             }
             if (notificationMessageList != null && notificationMessageList.size() > 0) {
                 noNotifications.setVisibility(TextView.GONE);

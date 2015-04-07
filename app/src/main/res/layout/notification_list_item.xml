@@ -16,10 +16,30 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Content"
         android:id="@+id/notification_list_item_message"
-        android:paddingTop="11dp"
         android:layout_marginLeft="11dp"
-        android:paddingBottom="11dp"
         android:layout_marginRight="11dp"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:layout_below="@+id/notification_list_item_date"
+        android:textColor="#000000"
+        android:layout_toRightOf="@+id/notification_list_item_user_pic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/notification_list_item_date"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/notification_list_item_message"
+        android:layout_alignStart="@+id/notification_list_item_message" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/notification_list_item_user_pic"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="11dp" />
 
 </RelativeLayout>

@@ -11,11 +11,14 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.gson.Gson;
 import com.mikerinehart.rideguide.activities.Constants;
 import com.mikerinehart.rideguide.activities.DecisionActivity;
 import com.mikerinehart.rideguide.activities.NotificationCenterActivity;
+import com.mikerinehart.rideguide.models.Notification;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -48,14 +51,31 @@ public class GcmIntentService extends IntentService {
             if (!extras.isEmpty())
             {
                 if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                    storeNotification(extras.getString("message"));
-                    sendNotification(extras.getString("message"));
+                    String message = extras.getString("notification");
+                    String type = extras.getString("type");
+                    Date date = new Date();
+                    String fbUid = extras.getString("fbUid");
+
+                    storeNotification(new Notification(message, date, fbUid, type));
+                    sendNotification(extras.getString("notification"));
 
                 }
             }
 
             GcmBroadcastReceiver.completeWakefulIntent(intent);
         }
+    }
+
+    private void storeNotification(Notification n) {
+        SharedPreferences sp = GcmIntentService.this.getSharedPreferences(Constants.NOTIFICATIONS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
+        Long timestamp = n.getDate().getTime();
+
+        Gson gson = new Gson();
+        String jsonNotification = gson.toJson(n);
+        editor.putString(timestamp.toString(), jsonNotification);
+        editor.commit();
     }
 
     private void sendNotification(String message) {
@@ -67,7 +87,7 @@ public class GcmIntentService extends IntentService {
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle(message)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                .bigText(message))
+                        .bigText(message))
                 .setContentText(message);
 
         mBuilder.setContentIntent(contentIntent);
@@ -76,16 +96,5 @@ public class GcmIntentService extends IntentService {
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
         r.play();
-    }
-
-    private void storeNotification(String message) {
-        SharedPreferences sp = GcmIntentService.this.getSharedPreferences(Constants.NOTIFICATIONS, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        Date d = new Date();
-        Timestamp t = new Timestamp(d.getTime());
-
-        editor.putString(t.toString(), message);
-        editor.commit();
-
     }
 }

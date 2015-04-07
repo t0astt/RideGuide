@@ -46,8 +46,14 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
     @Override
     public void onBindViewHolder(NotificationsAdapterViewHolder vh, int i) {
+        DateFormat df = new SimpleDateFormat("E d, h:mma");
         Notification n = notificationList.get(i);
         vh.message.setText(n.getMessage());
+        vh.date.setText(df.format(n.getDate()));
+        Picasso.with(vh.userPic.getContext())
+                .load("https://graph.facebook.com/" + n.getFbUid() + "/picture?type=large")
+                .transform(new RoundedTransformation(100, 5))
+                .into(vh.userPic);
     }
 
 
@@ -62,10 +68,14 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     public static class NotificationsAdapterViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView message;
+        protected TextView date;
+        protected ImageView userPic;
 
         public NotificationsAdapterViewHolder(View v) {
             super(v);
             message = (TextView) v.findViewById(R.id.notification_list_item_message);
+            date = (TextView) v.findViewById(R.id.notification_list_item_date);
+            userPic = (ImageView) v.findViewById(R.id.notification_list_item_user_pic);
         }
 
     }
