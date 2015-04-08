@@ -94,25 +94,6 @@ public class HomePageFragment extends Fragment {
         return v;
     }
 
-//    private void refreshContent() {
-//        Log.i("HomePage", "refresh");
-//        notificationSP = getActivity().getSharedPreferences(Constants.NOTIFICATIONS, Context.MODE_PRIVATE);
-//        ArrayList<Notification> notificationMessageList = new ArrayList<Notification>();
-//        Map<String, ?> map = notificationSP.getAll();
-//        for (Map.Entry<String, ?> entry : map.entrySet()) {
-//            notificationMessageList.add(new Notification(entry.getValue().toString())); // TODO: Check
-//        }
-//        if (notificationMessageList != null && notificationMessageList.size() > 0) {
-//            noNotifications.setVisibility(TextView.GONE);
-//            NotificationsAdapter na = new NotificationsAdapter(notificationMessageList);
-//            notificationList.setAdapter(na);
-//            notificationList.addItemDecoration(new SimpleDividerItemDecoration(notificationList.getContext()));
-//        } else {
-//            notificationList.setAdapter(null);
-//            noNotifications.setVisibility(TextView.VISIBLE);
-//        }
-//    }
-
     public void onResume() {
         super.onResume();
         MainActivity.toolbar.setTitle("Home");
