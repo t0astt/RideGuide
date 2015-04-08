@@ -94,43 +94,30 @@ public class HomePageFragment extends Fragment {
         return v;
     }
 
-    private void refreshContent() {
-        Log.i("HomePage", "refresh");
-        notificationSP = getActivity().getSharedPreferences(Constants.NOTIFICATIONS, Context.MODE_PRIVATE);
-        ArrayList<Notification> notificationMessageList = new ArrayList<Notification>();
-        Map<String, ?> map = notificationSP.getAll();
-        for (Map.Entry<String, ?> entry : map.entrySet()) {
-            notificationMessageList.add(new Notification(entry.getValue().toString())); // TODO: Check
-        }
-        if (notificationMessageList != null && notificationMessageList.size() > 0) {
-            noNotifications.setVisibility(TextView.GONE);
-            NotificationsAdapter na = new NotificationsAdapter(notificationMessageList);
-            notificationList.setAdapter(na);
-            notificationList.addItemDecoration(new SimpleDividerItemDecoration(notificationList.getContext()));
-        } else {
-            notificationList.setAdapter(null);
-            noNotifications.setVisibility(TextView.VISIBLE);
-        }
-    }
+//    private void refreshContent() {
+//        Log.i("HomePage", "refresh");
+//        notificationSP = getActivity().getSharedPreferences(Constants.NOTIFICATIONS, Context.MODE_PRIVATE);
+//        ArrayList<Notification> notificationMessageList = new ArrayList<Notification>();
+//        Map<String, ?> map = notificationSP.getAll();
+//        for (Map.Entry<String, ?> entry : map.entrySet()) {
+//            notificationMessageList.add(new Notification(entry.getValue().toString())); // TODO: Check
+//        }
+//        if (notificationMessageList != null && notificationMessageList.size() > 0) {
+//            noNotifications.setVisibility(TextView.GONE);
+//            NotificationsAdapter na = new NotificationsAdapter(notificationMessageList);
+//            notificationList.setAdapter(na);
+//            notificationList.addItemDecoration(new SimpleDividerItemDecoration(notificationList.getContext()));
+//        } else {
+//            notificationList.setAdapter(null);
+//            noNotifications.setVisibility(TextView.VISIBLE);
+//        }
+//    }
 
     public void onResume() {
         super.onResume();
+        MainActivity.toolbar.setTitle("Home");
         Log.i("HomePage", "onresume");
-        //refreshContent();
     }
-
-//    public static void showcase(Activity a) {
-//        ViewTarget target = new ViewTarget(R.id.home_page_notification_list, a);
-//        ShowcaseView s = new ShowcaseView.Builder(a, true)
-//                .setTarget(target)
-//                .setContentTitle("Notifications")
-//                .setContentText("Any notifications you receive will show up on the homescreen.\n\n" +
-//                        "Notifications can be cleared in the Settings menu.")
-//                .hideOnTouchOutside()
-//                .setStyle(R.style.CustomShowcaseTheme2)
-//                .build();
-//    }
-
 
     @Override
     public void onAttach(Activity activity) {
