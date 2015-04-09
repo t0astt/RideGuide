@@ -167,7 +167,10 @@ public class LoginActivity extends ActionBarActivity {
 
 
         if (!email.equals("") && email.length() > 4 && email.substring(email.length() - 4).equalsIgnoreCase(".edu")) {
-            Snackbar.with(getApplicationContext()).text("Sending email...").show(LoginActivity.this);
+            Snackbar.with(getApplicationContext())
+                    .text("Sending email...")
+                    .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
+                    .show(LoginActivity.this);
 
             //GCM REGISTRATION
 
@@ -186,7 +189,7 @@ public class LoginActivity extends ActionBarActivity {
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     confCheckActive = true;
                     Snackbar.with(getApplicationContext()).text("Email Sent!")
-                            .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
+                            .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
                             .actionLabel("Resend Email")
                             .actionListener(new ActionClickListener() {
                                 @Override
@@ -220,7 +223,10 @@ public class LoginActivity extends ActionBarActivity {
         String phone = phoneField.getText().toString();
 
 
-            Snackbar.with(getApplicationContext()).text("Sending validation text...").show(LoginActivity.this);
+            Snackbar.with(getApplicationContext())
+                    .text("Sending validation text...")
+                    .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
+                    .show(LoginActivity.this);
             RequestParams params = new RequestParams();
 
             params.put("fb_uid", user.getId());
@@ -231,7 +237,7 @@ public class LoginActivity extends ActionBarActivity {
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 
                     Snackbar.with(getApplicationContext()).text("Text Sent!")
-                            .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
+                            .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
                             .actionLabel("Resend Text")
                             .actionListener(new ActionClickListener() {
                                 @Override

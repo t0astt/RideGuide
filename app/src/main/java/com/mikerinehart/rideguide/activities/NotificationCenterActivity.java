@@ -70,6 +70,22 @@ public class NotificationCenterActivity extends ActionBarActivity {
         notifications_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (!MainActivity.isMainActivityOpen()) {
+                    SharedPreferences userPref = getSharedPreferences("CURRENT_USER", Context.MODE_PRIVATE);
+                    User me;
+                    Gson gson = new Gson();
+                    String jsonMe = userPref.getString("CURRENT_USER", "not_found");
+                    if (jsonMe.equalsIgnoreCase("not_found")) {
+                    } else {
+                        me = gson.fromJson(jsonMe, User.class);
+                        Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
+                        mainActivityIntent.putExtra("me", me);
+                        startActivity(mainActivityIntent);
+                    }
+                }
+
+
                 finish();
             }
         });

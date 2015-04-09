@@ -67,6 +67,7 @@ public class SettingActivity extends ActionBarActivity {
                         .commit();
             }
         });
+        System.gc(); // Clear RAM
 
     }
 
