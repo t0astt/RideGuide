@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,7 +51,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class ReservationsHistoryPageFragment extends Fragment {
+public class ReservationsHistoryPageFragment extends Fragment implements FragmentManager.OnBackStackChangedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static User ARG_PARAM1;
@@ -81,6 +82,11 @@ public class ReservationsHistoryPageFragment extends Fragment {
 
     public ReservationsHistoryPageFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        Log.i(TAG, "Backstack changed");
     }
 
     @Override
@@ -204,7 +210,7 @@ public class ReservationsHistoryPageFragment extends Fragment {
                                             public void onPositive(MaterialDialog dialog) {
                                                 Intent venmoIntent = VenmoLibrary.openVenmoPayment(Constants.getVenmoApiId(),
                                                         Constants.getVenmoAppName(),
-                                                        u.getPhone(),
+                                                        (u.getPhone().startsWith("1") ? u.getPhone() : "1" + u.getPhone()),
                                                         donationAmount.getText().toString(),
                                                         "RideGuide ride with " + u.getFullName(),
                                                         "pay");

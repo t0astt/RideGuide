@@ -1,6 +1,7 @@
 package com.mikerinehart.rideguide.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import android.os.Handler;
@@ -11,14 +12,17 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.gson.Gson;
 import com.mikerinehart.rideguide.R;
 
+import com.mikerinehart.rideguide.models.User;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import de.psdev.licensesdialog.LicensesDialog;
@@ -66,8 +70,23 @@ public class SettingActivity extends ActionBarActivity {
 
     }
 
+    @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        Log.i("OnBackPressed", "Back pressed");
+
+        if (!MainActivity.isMainActivityOpen()) {
+            SharedPreferences userPref = this.getSharedPreferences("CURRENT_USER", Context.MODE_PRIVATE);
+            User me;
+            Gson gson = new Gson();
+            String jsonMe = userPref.getString("CURRENT_USER", "not_found");
+            if (jsonMe.equalsIgnoreCase("not_found")) {
+            } else {
+                me = gson.fromJson(jsonMe, User.class);
+                Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
+                mainActivityIntent.putExtra("me", me);
+                startActivity(mainActivityIntent);
+            }
+        }
         super.finish();
     }
 

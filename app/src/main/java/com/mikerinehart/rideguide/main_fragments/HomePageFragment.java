@@ -97,6 +97,7 @@ public class HomePageFragment extends Fragment {
     public void onResume() {
         super.onResume();
         MainActivity.toolbar.setTitle("Home");
+        MainActivity.drawerAdapter.selectPosition(1);
         Log.i("HomePage", "onresume");
     }
 

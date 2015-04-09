@@ -275,7 +275,7 @@ public class MyReservationsFragment extends Fragment {
                                             public void onPositive(MaterialDialog dialog) {
                                                 Intent venmoIntent = VenmoLibrary.openVenmoPayment(Constants.getVenmoApiId(),
                                                         Constants.getVenmoAppName(),
-                                                        u.getPhone(),
+                                                        (u.getPhone().startsWith("1") ? u.getPhone() : "1" + u.getPhone()),
                                                         donationAmount.getText().toString(),
                                                         "RideGuide ride with " + u.getFullName(),
                                                         "pay");

@@ -85,6 +85,7 @@ public class MainActivity extends ActionBarActivity implements
 
     Activity mainActivity;
     SharedPreferences sp;
+    static boolean active = false;
 
     ShowcaseView s;
     public static boolean showDrawerShowcase;
@@ -214,7 +215,13 @@ public class MainActivity extends ActionBarActivity implements
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Session.getActiveSession().closeAndClearTokenInformation();
+                                        if (Session.getActiveSession() != null) {
+                                            Session.getActiveSession().closeAndClearTokenInformation();
+                                        }
+                                        SharedPreferences userPref = getSharedPreferences("CURRENT_USER", Context.MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = userPref.edit();
+                                        editor.clear();
+                                        editor.commit();
                                         finish();
                                         System.exit(0);
                                     }
@@ -389,5 +396,21 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        active = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        active = false;
+    }
+
+    public static boolean isMainActivityOpen() {
+        return active;
     }
 }
